@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, StatusBar,Dimensions} from 'react-native';
 import Topo_imagem from './topo';
-import BotaoPersonalizado from './botaoPersonalizado';
+import BotaoPersonalizado from './BotaoPersonalizado';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { tela_login_fundo } from './tela_login_fundo';
+
 
 
 function Tela_login({navigation}) {
@@ -29,7 +30,7 @@ function Tela_login({navigation}) {
             style={estilo.input}
             onChangeText={(text) => setUsuario(text)}
             value={usuario}
-            placeholderTextColor={"white"}
+            placeholderTextColor={'white'}
             placeholder="Usuário"
           />
 
@@ -37,7 +38,7 @@ function Tela_login({navigation}) {
             style={estilo.input}
             onChangeText={(text) => setSenha(text)}
             value={senha}
-            placeholderTextColor={"white"}
+            placeholderTextColor={'white'}
             placeholder="Senha"
             secureTextEntry={true} // Para ocultar a senha enquanto o usuário digita
           />
@@ -69,13 +70,13 @@ function Tela_login({navigation}) {
       </View>
     </SafeAreaView>
   );
-};
+}
 
 
 const estilo = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   container_imagem: {
     width: Dimensions.get('window').width * 1,
@@ -88,18 +89,18 @@ const estilo = StyleSheet.create({
   },
   input: {
     flex: 1,
-    marginTop: "0.8%",
-    backgroundColor: "#17161b",
+    marginTop: '0.8%',
+    backgroundColor: '#17161b',
     color: 'white',
     borderColor: '#17161b',
-    paddingHorizontal: "auto",
+    paddingHorizontal: 'auto',
     borderRadius: 6,
-    marginHorizontal: "1%"
+    marginHorizontal: '1%',
   },
   container_botao: {
     width: Dimensions.get('window').width * 0.8,
         height: Dimensions.get('window').height * 0.09,
-    marginHorizontal: "10%",
+    marginHorizontal: '10%',
 
 
   },
@@ -107,15 +108,15 @@ const estilo = StyleSheet.create({
   container_recuperar_dados: {
     width: Dimensions.get('window').width * 1,
     height: Dimensions.get('window').height * 0.08,
-    marginLeft: "0.5%",
-    flexDirection: "row",
+    marginLeft: '0.5%',
+    flexDirection: 'row',
   },
   recuperar_dados_rotulo: {
-    color: "white",
+    color: 'white',
 
   },
   recuperar_dados_clicar: {
-    color: "#934dd2",
+    color: '#934dd2',
 
   },
   container_rodape: {
@@ -126,15 +127,15 @@ const estilo = StyleSheet.create({
   },
   rodape_descricao: {
 
-    color: "white",
-    marginLeft: "1.2%",
+    color: 'white',
+    marginLeft: '1.2%',
 
 
   },
   rodape_termo_uso: {
-    color: "#934dd2",
-    textAlign: "center",
-    marginBottom: "auto"
+    color: '#934dd2',
+    textAlign: 'center',
+    marginBottom: 'auto',
 
   },
 
