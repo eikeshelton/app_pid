@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import BotaoPersonalizado from './BotaoPersonalizado';
+import BotaoPersonalizado from '../BotaoPersonalizado';
 import { View, SafeAreaView, StyleSheet, TextInput, Dimensions,
 ScrollView,Text,TouchableOpacity } from 'react-native';
-import { tela_login_fundo } from './tela_login_fundo';
-import Topo_imagem from './topo';
+import { tela_login_fundo } from '../Tela_Login_Fundo';
+import Topo_imagem from '../Topo';
 
 
 

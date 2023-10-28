@@ -104,7 +104,30 @@ export const TextBio = styled.Text`
 
 
 export const LinkButton = styled.TouchableOpacity`
-    color: '#0077FF';
+    text-decoration-line: underline;
+`;
+export const TextLinkButton = styled.Text`
+    color: ${({theme}) => theme.colors.colorBlue};
     text-decoration-line: underline;
     font-size: ${RFValue(14)}px;
+`;
+
+
+const ContainerButtonsHeight = Dimensions.get('window').height * 0.07;
+const ContainerButtonsWidth = Dimensions.get('window').width * 1;
+export const ContainerButtons = styled.View`
+    height: ${ContainerButtonsHeight}px;
+    width: ${ContainerButtonsWidth}px;
+    flex-direction:row;
+`;
+
+export const FollowButton = styled.View`
+    width: ${RFValue(140)}px;
+    height: ${RFValue(48)}px;
+    margin-left: ${RFValue(20)}px;
+`;
+export const MessageButton = styled.View`
+    width: ${RFValue(140)}px;
+    height: ${RFValue(48)}px;
+    margin-left: ${RFValue(20)}px;
 `;
