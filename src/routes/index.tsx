@@ -1,8 +1,6 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import {AppRoutes} from './app.stack.routes';
-import  {AuthRoutes}  from './auth.routes';
-
 
 
 export function Routes(){
@@ -19,8 +17,7 @@ export function Routes(){
     <NavigationContainer linking={linking}>
 
 
-        <AppRoutes
-        colocar o authroutes />
+        <AppRoutes />
 
     </NavigationContainer>
     );

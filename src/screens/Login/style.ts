@@ -13,29 +13,19 @@ export const ContainerImagem = styled.View`
 
 export const ContentLogin = styled.View`
     flex:1;
-    padding-left:${RFValue(24)}px;
-    padding-right:${RFValue(24)}px;
-    
-    
+    padding:0 ${RFValue(24)}px;
 `;
 
 export const ContainerInputLogin = styled.View`
     width:100%;
-
 `;
 
 export const ContainerButton = styled.View`
     margin-top:  ${RFValue(18)}px;
-
 `;
-
-
-
 
 export const FooterLogin = styled.View`
     padding:${RFValue(24)}px;
-    flex: 1;
-
 `;
 
 

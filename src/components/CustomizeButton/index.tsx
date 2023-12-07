@@ -4,12 +4,12 @@ import { TouchableOpacityProps } from 'react-native';
 
 interface CustomizeButtonProps extends TouchableOpacityProps{
   texto:string;
-
+  onPress: () => void;
 }
-function CustomButton({ texto,onPress}: CustomizeButtonProps) {
+function CustomButton({texto, ...rest}: CustomizeButtonProps) {
   return (
     <Container>
-    <InputButton onPress={onPress}>
+    <InputButton {...rest}>
       <TextButton>{texto}</TextButton>
     </InputButton>
     </Container>

@@ -42,7 +42,6 @@ function Login() {
             onChangeText= {setUsuario}
 
           />
-
           <Input
             onChangeText={text => setSenha(text)}
             value={senha}
@@ -51,9 +50,11 @@ function Login() {
             secureTextEntry={true} // Para ocultar a senha enquanto o usuário digita
           />
         </ContainerInputLogin>
+
         <TouchableOpacity onPress={() => navigation.navigate('MyPassword')} >
-            <ClickText>Esqueci minha senha</ClickText>
-          </TouchableOpacity>
+          <ClickText>Esqueci minha senha</ClickText>
+        </TouchableOpacity>
+
         <CustonButton
           texto="Entrar"
           onPress={() => navigation.navigate('AppTabNav')}
@@ -76,7 +77,6 @@ function Login() {
             <ClickText >Termos de uso </ClickText>
           </TouchableOpacity>
         </TermsUse>
-
 
       </FooterLogin>
     </Container>
