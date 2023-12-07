@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {
-  TouchableOpacity,
-} from 'react-native';
+import React, {useState} from 'react';
+import {TouchableOpacity} from 'react-native';
+import { useAuth } from '../../hooks/auth';
 import TopImage from '../../components/TopImage';
 import CustonButton from '../../components/CustomizeButton';
 import {
@@ -14,7 +13,6 @@ import {
   FooterLogin,
   NewHere,
   TermsUse,
-  Welcome,
 } from './style';
 
 import { Input } from '../../components/Input/style';
@@ -23,21 +21,11 @@ import { useNavigation } from '@react-navigation/native';
 function Login() {
   const [usuario, setUsuario] = useState('');
   const [senha, setSenha] = useState('');
-  const [WelcomeMessage, setWelcomeMessage] = useState('');
-  const navigation = useNavigation();
 
-  useEffect(()=>{
-    const WelcomeLogin = new Date().getHours();
-    if (WelcomeLogin < 12){
-      setWelcomeMessage('Bom dia');
-    }
-    else if (WelcomeLogin >= 12 && WelcomeLogin < 18){
-      setWelcomeMessage('Boa tarde');
-    }
-    else {
-      setWelcomeMessage('Boa noite');
-    }
-  },[]);
+  const navigation = useNavigation();
+  const data = useAuth();
+  console.log(data);
+
 
   return (
     <Container>
@@ -89,7 +77,7 @@ function Login() {
           </TouchableOpacity>
         </TermsUse>
 
-        <Welcome >{WelcomeMessage}</Welcome>
+
       </FooterLogin>
     </Container>
   );

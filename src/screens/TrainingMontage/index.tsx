@@ -1,12 +1,10 @@
 import React, {useState} from 'react';
 import CustonButton from '../../components/CustomizeButton';
-import {ScrollView, Text, View} from 'react-native';
+import {ScrollView} from 'react-native';
 import TopImage from '../../components/TopImage';
 import {
   ContainerImagemRegister,
   ContainerInputRegister,
-  ContainerRenderTrainingDays,
-  ExerciseContainer,
   ScreenBackgroundRegister,
 } from './style';
 import {Input} from '../../components/Input/style';

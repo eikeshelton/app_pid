@@ -1,6 +1,6 @@
-// src/screens/FeedScreen.js
+
 import React from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { FlatList} from 'react-native';
 import { Container, Imagem } from './style';
 
 const imagens = [
@@ -36,27 +36,4 @@ const FeedScreen = () => {
 </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
-  },
-  postContainer: {
-    marginBottom: 16,
-  },
-  postUser: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  postContent: {
-    fontSize: 16,
-  },
-});
-
 export default FeedScreen;

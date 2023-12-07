@@ -12,7 +12,7 @@ import EditProfile from '../screens/EditProfile';
 
 
 const {Navigator, Screen} = createStackNavigator();
-export default function AppRoutes() {
+export  function AppRoutes() {
 
 
 
@@ -22,7 +22,8 @@ export default function AppRoutes() {
 
       <Screen name="Register" component={Register} />
       <Screen name="TermsUse" component={TermsUse} />
-      <Screen name="AppTabNav" component={AppTabNav} />
+      <Screen name="AppTabNav" component={AppTabNav}
+      options={{headerShown:false}}/>
       <Screen name="MyPassword" component={MyPassword} />
       <Screen name="EditProfile" component={EditProfile} />
     </Navigator>

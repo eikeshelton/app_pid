@@ -22,26 +22,22 @@ import {
   TextPubFoll,
   ButtonFollow,
 } from './style';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation} from '@react-navigation/native';
 
-interface Params{
-  selectedImage: string
-}
+
 
 
 
 export default function Profile() {
-  const route = useRoute();
+
 
 
 
   const [avatar, setAvatar] = useState(foto);
 
   const url = 'https://www.gsuplementos.com.br';
-  const onPress =  () => {
-    // Esta função não faz nada, apenas retorna undefined
-  };
-  const [seguidor, setSeguidor] = useState(0);
+
+
   const navigation = useNavigation();
 
   const abrirLink = () => {
@@ -64,7 +60,7 @@ export default function Profile() {
               <TextPubFoll>Publicações</TextPubFoll>
             </ContainerPub>
             <ContainerFollowers>
-              <TextNumber>{seguidor}</TextNumber>
+              <TextNumber>0</TextNumber>
               <TextPubFoll>Seguidores</TextPubFoll>
             </ContainerFollowers>
             <ContainerFollowed>

@@ -4,9 +4,10 @@ import {RFValue} from 'react-native-responsive-fontsize';
 
 export const Container = styled.View`
   height: ${RFValue(58)}px;
+
 `;
 export const InputButton = styled.TouchableOpacity`
-flex:1;
+    flex:1;
     background-color : ${({theme}) => theme.colors.primary};
     justify-content:center;
     align-items:center;
@@ -16,9 +17,9 @@ flex:1;
 `;
 export const TextButton = styled.Text`
 text-align:center;
-    color: white;
-    font-size: ${RFValue(20)}px;
-    font-family:${({theme}) => theme.fonts.bold};
+color: white;
+font-size: ${RFValue(20)}px;
+font-family:${({theme}) => theme.fonts.bold};
     
 `;
 

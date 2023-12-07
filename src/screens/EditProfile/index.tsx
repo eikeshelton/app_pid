@@ -1,84 +1,42 @@
 // EditProfileScreen.js
-import React,{useState}  from 'react';
-import {Text,StyleSheet, Alert, ImageSourcePropType } from 'react-native';
+import React, { useState }  from 'react';
+import {Text} from 'react-native';
 import TopImage from '../../components/TopImage';
 import CustonButton from '../../components/CustomizeButton';
-import { Container, ProfileImageContainer } from './style';
-import {launchImageLibrary,ImageLibraryOptions} from 'react-native-image-picker';
+import { Container, ContainerInputBio, ProfileImageContainer } from './style';
+
 import { useNavigation } from '@react-navigation/native';
+import { Input } from '../../components/Input/style';
 
 
 
 const EditProfile = ({ }) => {
   const navigation = useNavigation();
-  const [selectedImage, setSelectedImage] = useState('');
-  const handleImageUse = () =>{
-  Alert.alert('selecione',
-  'informe de onde você quer pegar a foto',
-  [
-    {
-      text:'galeria',
-      onPress:()=> pickImageFromGalery(),
-      style :'default',
-    },
-    {
-      text:'camera',
-      onPress:()=> pickImageFromCamera(),
-      style :'default',
-    },
+  const [bio,setBio] = useState('');
 
-  ],
-    {
-    cancelable: true,
-    onDismiss: () =>console.log('tratar depois'),
-  },
-  );
-};
-  const pickImageFromGalery = async ()=>{
-  const options:ImageLibraryOptions = {
-    mediaType:'photo',
-  };
-  const result = await launchImageLibrary(options);
-  if (result){
-    if (result.assets){
-        setSelectedImage(result.assets[0].uri as string);
-    }
-
-  }
-};
-const pickImageFromCamera = ()=>{
-};
 const handleNavigateToProfile = () => {
   navigation.navigate('Profile');
 };
   return (
     <Container>
       <TopImage/>
+      <ContainerInputBio>
+      <Input
+            onChangeText={text => setBio(text)}
+            value={bio}
+            placeholderTextColor={'white'}
+            placeholder="bio"
 
-        <ProfileImageContainer onPress={handleImageUse}>
+          />
+          <ProfileImageContainer >
           <Text>alterar foto</Text>
         </ProfileImageContainer>
+        <CustonButton texto="Salvar alterações"onPress={handleNavigateToProfile}/>
+      </ContainerInputBio>
 
-      <CustonButton texto="Salvar alterações"onPress={handleNavigateToProfile}/>
+
     </Container>
+
   );
 };
-
-const styles = StyleSheet.create({
-
-  profileImageContainer: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
-    backgroundColor: '#ccc',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  profileImage: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
-  },
-});
-
 export default EditProfile;
