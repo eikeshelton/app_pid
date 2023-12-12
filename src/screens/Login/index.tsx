@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {TouchableOpacity} from 'react-native';
-import { useAuth } from '../../hooks/auth';
 import TopImage from '../../components/TopImage';
 import CustonButton from '../../components/CustomizeButton';
 import {
@@ -23,8 +22,6 @@ function Login() {
   const [senha, setSenha] = useState('');
 
   const navigation = useNavigation();
-  const data = useAuth();
-  console.log(data);
 
 
   return (
