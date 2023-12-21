@@ -10,7 +10,7 @@ import { Input } from '../../components/Input/style';
 
 
 
-const EditProfile = ({ }) => {
+const EditProfile = () => {
   const navigation = useNavigation();
   const [bio,setBio] = useState('');
 
