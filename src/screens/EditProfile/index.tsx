@@ -14,9 +14,6 @@ const EditProfile = () => {
   const navigation = useNavigation();
   const [bio,setBio] = useState('');
 
-const handleNavigateToProfile = () => {
-  navigation.navigate('Profile');
-};
   return (
     <Container>
       <TopImage/>
@@ -31,7 +28,7 @@ const handleNavigateToProfile = () => {
           <ProfileImageContainer >
           <Text>alterar foto</Text>
         </ProfileImageContainer>
-        <CustonButton texto="Salvar alterações"onPress={handleNavigateToProfile}/>
+        <CustonButton texto="Salvar alterações"onPress={() => navigation.navigate('AppTabNav')}/>
       </ContainerInputBio>
 
 

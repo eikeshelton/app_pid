@@ -17,7 +17,9 @@ export default function  TrainingPartner () {
   const [local, setLocal] = useState('');
   const [sexo, setSexo] = useState('');
   const [modalidade, setModalidade] = useState('');
-
+  const handlePress = () => {
+    // Função vazia, não faz nada
+  };
 
 
 
@@ -69,7 +71,7 @@ export default function  TrainingPartner () {
             placeholder="Modalidade:"
           />
         </ScrollView>
-        <CustonButton texto="Procurar" />
+        <CustonButton texto="Procurar" onPress={handlePress} />
 
       </ContainerInputRegister>
 

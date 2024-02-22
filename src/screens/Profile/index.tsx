@@ -33,7 +33,7 @@ export default function Profile() {
 
 
 
-  const [avatar, setAvatar] = useState(foto);
+  const [avatar] = useState(foto);
 
   const url = 'https://www.gsuplementos.com.br';
 

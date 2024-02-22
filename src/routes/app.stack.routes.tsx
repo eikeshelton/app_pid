@@ -18,14 +18,19 @@ export  function AppRoutes() {
 
   return (
     <Navigator>
-      <Screen name="Login" component={Login} />
+      <Screen name="Login" component={Login}
+      options={{headerShown:false}}/>
 
-      <Screen name="Register" component={Register} />
-      <Screen name="TermsUse" component={TermsUse} />
+      <Screen name="Register" component={Register}
+      options={{headerShown:false}}/>
+      <Screen name="TermsUse" component={TermsUse}
+      options={{headerShown:false}}/>
       <Screen name="AppTabNav" component={AppTabNav}
       options={{headerShown:false}}/>
-      <Screen name="MyPassword" component={MyPassword} />
-      <Screen name="EditProfile" component={EditProfile} />
+      <Screen name="MyPassword" component={MyPassword}
+      options={{headerShown:false}}/>
+      <Screen name="EditProfile" component={EditProfile}
+      options={{headerShown:false}}/>
     </Navigator>
   );
 }
