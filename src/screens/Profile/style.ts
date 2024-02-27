@@ -98,6 +98,7 @@ export const TextBio = styled.Text`
     font-size: ${RFValue(14)}px;
     color: ${({theme}) => theme.colors.colorWhite};
     padding-bottom: ${RFValue(2)}px;
+    font-family:${({theme}) => theme.fonts.light} ;
 `;
 
 
