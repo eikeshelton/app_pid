@@ -10,7 +10,6 @@
     "test": "jest"
   },
   "dependencies": {
-    "@react-native-community/cli": "^13.6.4",
     "@react-native-community/viewpager": "^5.0.11",
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/native": "^6.1.9",
