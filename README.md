@@ -97,14 +97,14 @@ Este guia irá ajudá-lo a configurar um servidor FastAPI para o seu projeto.
    ```bash
    cd server
 
-2. **Crie e ative o ambiente virtual Crie um ambiente virtual Python:**
-   **Obs: esse processo só precisa ser feito uma vez, se já tiver um ambiente virtual configurado, apenas inicialize ele, com o segundo comando**
+2. **Crie e ative o ambiente virtual Crie um ambiente virtual Python.**
+   **Obs: esse processo só precisa ser feito uma vez, se já tiver um ambiente virtual configurado, apenas inicialize ele, com o segundo comando abaixo:**
 
    ```bash
    python3 -m venv venv
    .\venv\Scripts\Activate
 
-3. **Instale as dependências Instale as dependências necessárias com o seguinte comando:**
+3. **Instale as dependências necessárias com o seguinte comando:**
 
       ```bash
       pip install -r requirements.txt
