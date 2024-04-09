@@ -1,4 +1,5 @@
 import React from 'react';
+<<<<<<< HEAD
 import Tela_login from './componentes/tela_login';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack'
@@ -24,6 +25,25 @@ export default function App() {
             </Stack.Navigator>
 
         </NavigationContainer>
+=======
+import {ThemeProvider} from 'styled-components';
+import theme from './src/global/styles/theme';
+import { Routes } from './src/routes';
+import { AuthProvider} from './src/hooks/auth';
+
+
+export default function MyApp() {
+
+    return (
+
+        <ThemeProvider theme={theme}>
+        <AuthProvider>
+        <Routes/>
+
+        </AuthProvider>
+        </ThemeProvider>
+
+>>>>>>> 0e7c0d6f1a79905d8d8cbabcdf423be0f6146ab4
 
 
     );
