@@ -1,8 +1,8 @@
 import { RFValue } from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
+import TextInputMask from 'react-native-text-input-mask';
 
-
-export const Input = styled.TextInput`
+export const Input = styled(TextInputMask)`
     background-color: ${({theme}) => theme.colors.colorInput};
     color: ${({theme}) => theme.colors.colorWhite};
     padding-left: ${RFValue(12)}px;

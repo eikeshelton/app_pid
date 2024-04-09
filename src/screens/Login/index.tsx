@@ -17,7 +17,22 @@ import {
 import { Input } from '../../components/Input/style';
 import { useNavigation } from '@react-navigation/native';
 import { KeyboardAvoidingView } from 'react-native';
+import api from '../../../server/api';
+interface fazer_login{
+  login:string;
+  senha:string
+}
+const logar = async (login: fazer_login) => {
+  console.log(login);
+  try {
+    const response = await api.post('/login/', login);
 
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao logar:', error);
+    throw error;
+  }
+};
 function Login() {
   const [usuario, setUsuario] = useState('');
   const [senha, setSenha] = useState('');

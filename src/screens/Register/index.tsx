@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import CustomButton  from '../../components/CustomizeButton';
 import {ScrollView} from 'react-native';
 import TopImage from '../../components/TopImage';
+import { format } from 'date-fns';
 import {
   ContainerImagemRegister,
   ContainerInputRegister,
@@ -42,11 +43,24 @@ function Register() {
   const [dataNascimento, setDataNascimento] = useState('');
   const [tipoUsuario, setTipoUsuario] = useState('');
 
+
+
+
   const handleRegister = () => {
     if (senha !== confirmarSenha) {
       console.error('As senhas não correspondem.');
       return;
     }
+    const cleanedText = dataNascimento.replace(/\D/g, '');
+    const dia = cleanedText.substring(0, 2);
+    const mes = cleanedText.substring(2, 4);
+    const ano = cleanedText.substring(4, 8);
+
+    // Cria um novo objeto Date
+    const novaData = new Date(parseInt(ano, 10), parseInt(mes, 10) - 1, parseInt(dia, 10));
+
+    // Formata a data no formato desejado (yyyy-mm-dd)
+    const dataFormatada = format(novaData, 'yyyy-MM-dd');
 
     // Aqui você pode chamar a função para criar o usuário
     const usuarioCreate: UsuarioCreate = {
@@ -55,7 +69,7 @@ function Register() {
       login: email, // Ou qualquer outro valor que seja apropriado
       senha,
       tipo_usuario: tipoUsuario,
-      data_nascimento: dataNascimento,
+      data_nascimento: dataFormatada,
       foto_perfil: '', // Você precisa definir um valor para a foto de perfil
       bio: '', // Você precisa definir um valor para a bio
     };
@@ -105,10 +119,14 @@ function Register() {
             secureTextEntry={true}
           />
           <Input
-            onChangeText={(text) => setDataNascimento(text)}
-            value={dataNascimento}
+            onChangeText={(formatted, extracted: any) => {
+              return setDataNascimento(extracted);
+            }}
+
+            mask="[00]/[00]/[0000]"
             placeholderTextColor={'white'}
             placeholder="Data de nascimento:"
+            keyboardType="numeric"
           />
           <Input
             onChangeText={(text) => setTipoUsuario(text)}
