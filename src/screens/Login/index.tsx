@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {TouchableOpacity} from 'react-native';
+import {Keyboard, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
 import TopImage from '../../components/TopImage';
 import CustonButton from '../../components/CustomizeButton';
 import {
@@ -16,6 +16,7 @@ import {
 
 import { Input } from '../../components/Input/style';
 import { useNavigation } from '@react-navigation/native';
+import { KeyboardAvoidingView } from 'react-native';
 
 function Login() {
   const [usuario, setUsuario] = useState('');
@@ -25,7 +26,9 @@ function Login() {
 
 
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <Container>
+          <KeyboardAvoidingView behavior="position">
       <ContainerImagem>
         <TopImage />
       </ContainerImagem>
@@ -76,7 +79,9 @@ function Login() {
         </TermsUse>
 
       </FooterLogin>
+      </KeyboardAvoidingView>
     </Container>
+    </TouchableWithoutFeedback>
   );
 }
 export default Login;
