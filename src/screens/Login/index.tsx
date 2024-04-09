@@ -63,7 +63,7 @@ function Login() {
         <NewHere>
           <FooterDescription>Novo aqui ?</FooterDescription>
           <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-          <ClickText>Cadastre-se</ClickText>
+          <ClickText> Cadastre-se</ClickText>
           </TouchableOpacity>
         </NewHere>
         <TermsUse>
