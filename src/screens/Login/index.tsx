@@ -50,7 +50,7 @@ function Login() {
 
     logar(usuarioLogin)
       .then(() => {
-        console.log('Usuário criado com sucesso!');
+        console.log('login  feito com sucesso');
         navigation.navigate('AppTabNav');
       })
       .catch((error) => console.error('Erro ao criar usuário:', error));
