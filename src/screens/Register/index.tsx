@@ -38,6 +38,7 @@ function Register() {
   const navigation = useNavigation();
   const [usuario, setUsuario] = useState('');
   const [email, setEmail] = useState('');
+  const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
@@ -64,10 +65,10 @@ function Register() {
 
     // Aqui você pode chamar a função para criar o usuário
     const usuarioCreate: UsuarioCreate = {
-      email,
+      email:email,
       nome_usuario: usuario,
-      login: email, // Ou qualquer outro valor que seja apropriado
-      senha,
+      login: login, // Ou qualquer outro valor que seja apropriado
+      senha:senha,
       tipo_usuario: tipoUsuario,
       data_nascimento: dataFormatada,
       foto_perfil: '', // Você precisa definir um valor para a foto de perfil
@@ -103,6 +104,13 @@ function Register() {
             placeholderTextColor={'white'}
             placeholder="Email:"
             keyboardType="email-address"
+          />
+          <Input
+            onChangeText={(text) => setLogin(text)}
+            value={login}
+            placeholderTextColor={'white'}
+            placeholder="Login:"
+
           />
           <Input
             onChangeText={(text) => setSenha(text)}

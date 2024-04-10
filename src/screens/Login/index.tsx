@@ -18,11 +18,11 @@ import { Input } from '../../components/Input/style';
 import { useNavigation } from '@react-navigation/native';
 import { KeyboardAvoidingView } from 'react-native';
 import api from '../../../server/api';
-interface fazer_login{
+interface Login{
   login:string;
   senha:string
 }
-const logar = async (login: fazer_login) => {
+const logar = async (login: Login) => {
   console.log(login);
   try {
     const response = await api.post('/login/', login);
@@ -34,11 +34,28 @@ const logar = async (login: fazer_login) => {
   }
 };
 function Login() {
-  const [usuario, setUsuario] = useState('');
+  const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
 
   const navigation = useNavigation();
+  const handlelogin = () => {
 
+    // Aqui você pode chamar a função para criar o usuário
+    const usuarioLogin: Login = {
+
+      login: login, // Ou qualquer outro valor que seja apropriado
+      senha:senha,
+
+    };
+
+    logar(usuarioLogin)
+      .then(() => {
+        console.log('Usuário criado com sucesso!');
+        navigation.navigate('AppTabNav');
+      })
+      .catch((error) => console.error('Erro ao criar usuário:', error));
+
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -50,19 +67,19 @@ function Login() {
 
       <ContentLogin>
         <ContainerInputLogin>
-          <Input
-            value={usuario}
-            placeholder="Usuário"
+        <Input
+            onChangeText={(text) => setLogin(text)}
+            value={login}
             placeholderTextColor={'white'}
-            onChangeText= {setUsuario}
+            placeholder="Login:"
 
           />
           <Input
-            onChangeText={text => setSenha(text)}
+            onChangeText={(text) => setSenha(text)}
             value={senha}
             placeholderTextColor={'white'}
-            placeholder="Senha"
-            secureTextEntry={true} // Para ocultar a senha enquanto o usuário digita
+            placeholder="Senha:"
+            secureTextEntry={true}
           />
         </ContainerInputLogin>
 
@@ -72,7 +89,7 @@ function Login() {
 
         <CustonButton
           texto="Entrar"
-          onPress={() => navigation.navigate('AppTabNav')}
+          onPress={handlelogin}
         />
 
       </ContentLogin>
