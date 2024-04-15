@@ -1,11 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Linking} from 'react-native';
-import foto from '../../assets/imagens/fotoperfil.png';
+
 import CustonButton from '../../components/CustomizeButton';
 import ProfilePost from '../../components/ProfilePost';
 import {
   Container,
-  ContainerBioFoll,
   ContainerButtons,
   ScreenBackground,
   ContainerFollowed,
@@ -21,66 +20,112 @@ import {
   TextNumber,
   TextPubFoll,
   ButtonFollow,
+  ContainerNameBio,
+  SettingContainer,
+  SettingButton,
+  SettingIcon,
 } from './style';
-import { useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import api from '../../services/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-
-
+import fotoPerfil from '../../assets/imagens/fotoperfil.png';
 
 export default function Profile() {
+  const isFocused = useIsFocused();
+  const [profileData, setProfileData] = useState({
+    nome_usuario: '',
+    tipo_usuario: '',
+    bio: '',
+    foto_perfil: '',
+    seguidores: 0,
+    seguidos: 0,
+  });
 
-
-
-
-  const [avatar] = useState(foto);
-
-  const url = 'https://www.gsuplementos.com.br';
-
+  const urlGrouth = 'https://www.gsuplementos.com.br';
 
   const navigation = useNavigation();
 
   const abrirLink = () => {
-    Linking.openURL(url);
+    Linking.openURL(urlGrouth);
+  };
+
+  const fetchProfileData = async () => {
+    try {
+      const email = await AsyncStorage.getItem('userEmail');
+      if (!email) {
+        console.error('email nao encontrado no AsyncStorage');
+        return;
+      }
+
+      const response = await api.get(`/usuarios/${email}`);
+      const {data} = response;
+
+      setProfileData(data);
+    } catch (error) {
+      console.error('Erro ao obter dados do perfil:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfileData();
+  }, [isFocused]);
+
+  const handleSettings = () => {
+    navigation.navigate('SettingsScreen');
   };
   return (
     <>
       <ScreenBackground>
         <Container>
           <PictureContainer>
-            <ProfilePicture
-              source={avatar}
-              resizeMode="contain" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
-            />
-            <ProfileName>Eike</ProfileName>
+            {profileData.foto_perfil.length <= 0 ? (
+              <ProfilePicture
+                source={fotoPerfil}
+                resizeMode="contain" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
+              />
+            ) : (
+              <ProfilePicture
+                source={{uri: profileData.foto_perfil}}
+                resizeMode="contain" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
+              />
+            )}
           </PictureContainer>
-          <ContainerPubFoll>
-            <ContainerPub>
-              <TextNumber>8</TextNumber>
-              <TextPubFoll>Publicações</TextPubFoll>
-            </ContainerPub>
-            <ContainerFollowers>
-              <TextNumber>0</TextNumber>
-              <TextPubFoll>Seguidores</TextPubFoll>
-            </ContainerFollowers>
-            <ContainerFollowed>
-              <TextNumber>0</TextNumber>
-              <TextPubFoll>Seguidos</TextPubFoll>
-            </ContainerFollowed>
-          </ContainerPubFoll>
+          <SettingContainer>
+            <SettingButton onPress={handleSettings}>
+              <SettingIcon name="menu" />
+            </SettingButton>
+            <ContainerPubFoll>
+              <ContainerPub>
+                <TextNumber>8</TextNumber>
+                <TextPubFoll>Publicações</TextPubFoll>
+              </ContainerPub>
+              <ContainerFollowers>
+                <TextNumber>{profileData.seguidores}</TextNumber>
+                <TextPubFoll>Seguidores</TextPubFoll>
+              </ContainerFollowers>
+              <ContainerFollowed>
+                <TextNumber>{profileData.seguidos}</TextNumber>
+                <TextPubFoll>Seguidos</TextPubFoll>
+              </ContainerFollowed>
+            </ContainerPubFoll>
+          </SettingContainer>
         </Container>
-        <ContainerBioFoll>
-          <TextBio>Atleta de fisiculturismo</TextBio>
-          <TextBio>Use o cupon maromba e ganhe 10% de desconto</TextBio>
+        <ContainerNameBio>
+          <ProfileName>{profileData.nome_usuario}</ProfileName>
+          <TextBio>{profileData.bio}</TextBio>
+
           <LinkButton onPress={abrirLink}>
             <TextLinkButton>www.gsuplementos.com.br</TextLinkButton>
           </LinkButton>
-        </ContainerBioFoll>
+        </ContainerNameBio>
         <ContainerButtons>
           <ButtonFollow>
-            <CustonButton texto="Editar perfil" onPress={() => navigation.navigate('EditProfile')}/>
+            <CustonButton
+              texto="Editar perfil"
+              onPress={() => navigation.navigate('EditProfile')}
+            />
           </ButtonFollow>
-
         </ContainerButtons>
 
         <ProfilePost />
@@ -88,4 +133,3 @@ export default function Profile() {
     </>
   );
 }
-

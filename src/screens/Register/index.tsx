@@ -1,16 +1,16 @@
 import React, {useState} from 'react';
-import CustomButton  from '../../components/CustomizeButton';
+import CustomButton from '../../components/CustomizeButton';
 import {ScrollView} from 'react-native';
 import TopImage from '../../components/TopImage';
-import { format } from 'date-fns';
+import {format} from 'date-fns';
 import {
   ContainerImagemRegister,
   ContainerInputRegister,
   ScreenBackgroundRegister,
 } from './style';
 import {Input} from '../../components/Input/style';
-import { useNavigation } from '@react-navigation/native';
-import api from '../../../server/api';
+import {useNavigation} from '@react-navigation/native';
+import api from '../../services/api';
 interface UsuarioCreate {
   email: string;
   nome_usuario: string;
@@ -44,9 +44,6 @@ function Register() {
   const [dataNascimento, setDataNascimento] = useState('');
   const [tipoUsuario, setTipoUsuario] = useState('');
 
-
-
-
   const handleRegister = () => {
     if (senha !== confirmarSenha) {
       console.error('As senhas não correspondem.');
@@ -58,17 +55,21 @@ function Register() {
     const ano = cleanedText.substring(4, 8);
 
     // Cria um novo objeto Date
-    const novaData = new Date(parseInt(ano, 10), parseInt(mes, 10) - 1, parseInt(dia, 10));
+    const novaData = new Date(
+      parseInt(ano, 10),
+      parseInt(mes, 10) - 1,
+      parseInt(dia, 10),
+    );
 
     // Formata a data no formato desejado (yyyy-mm-dd)
     const dataFormatada = format(novaData, 'yyyy-MM-dd');
 
     // Aqui você pode chamar a função para criar o usuário
     const usuarioCreate: UsuarioCreate = {
-      email:email,
+      email: email,
       nome_usuario: usuario,
       login: login, // Ou qualquer outro valor que seja apropriado
-      senha:senha,
+      senha: senha,
       tipo_usuario: tipoUsuario,
       data_nascimento: dataFormatada,
       foto_perfil: '', // Você precisa definir um valor para a foto de perfil
@@ -80,8 +81,7 @@ function Register() {
         console.log('Usuário criado com sucesso!');
         navigation.navigate('Login');
       })
-      .catch((error) => console.error('Erro ao criar usuário:', error));
-
+      .catch(error => console.error('Erro ao criar usuário:', error));
   };
 
   return (
@@ -93,34 +93,33 @@ function Register() {
       <ContainerInputRegister>
         <ScrollView>
           <Input
-            onChangeText={(text) => setUsuario(text)}
+            onChangeText={text => setUsuario(text)}
             value={usuario}
             placeholderTextColor={'white'}
             placeholder="Usuário:"
           />
           <Input
-            onChangeText={(text) => setEmail(text)}
+            onChangeText={text => setEmail(text)}
             value={email}
             placeholderTextColor={'white'}
             placeholder="Email:"
             keyboardType="email-address"
           />
           <Input
-            onChangeText={(text) => setLogin(text)}
+            onChangeText={text => setLogin(text)}
             value={login}
             placeholderTextColor={'white'}
             placeholder="Login:"
-
           />
           <Input
-            onChangeText={(text) => setSenha(text)}
+            onChangeText={text => setSenha(text)}
             value={senha}
             placeholderTextColor={'white'}
             placeholder="Senha:"
             secureTextEntry={true}
           />
           <Input
-            onChangeText={(text) => setConfirmarSenha(text)}
+            onChangeText={text => setConfirmarSenha(text)}
             value={confirmarSenha}
             placeholderTextColor={'white'}
             placeholder="Confirmar senha:"
@@ -130,14 +129,13 @@ function Register() {
             onChangeText={(formatted, extracted: any) => {
               return setDataNascimento(extracted);
             }}
-
             mask="[00]/[00]/[0000]"
             placeholderTextColor={'white'}
             placeholder="Data de nascimento:"
             keyboardType="numeric"
           />
           <Input
-            onChangeText={(text) => setTipoUsuario(text)}
+            onChangeText={text => setTipoUsuario(text)}
             value={tipoUsuario}
             placeholderTextColor={'white'}
             placeholder="Tipo de usuário:"

@@ -13,21 +13,21 @@ export const {Navigator, Screen} = createBottomTabNavigator();
 export default function AppTabNav() {
   const theme = useTheme();
 
-  const profileIcone = (focused:boolean, size:number, color:string) => (
+  const profileIcone = (focused: boolean, size: number, color: string) => (
     <Ionicons
       name={focused ? 'person' : 'person-outline'}
       size={size}
       color={color}
     />
   );
-  const researchIcone = (focused:boolean, size:number, color:string) => (
+  const researchIcone = (focused: boolean, size: number, color: string) => (
     <Ionicons
       name={focused ? 'search' : 'search-outline'}
       size={size}
       color={color}
     />
   );
-  const feedScreenIcone = (focused:boolean, size:number, color:string) => (
+  const feedScreenIcone = (focused: boolean, size: number, color: string) => (
     <Ionicons
       name={focused ? 'newspaper' : 'newspaper-outline'}
       size={size}
@@ -35,19 +35,27 @@ export default function AppTabNav() {
     />
   );
 
-  const trainingPartnerIcone = (focused:boolean, size:number, color:string) => (
+  const trainingPartnerIcone = (
+    focused: boolean,
+    size: number,
+    color: string,
+  ) => (
     <Ionicons
-    name={focused ? 'people' : 'people-outline'}
-    size={size}
-    color={color}
-  />
+      name={focused ? 'people' : 'people-outline'}
+      size={size}
+      color={color}
+    />
   );
-  const trainingmontageIcone = (focused:boolean, size:number, color:string) => (
-<Ionicons
-              name={focused ? 'barbell' : 'barbell-outline'}
-              size={size}
-              color={color}
-            />
+  const trainingmontageIcone = (
+    focused: boolean,
+    size: number,
+    color: string,
+  ) => (
+    <Ionicons
+      name={focused ? 'barbell' : 'barbell-outline'}
+      size={size}
+      color={color}
+    />
   );
   return (
     <Navigator
@@ -87,7 +95,8 @@ export default function AppTabNav() {
         options={{
           tabBarLabel: 'Feed',
 
-          tabBarIcon: ({size, color, focused}) =>feedScreenIcone(focused, size, color),
+          tabBarIcon: ({size, color, focused}) =>
+            feedScreenIcone(focused, size, color),
         }}
       />
       <Screen
@@ -96,7 +105,8 @@ export default function AppTabNav() {
         options={{
           tabBarLabel: 'TrainingPartner',
 
-          tabBarIcon: ({size, color, focused}) => trainingPartnerIcone(focused, size, color),
+          tabBarIcon: ({size, color, focused}) =>
+            trainingPartnerIcone(focused, size, color),
         }}
       />
       <Screen
@@ -106,7 +116,7 @@ export default function AppTabNav() {
           tabBarLabel: 'TrainingMontage',
 
           tabBarIcon: ({size, color, focused}) =>
-          trainingmontageIcone(focused, size, color),
+            trainingmontageIcone(focused, size, color),
         }}
       />
     </Navigator>
