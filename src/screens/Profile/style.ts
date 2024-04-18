@@ -3,6 +3,9 @@ import {Dimensions} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {RFValue} from 'react-native-responsive-fontsize';
 
+export const TexLoading = styled.Text`
+  color: ${({theme}) => theme.colors.primary};
+`;
 export const ScreenBackground = styled.SafeAreaView`
   flex: 1;
   background-color: ${({theme}) => theme.colors.backgroundColor};

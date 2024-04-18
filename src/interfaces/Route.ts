@@ -9,4 +9,5 @@ export type RootStackParamsList = {
   config: undefined;
   DrawerRoutes: undefined;
   SettingsScreen: undefined;
+  EditReg: undefined;
 };

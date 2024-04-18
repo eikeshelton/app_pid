@@ -12,6 +12,15 @@ export const Title = styled.Text`
   text-align: center;
   font-size: ${RFValue(20)}px;
   font-family: ${({theme}) => theme.fonts.bold};
-
   padding: ${RFValue(5)}px 0;
+`;
+export const ContainerOptions = styled.View`
+  flex: 1;
+  padding: ${RFValue(10)}px 0;
+`;
+export const TouchOptions = styled.TouchableOpacity``;
+export const OptionsText = styled.Text`
+  color: ${({theme}) => theme.colors.primary};
+  font-size: ${RFValue(17)}px;
+  text-decoration-line: underline;
 `;

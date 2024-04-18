@@ -63,8 +63,8 @@ function AuthProvider({children}: AuthProviderProps) {
   }
 
   async function destroyAllTables() {
-    await AsyncStorage.removeItem('userString');
-    await AsyncStorage.removeItem('userEmail');
+    await AsyncStorage.setItem('userString', '');
+
     setData({} as User);
   }
 
