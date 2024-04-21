@@ -78,7 +78,6 @@ function Register() {
 
     criarUsuario(usuarioCreate)
       .then(() => {
-        console.log('Usuário criado com sucesso!');
         navigation.navigate('Login');
       })
       .catch(error => console.error('Erro ao criar usuário:', error));
@@ -96,7 +95,7 @@ function Register() {
             onChangeText={text => setUsuario(text)}
             value={usuario}
             placeholderTextColor={'white'}
-            placeholder="Usuário:"
+            placeholder="Nome:"
           />
           <Input
             onChangeText={text => setEmail(text)}

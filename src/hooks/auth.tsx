@@ -9,14 +9,19 @@ import api from '../services/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface User {
-  nome_usuario: string;
-  tipo_usuario: string;
-  bio: string;
-  foto_perfil: string;
-  seguidores: number;
-  seguidos: number;
-  email: string;
-  login: string;
+  nome_usuario?: string;
+  tipo_usuario?: string;
+  bio?: string;
+  foto_perfil?: string;
+  seguidores?: number;
+  seguidos?: number;
+  email?: string;
+  login?: string;
+  senha?: string;
+  id: Number;
+}
+interface UserCheck {
+  email: any;
   senha: string;
 }
 
@@ -30,6 +35,8 @@ interface AuthContextData {
   signIn: (credentials: SignInCredentials) => Promise<void>;
   signOut: () => Promise<void>;
   updateAvatar: (user: User) => Promise<void>;
+  updateLogin: (user: User) => Promise<void>;
+  checkCredentials: (user: UserCheck) => Promise<boolean>;
 }
 
 interface AuthProviderProps {
@@ -93,6 +100,42 @@ function AuthProvider({children}: AuthProviderProps) {
       console.log(err);
     }
   }
+  async function checkCredentials(user: UserCheck): Promise<boolean> {
+    try {
+      const response = await api.post('/check-credentials/', {
+        email: user.email,
+        senha: user.senha,
+      });
+
+      if (response.data) {
+        console.log('credenciais válidas');
+        setData(response.data);
+        return true;
+      } else {
+        throw new Error('Credenciais inválidas');
+      }
+    } catch (err) {
+      console.log(err);
+      throw err; // Lança a exceção para indicar uma falha
+    }
+  }
+
+  async function updateLogin(user: User) {
+    try {
+      const response = await api.put('/Uploadlogin/', {
+        email: user.email,
+        id: user.id,
+        login: user.login,
+        senha: user.senha,
+      });
+
+      if (response.data) {
+        setData(response.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   useEffect(() => {
     let isMounted = true;
@@ -122,6 +165,8 @@ function AuthProvider({children}: AuthProviderProps) {
         signIn,
         signOut,
         updateAvatar,
+        updateLogin,
+        checkCredentials,
       }}>
       {children}
     </AuthContext.Provider>
