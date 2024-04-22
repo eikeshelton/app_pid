@@ -6,7 +6,6 @@ import CustomButton from '../../components/CustomizeButton';
 import TopImage from '../../components/TopImage';
 import {useNavigation} from '@react-navigation/native';
 import api from '../../services/api';
-import {useAuth} from '../../hooks/auth';
 
 export default function ResetPassword() {
   const [token, setToken] = useState('');
