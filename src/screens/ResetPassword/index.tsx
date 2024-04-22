@@ -4,16 +4,16 @@ import {Container, InputContainer} from './style';
 import {Input} from '../../components/Input/style';
 import CustomButton from '../../components/CustomizeButton';
 import TopImage from '../../components/TopImage';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import api from '../../services/api';
+import {useAuth} from '../../hooks/auth';
 
-export default function ResetPassword({ route }) {
-  const { email } = route.params;
+export default function ResetPassword() {
   const [token, setToken] = useState('');
+  const [email, setEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const navigation = useNavigation();
-
   const handleResetPassword = async () => {
     try {
       if (newPassword !== confirmNewPassword) {
@@ -21,11 +21,12 @@ export default function ResetPassword({ route }) {
         return;
       }
 
-      const response = await api.post(`/usuarios/${email}/reset-password/`, {
-        token,
-        new_password: newPassword
+      const response = await api.post('/usuarios/reset-password/', {
+        token: token,
+        new_password: newPassword,
+        email: email,
       });
-      if (response.ok) {
+      if (response.data) {
         Alert.alert('Sucesso', 'Senha redefinida com sucesso.');
         navigation.navigate('Login');
       } else {
@@ -45,6 +46,12 @@ export default function ResetPassword({ route }) {
           value={token}
           placeholder="Token de redefinição de senha"
           onChangeText={setToken}
+          placeholderTextColor={'white'}
+        />
+        <Input
+          value={email}
+          placeholder="Email"
+          onChangeText={setEmail}
           placeholderTextColor={'white'}
         />
         <Input

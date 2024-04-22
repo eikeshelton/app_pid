@@ -18,11 +18,17 @@ interface User {
   email?: string;
   login?: string;
   senha?: string;
-  id: Number;
+  id?: Number;
+  token?: string;
 }
 interface UserCheck {
   email: any;
   senha: string;
+}
+interface UserResetPassword {
+  email: any;
+  senha: string;
+  token: string;
 }
 
 interface SignInCredentials {
@@ -37,6 +43,8 @@ interface AuthContextData {
   updateAvatar: (user: User) => Promise<void>;
   updateLogin: (user: User) => Promise<void>;
   checkCredentials: (user: UserCheck) => Promise<boolean>;
+  requestPasswordReset: (user: User) => Promise<void>;
+  updateUser: (user: User) => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -83,7 +91,18 @@ function AuthProvider({children}: AuthProviderProps) {
       throw new Error('Erro ao fazer logout.');
     }
   }
-
+  async function updateUser(user: User) {
+    try {
+      const response = await api.post('/usuarios/', {
+        email: user.email,
+      });
+      if (response.data) {
+        setData(response.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
   async function updateAvatar(user: User) {
     try {
       const response = await api.put(`/usuarios/${user.email}`, {
@@ -100,6 +119,25 @@ function AuthProvider({children}: AuthProviderProps) {
       console.log(err);
     }
   }
+  async function requestPasswordReset(user: User) {
+    try {
+      // Enviar apenas o token para o backend
+      const response = await api.post('/usuarios/request-password-reset/', {
+        email: user.email,
+      });
+
+      // Verificar se a resposta foi bem-sucedida
+      if (response.status === 200) {
+        console.log('Email enviado');
+      } else {
+        throw new Error('Erro ao enviar o email');
+      }
+    } catch (err) {
+      console.log(err);
+      throw err; // Lança a exceção para indicar uma falha
+    }
+  }
+  async function handleResetPassword(user: User) {}
   async function checkCredentials(user: UserCheck): Promise<boolean> {
     try {
       const response = await api.post('/check-credentials/', {
@@ -164,9 +202,11 @@ function AuthProvider({children}: AuthProviderProps) {
         user: data,
         signIn,
         signOut,
+        updateUser,
         updateAvatar,
         updateLogin,
         checkCredentials,
+        requestPasswordReset,
       }}>
       {children}
     </AuthContext.Provider>

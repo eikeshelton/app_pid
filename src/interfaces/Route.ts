@@ -10,4 +10,5 @@ export type RootStackParamsList = {
   DrawerRoutes: undefined;
   SettingsScreen: undefined;
   EditReg: undefined;
+  ResetPassword: undefined;
 };
