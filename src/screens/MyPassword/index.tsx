@@ -1,9 +1,7 @@
 import React, {useState} from 'react';
 
-import {
-  Container, ContainerEmail,
-} from './style';
-import { Input } from '../../components/Input/style';
+import {Container, ContainerEmail} from './style';
+import {Input} from '../../components/Input/style';
 import CustomButton from '../../components/CustomizeButton';
 import TopImage from '../../components/TopImage';
 import {useNavigation} from '@react-navigation/native';
