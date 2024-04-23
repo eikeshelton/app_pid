@@ -4,6 +4,7 @@ import Login from '../screens/Login';
 import Register from '../screens/Register';
 import TermsUse from '../screens/TermsUse';
 import MyPassword from '../screens/MyPassword';
+import ResetPassword from '../screens/ResetPassword';
 const {Navigator, Screen} = createStackNavigator();
 export function AuthRoutes() {
   return (
@@ -22,6 +23,11 @@ export function AuthRoutes() {
       <Screen
         name="Register"
         component={Register}
+        options={{headerShown: false}}
+      />
+      <Screen
+        name="ResetPassword"
+        component={ResetPassword}
         options={{headerShown: false}}
       />
     </Navigator>

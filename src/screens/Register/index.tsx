@@ -23,7 +23,6 @@ interface UsuarioCreate {
 }
 
 const criarUsuario = async (usuarioCreate: UsuarioCreate) => {
-  console.log(usuarioCreate);
   try {
     const response = await api.post('/usuarios/', usuarioCreate);
 
