@@ -5,6 +5,7 @@ import AppTabNav from './app.tab.routes'; // Assuming this defines your tab navi
 import EditProfile from '../screens/EditProfile';
 import {SettingsScreen} from '../screens/SettingsScreen';
 import {EditReg} from '../screens/EditRegistration';
+import ResetPassword from '../screens/ResetPassword';
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,11 @@ export function AppRoutes() {
       <Stack.Screen
         name="EditReg"
         component={EditReg}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ResetPassword"
+        component={ResetPassword}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

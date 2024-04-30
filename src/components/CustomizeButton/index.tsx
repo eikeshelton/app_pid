@@ -1,5 +1,5 @@
 import React from 'react';
-import {Container, GradientInputButton, InputButton, TextButton} from './style';
+import {Container, InputButton, TextButton} from './style';
 import {TouchableOpacityProps} from 'react-native';
 
 interface CustomizeButtonProps extends TouchableOpacityProps {
@@ -11,9 +11,7 @@ function CustomButton({texto, ...rest}: CustomizeButtonProps) {
   return (
     <Container>
       <InputButton {...rest}>
-        <GradientInputButton>
-          <TextButton>{texto}</TextButton>
-        </GradientInputButton>
+        <TextButton>{texto}</TextButton>
       </InputButton>
     </Container>
   );

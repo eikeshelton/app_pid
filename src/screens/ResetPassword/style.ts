@@ -5,8 +5,13 @@ export const Container = styled.View`
   flex: 1;
   background-color: ${({theme}) => theme.colors.backgroundColor};
 `;
-export const ContainerEmail = styled.View`
-  flex: 1;
-  padding-left: ${RFValue(24)}px;
-  padding-right: ${RFValue(24)}px;
+
+export const InputContainer = styled.View`
+  width: 100%;
+  margin-top: ${RFValue(32)}px;
+`;
+
+export const ButtonContainer = styled.View`
+  margin-top: ${RFValue(24)}px;
+  width: 100%;
 `;

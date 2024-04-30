@@ -6,6 +6,7 @@ import BackButton from '../../components/BackButton';
 import TopImage from '../../components/TopImage';
 import CustonButton from '../../components/CustomizeButton';
 import {useNavigation} from '@react-navigation/native';
+import {Alert} from 'react-native';
 export function EditReg() {
   const navigation = useNavigation();
   const {updateLogin, checkCredentials} = useAuth();
@@ -17,13 +18,17 @@ export function EditReg() {
   const [senha_verifica, setSenha_verifica] = useState(false);
 
   const handleupdate = () => {
-    updateLogin({
-      email: email,
-      id: user.id,
-      login: login,
-      senha: senha,
-    });
-    navigation.goBack();
+    if (senha_antiga !== senha) {
+      updateLogin({
+        email: email,
+        id: user.id,
+        login: login,
+        senha: senha,
+      });
+      navigation.goBack();
+    } else {
+      Alert.alert('A nova senha deve ser diferente da atual');
+    }
   };
   const verificar = async () => {
     const credenciaisValidas = await checkCredentials({
