@@ -48,6 +48,7 @@ export function EditReg() {
           value={senha}
           placeholderTextColor={'white'}
           placeholder="Nova senha"
+          secureTextEntry={true}
         />
         <Input
           onChangeText={text => setLogin(text)}
@@ -60,6 +61,7 @@ export function EditReg() {
           value={email}
           placeholderTextColor={'white'}
           placeholder="Novo email:"
+          keyboardType="email-address"
         />
       </ContainerInputBio>
 
@@ -75,6 +77,7 @@ export function EditReg() {
           placeholderTextColor={'white'}
           placeholder="Senha atual"
           onChangeText={text => setSenha_antiga(text)}
+          secureTextEntry={true}
         />
       </ContainerInputBio>
 
