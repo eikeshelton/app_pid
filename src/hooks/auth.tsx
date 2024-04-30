@@ -25,11 +25,6 @@ interface UserCheck {
   email: any;
   senha: string;
 }
-interface UserResetPassword {
-  email: any;
-  senha: string;
-  token: string;
-}
 
 interface SignInCredentials {
   login: string;
@@ -134,10 +129,9 @@ function AuthProvider({children}: AuthProviderProps) {
       }
     } catch (err) {
       console.log(err);
-      throw err; // Lança a exceção para indicar uma falha
+      throw err;
     }
   }
-  async function handleResetPassword(user: User) {}
   async function checkCredentials(user: UserCheck): Promise<boolean> {
     try {
       const response = await api.post('/check-credentials/', {
@@ -154,7 +148,7 @@ function AuthProvider({children}: AuthProviderProps) {
       }
     } catch (err) {
       console.log(err);
-      throw err; // Lança a exceção para indicar uma falha
+      throw err;
     }
   }
 

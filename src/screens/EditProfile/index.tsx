@@ -48,7 +48,7 @@ const EditProfile = () => {
 
   async function handleUpdateUser() {
     await updateAvatar({
-      ...user,
+      email: user.email,
       bio: bio,
       foto_perfil: fotoPerfil,
       nome_usuario: usuario,

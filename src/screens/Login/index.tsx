@@ -3,6 +3,8 @@ import {
   Keyboard,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import TopImage from '../../components/TopImage';
 import CustonButton from '../../components/CustomizeButton';
@@ -17,31 +19,33 @@ import {
   NewHere,
   TermsUse,
 } from './style';
-
 import {Input} from '../../components/Input/style';
 import {useNavigation} from '@react-navigation/native';
-import {KeyboardAvoidingView} from 'react-native';
 import {useAuth} from '../../hooks/auth';
-
-interface Login {
-  login: string;
-  senha: string;
-}
-
 function Login() {
   const {signIn} = useAuth();
-
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
   const navigation = useNavigation();
 
   const handlelogin = () => {
     signIn({
       login,
       senha,
+    }).catch(_error => {
+      setShowAlert(true);
     });
   };
-
+  if (showAlert === true) {
+    Alert.alert(
+      'Erro de autenticação',
+      'Login ou senha incorretos. Por favor, tente novamente.',
+      [
+        {text: 'OK', onPress: () => setShowAlert(false)}, // O botão "OK" fecha o alerta
+      ],
+    );
+  }
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Container>
