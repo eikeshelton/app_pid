@@ -1,18 +1,16 @@
 import React from 'react';
 import {FlatList} from 'react-native';
-import { Container,
-   Imagem } from './style';
+import {Container, Imagem} from './style';
 
 const imagens = [
-  { id: '1', source: require('../../assets/imagens/imagens_postagens/1.jpg') },
-  { id: '3', source: require('../../assets/imagens/imagens_postagens/3.jpg') },
-  { id: '2', source: require('../../assets/imagens/imagens_postagens/2.jpg') },
-  { id: '4', source: require('../../assets/imagens/imagens_postagens/4.jpg') },
-  { id: '5', source: require('../../assets/imagens/imagens_postagens/5.jpg') },
-  { id: '6', source: require('../../assets/imagens/imagens_postagens/6.jpg') },
-  { id: '7', source: require('../../assets/imagens/imagens_postagens/7.jpg') },
-  { id: '8', source: require('../../assets/imagens/imagens_postagens/8.jpg') },
-
+  {id: '1', source: require('../../assets/imagens/imagens_postagens/1.jpg')},
+  {id: '3', source: require('../../assets/imagens/imagens_postagens/3.jpg')},
+  {id: '2', source: require('../../assets/imagens/imagens_postagens/2.jpg')},
+  {id: '4', source: require('../../assets/imagens/imagens_postagens/4.jpg')},
+  {id: '5', source: require('../../assets/imagens/imagens_postagens/5.jpg')},
+  {id: '6', source: require('../../assets/imagens/imagens_postagens/6.jpg')},
+  {id: '7', source: require('../../assets/imagens/imagens_postagens/7.jpg')},
+  {id: '8', source: require('../../assets/imagens/imagens_postagens/8.jpg')},
 ];
 
 function ProfilePost() {
@@ -21,14 +19,10 @@ function ProfilePost() {
       <FlatList
         data={imagens}
         renderItem={({item}) => (
-          <Imagem
-            source={item.source}
-            resizeMode="stretch"
-          />
+          <Imagem source={item.source} resizeMode="stretch" />
         )}
         keyExtractor={item => item.id}
         numColumns={2} // Define 2 imagens por linha
-
       />
     </Container>
   );

@@ -21,6 +21,8 @@ import {
   SettingContainer,
   SettingButton,
   SettingIcon,
+  ChatIcon,
+  ChatButton,
 } from './style';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import api from '../../services/api';
@@ -48,7 +50,6 @@ export default function Profile() {
     try {
       setLoading(true);
       const {email} = user;
-      console.log(email);
       const response = await api.get(`/usuarios/${email}`);
       const {data} = response;
       if (!email) {
@@ -120,6 +121,9 @@ export default function Profile() {
             onPress={() => navigation.navigate('EditProfile')}
           />
         </ButtonFollow>
+        <ChatButton>
+          <ChatIcon name="chat" />
+        </ChatButton>
       </ContainerButtons>
 
       <ProfilePost />
