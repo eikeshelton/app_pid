@@ -30,9 +30,26 @@ interface SignInCredentials {
   login: string;
   senha: string;
 }
-
+interface Search {
+  login: string;
+}
+interface UserSearch {
+  nome_usuario?: string;
+  tipo_usuario?: string;
+  bio?: string;
+  foto_perfil?: string;
+  seguidores?: number;
+  seguidos?: number;
+  email?: string;
+  login?: string;
+  senha?: string;
+  id: Number;
+  token?: string;
+}
+type UserSearchArray = UserSearch[];
 interface AuthContextData {
   user: User;
+  usersearch: UserSearchArray;
   signIn: (credentials: SignInCredentials) => Promise<void>;
   signOut: () => Promise<void>;
   updateAvatar: (user: User) => Promise<void>;
@@ -40,6 +57,7 @@ interface AuthContextData {
   checkCredentials: (user: UserCheck) => Promise<boolean>;
   requestPasswordReset: (user: User) => Promise<void>;
   updateUser: (user: User) => Promise<void>;
+  Search: (search: Search) => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -50,6 +68,7 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 function AuthProvider({children}: AuthProviderProps) {
   const [data, setData] = useState<User>({foto_perfil: ''} as User);
+  const [datausersearch, setusersearch] = useState<UserSearchArray>([]);
 
   async function signIn({login, senha}: SignInCredentials) {
     try {
@@ -123,7 +142,6 @@ function AuthProvider({children}: AuthProviderProps) {
 
       // Verificar se a resposta foi bem-sucedida
       if (response.status === 200) {
-        console.log('Email enviado');
       } else {
         throw new Error('Erro ao enviar o email');
       }
@@ -140,7 +158,6 @@ function AuthProvider({children}: AuthProviderProps) {
       });
 
       if (response.data) {
-        console.log('credenciais válidas');
         setData(response.data);
         return true;
       } else {
@@ -163,6 +180,19 @@ function AuthProvider({children}: AuthProviderProps) {
 
       if (response.data) {
         setData(response.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  async function Search(search: Search) {
+    try {
+      const response = await api.post('/usuarios/buscar/', {
+        login: search.login,
+      });
+
+      if (response.data) {
+        setusersearch(response.data);
       }
     } catch (err) {
       console.log(err);
@@ -194,6 +224,7 @@ function AuthProvider({children}: AuthProviderProps) {
     <AuthContext.Provider
       value={{
         user: data,
+        usersearch: datausersearch,
         signIn,
         signOut,
         updateUser,
@@ -201,6 +232,7 @@ function AuthProvider({children}: AuthProviderProps) {
         updateLogin,
         checkCredentials,
         requestPasswordReset,
+        Search,
       }}>
       {children}
     </AuthContext.Provider>

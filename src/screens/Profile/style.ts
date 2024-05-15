@@ -1,6 +1,7 @@
 import styled from 'styled-components/native';
 import {Dimensions} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Entypo from 'react-native-vector-icons/Entypo';
 import {RFValue} from 'react-native-responsive-fontsize';
 
 export const TexLoading = styled.Text`
@@ -100,14 +101,21 @@ export const TextLinkButton = styled.Text`
 `;
 
 export const ContainerButtons = styled.View`
-  padding: ${RFValue(12)}px;
   flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
 `;
 export const ButtonFollow = styled.View`
-  flex: 1;
-  margin-right: ${RFValue(6)}px;
+  width: 80%;
+  flex-direction: row;
+  align-items: center;
+
+  padding-top: 10px;
 `;
-export const ButtonMessage = styled.View`
-  flex: 1;
-  margin-left: ${RFValue(12)}px;
+export const ChatButton = styled.TouchableOpacity``;
+export const ChatIcon = styled(Entypo)`
+  color: ${({theme}) => theme.colors.primary};
+  font-size: ${RFValue(40)}px;
 `;
