@@ -91,28 +91,15 @@ export const TextBio = styled.Text`
   font-family: ${({theme}) => theme.fonts.light};
 `;
 
-export const LinkButton = styled.TouchableOpacity`
-  text-decoration-line: underline;
-`;
-export const TextLinkButton = styled.Text`
-  color: ${({theme}) => theme.colors.colorBlue};
-  text-decoration-line: underline;
-  font-size: ${RFValue(14)}px;
-`;
-
 export const ContainerButtons = styled.View`
   flex-direction: row;
   width: 100%;
-  align-items: center;
+
   justify-content: space-between;
   padding: 0 20px;
 `;
 export const ButtonFollow = styled.View`
   width: 80%;
-  flex-direction: row;
-  align-items: center;
-
-  padding-top: 10px;
 `;
 export const ChatButton = styled.TouchableOpacity``;
 export const ChatIcon = styled(Entypo)`
