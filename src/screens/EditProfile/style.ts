@@ -6,6 +6,7 @@ export const Container = styled.View`
   flex: 1;
   align-items: center;
   background-color: ${({theme}) => theme.colors.backgroundColor};
+  padding: 5px 25px;
 `;
 
 export const ContainerInputBio = styled.ScrollView`

@@ -121,7 +121,7 @@ export default function Profile() {
             onPress={() => navigation.navigate('EditProfile')}
           />
         </ButtonFollow>
-        <ChatButton>
+        <ChatButton onPress={() => navigation.navigate('ScreenChat')}>
           <ChatIcon name="chat" />
         </ChatButton>
       </ContainerButtons>

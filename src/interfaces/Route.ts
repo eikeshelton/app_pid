@@ -11,4 +11,5 @@ export type RootStackParamsList = {
   SettingsScreen: undefined;
   EditReg: undefined;
   ResetPassword: undefined;
+  ScreenChat: undefined;
 };
