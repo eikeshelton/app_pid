@@ -8,7 +8,8 @@ export const Container = styled.View`
 
 export const ContainerImagem = styled.View`
   width: 100%;
-  height: ${RFValue(180)}px;
+  height: ${RFValue(220)}px;
+  margin: ${RFValue(24)}px 0;
 `;
 
 export const ContentLogin = styled.View`
@@ -24,33 +25,46 @@ export const ContainerButton = styled.View`
 `;
 
 export const FooterLogin = styled.View`
-  padding: ${RFValue(24)}px;
+  padding: 0 ${RFValue(24)}px;
 `;
 
 export const FooterDescription = styled.Text`
   color: ${({theme}) => theme.colors.colorWhite};
-  font-size: ${RFValue(15)}px;
+  font-size: ${RFValue(14)}px;
   font-family: ${({theme}) => theme.fonts.light};
-  padding-bottom: ${RFValue(10)}px;
 `;
 
 export const ClickText = styled.Text`
   color: ${({theme}) => theme.colors.primary};
-  font-size: ${RFValue(15)}px;
+  font-size: ${RFValue(14)}px;
   font-family: ${({theme}) => theme.fonts.bold};
-  padding-bottom: ${RFValue(10)}px;
+  padding-bottom: ${RFValue(14)}px;
   text-decoration-line: underline;
 `;
 
-export const NewHere = styled.View`
-  flex-direction: row;
+export const ContainerForgotPassword = styled.View`
   width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-top: ${RFValue(14)}px;
+`;
+
+export const NewHere = styled.View`
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   margin-bottom: ${RFValue(10)}px;
-  margin-top: ${RFValue(10)}px;
+  margin-top: ${RFValue(14)}px;
 `;
+
 export const TermsUse = styled.View`
-  justify-content: space-between;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 `;
+
 export const Welcome = styled.Text`
   color: ${({theme}) => theme.colors.primary};
   font-size: ${RFValue(50)}px;

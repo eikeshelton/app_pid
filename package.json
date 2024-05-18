@@ -32,7 +32,8 @@
     "react-native-vector-icons": "^10.0.3",
     "react-navigation": "^5.0.0",
     "styled-components": "^6.1.0",
-    "uri-scheme": "^1.1.0"
+    "uri-scheme": "^1.1.0",
+    "yarn": "^1.22.22"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

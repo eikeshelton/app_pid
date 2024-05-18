@@ -13,6 +13,7 @@ import {
   Container,
   ContainerImagem,
   ContainerInputLogin,
+  ContainerForgotPassword,
   ContentLogin,
   FooterDescription,
   FooterLogin,
@@ -27,6 +28,15 @@ function Login() {
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
   const [showAlert, setShowAlert] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [focusedInputId, setFocusedInputId] = useState(0);
+  const handleFocus = (inputId: number) => {
+    setIsFocused(true);
+    setFocusedInputId(inputId);
+  };
+  const handleBlur = () => {
+    setFocusedInputId(0);
+  };
   const navigation = useNavigation();
 
   const handlelogin = () => {
@@ -60,37 +70,44 @@ function Login() {
                 onChangeText={text => setLogin(text)}
                 value={login}
                 placeholderTextColor={'white'}
-                placeholder="Login:"
+                placeholder="Login"
+                onFocus={() => handleFocus(1)}
+                onBlur={handleBlur}
+                isFocused={focusedInputId === 1}
               />
               <Input
                 onChangeText={text => setSenha(text)}
                 value={senha}
                 placeholderTextColor={'white'}
-                placeholder="Senha:"
+                placeholder="Senha"
                 secureTextEntry={true}
+                onFocus={() => handleFocus(2)}
+                onBlur={handleBlur}
+                isFocused={focusedInputId === 2}
               />
             </ContainerInputLogin>
-
-            <TouchableOpacity onPress={() => navigation.navigate('MyPassword')}>
-              <ClickText>Esqueci minha senha</ClickText>
-            </TouchableOpacity>
 
             <CustonButton texto="Entrar" onPress={handlelogin} />
           </ContentLogin>
 
           <FooterLogin>
+            <ContainerForgotPassword>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('MyPassword')}>
+                <ClickText>Esqueci minha senha</ClickText>
+              </TouchableOpacity>
+            </ContainerForgotPassword>
             <NewHere>
-              <FooterDescription>Novo aqui ?</FooterDescription>
+              <FooterDescription>Novo por aqui?</FooterDescription>
               <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-                <ClickText> Cadastre-se</ClickText>
+                <ClickText>Cadastre-se</ClickText>
               </TouchableOpacity>
             </NewHere>
             <TermsUse>
-              <FooterDescription>
-                Ao usar o aplicativo, você concorda com os nossos
-              </FooterDescription>
+              <FooterDescription>Ao usar o aplicativo,</FooterDescription>
+              <FooterDescription>você concorda com nossos</FooterDescription>
               <TouchableOpacity onPress={() => navigation.navigate('TermsUse')}>
-                <ClickText>Termos de uso </ClickText>
+                <ClickText>Termos de Uso</ClickText>
               </TouchableOpacity>
             </TermsUse>
           </FooterLogin>

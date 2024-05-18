@@ -94,33 +94,33 @@ function Register() {
             onChangeText={text => setUsuario(text)}
             value={usuario}
             placeholderTextColor={'white'}
-            placeholder="Nome:"
+            placeholder="Nome"
           />
           <Input
             onChangeText={text => setEmail(text)}
             value={email}
             placeholderTextColor={'white'}
-            placeholder="Email:"
+            placeholder="Email"
             keyboardType="email-address"
           />
           <Input
             onChangeText={text => setLogin(text)}
             value={login}
             placeholderTextColor={'white'}
-            placeholder="Login:"
+            placeholder="Login"
           />
           <Input
             onChangeText={text => setSenha(text)}
             value={senha}
             placeholderTextColor={'white'}
-            placeholder="Senha:"
+            placeholder="Senha"
             secureTextEntry={true}
           />
           <Input
             onChangeText={text => setConfirmarSenha(text)}
             value={confirmarSenha}
             placeholderTextColor={'white'}
-            placeholder="Confirmar senha:"
+            placeholder="Confirmar Senha"
             secureTextEntry={true}
           />
           <Input
@@ -129,14 +129,14 @@ function Register() {
             }}
             mask="[00]/[00]/[0000]"
             placeholderTextColor={'white'}
-            placeholder="Data de nascimento:"
+            placeholder="Data de Nascimento"
             keyboardType="numeric"
           />
           <Input
             onChangeText={text => setTipoUsuario(text)}
             value={tipoUsuario}
             placeholderTextColor={'white'}
-            placeholder="Tipo de usuário:"
+            placeholder="Tipo de Usuário"
           />
         </ScrollView>
         <CustomButton texto="Cadastre-se" onPress={handleRegister} />

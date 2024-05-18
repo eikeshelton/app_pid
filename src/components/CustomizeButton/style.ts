@@ -11,7 +11,7 @@ export const Container = styled.View`
 export const InputButton = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
-  border-radius: ${RFValue(15)}px;
+  border-radius: ${RFValue(18)}px;
   background-color: ${({theme}) => theme.colors.primary};
   padding: ${RFValue(10)}px;
 `;
