@@ -33,7 +33,7 @@ interface SignInCredentials {
 interface Search {
   login: string;
 }
-interface UserSearch {
+interface UsersSearch {
   nome_usuario?: string;
   tipo_usuario?: string;
   bio?: string;
@@ -46,10 +46,10 @@ interface UserSearch {
   id: Number;
   token?: string;
 }
-type UserSearchArray = UserSearch[];
+type UsersSearchArray = UsersSearch[];
 interface AuthContextData {
   user: User;
-  usersearch: UserSearchArray;
+  userssearch: UsersSearchArray;
   signIn: (credentials: SignInCredentials) => Promise<void>;
   signOut: () => Promise<void>;
   updateAvatar: (user: User) => Promise<void>;
@@ -68,7 +68,7 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 function AuthProvider({children}: AuthProviderProps) {
   const [data, setData] = useState<User>({foto_perfil: ''} as User);
-  const [datausersearch, setusersearch] = useState<UserSearchArray>([]);
+  const [datausersearch, setusersearch] = useState<UsersSearchArray>([]);
 
   async function signIn({login, senha}: SignInCredentials) {
     try {
@@ -224,7 +224,7 @@ function AuthProvider({children}: AuthProviderProps) {
     <AuthContext.Provider
       value={{
         user: data,
-        usersearch: datausersearch,
+        userssearch: datausersearch,
         signIn,
         signOut,
         updateUser,

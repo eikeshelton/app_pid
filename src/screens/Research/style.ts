@@ -8,7 +8,7 @@ export const Background = styled.SafeAreaView`
 export const Container = styled.View`
   padding: 22px;
 `;
-export const PictureContainer = styled.View`
+export const PictureContainer = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   border: solid 1px ${({theme}) => theme.colors.primary};

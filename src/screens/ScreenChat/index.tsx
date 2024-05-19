@@ -12,7 +12,7 @@ import {InputComponent} from '../../components/Input';
 import {FlatList} from 'react-native';
 import fotoPerfil from '../../assets/imagens/fotoperfil.png';
 export function ScreenChat() {
-  const {usersearch} = useAuth();
+  const {userssearch} = useAuth();
   const [pesquisar, setPesquisar] = useState('');
   const renderItem = ({item}: any) => (
     <PictureContainer>
@@ -36,7 +36,7 @@ export function ScreenChat() {
         placeholder="Pesquisar:"
       />
       <FlatList
-        data={usersearch}
+        data={userssearch}
         renderItem={renderItem}
         keyExtractor={item => item.id.toString()}
       />

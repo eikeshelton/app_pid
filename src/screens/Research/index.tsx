@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Input} from '../../components/Input/style';
-import {Alert, FlatList} from 'react-native';
+import {FlatList} from 'react-native';
 import {useAuth} from '../../hooks/auth';
 import {
   Background,
@@ -9,42 +9,41 @@ import {
   PictureContainer,
   ProfilePicture,
 } from './style';
-import CustomButton from '../../components/CustomizeButton';
+
 import fotoPerfil from '../../assets/imagens/fotoperfil.png';
+import {useNavigation} from '@react-navigation/native';
 export default function Research() {
-  const {usersearch, Search} = useAuth();
-  const [showAlert, setShowAlert] = useState(false);
+  const navigation = useNavigation();
+  const {userssearch, Search} = useAuth();
   const [pesquisar, setPesquisar] = useState('');
 
+  const handleChangeText = (text: string) => {
+    setPesquisar(text);
+  };
+  useEffect(() => {
+    if (pesquisar.length > 0) {
+      handleChangeText(pesquisar);
+      handleLogin();
+    }
+  }, [pesquisar]);
   const handleLogin = React.useCallback(() => {
     Search({
       login: pesquisar,
     }).catch(_error => {
-      setShowAlert(true);
+      console.error(_error);
     });
   }, [Search, pesquisar]);
-
-  if (showAlert === true) {
-    Alert.alert('Erro ', 'Usuário não encontrado', [
-      {
-        text: 'OK',
-        onPress: () => setShowAlert(false),
-      },
-    ]);
-  }
-  const handleChangeText = (text: string) => {
-    // Atualizar o estado de 'pesquisar' e chamar handleLogin
-    setPesquisar(text);
-    handleLogin();
+  const handleItemPress = (item: any) => {
+    navigation.navigate('UserSearch', {selectedItem: item});
   };
   const renderItem = ({item}: any) => (
-    <PictureContainer>
+    <PictureContainer onPress={() => handleItemPress(item)}>
       {item.foto_perfil ? (
         <ProfilePicture source={{uri: item.foto_perfil}} resizeMode="contain" />
       ) : (
         <ProfilePicture source={fotoPerfil} resizeMode="contain" />
       )}
-      <Name>{item.nome_usuario}</Name>
+      <Name>{item.login}</Name>
       <Name>{item.tipo_usuario}</Name>
     </PictureContainer>
   );
@@ -58,9 +57,9 @@ export default function Research() {
           placeholderTextColor={'white'}
           placeholder="Pesquisar"
         />
-        <CustomButton texto="pesquisar" onPress={handleLogin} />
+
         <FlatList
-          data={usersearch}
+          data={userssearch}
           renderItem={renderItem}
           keyExtractor={item => item.id.toString()}
           numColumns={2}

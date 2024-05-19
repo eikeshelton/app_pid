@@ -48,10 +48,10 @@ export default function Profile() {
 
   const fetchProfileData = async () => {
     try {
-      setLoading(true);
       const {email} = user;
       const response = await api.get(`/usuarios/${email}`);
       const {data} = response;
+
       if (!email) {
         console.error('Email não encontrado no AsyncStorage');
         return;

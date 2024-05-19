@@ -7,6 +7,7 @@ import {EditReg} from '../screens/EditRegistration';
 import ResetPassword from '../screens/ResetPassword';
 import TermsUse from '../screens/TermsUse';
 import {ScreenChat} from '../screens/ScreenChat';
+import UserSearch from '../screens/UserSearch';
 
 const Stack = createStackNavigator();
 
@@ -46,6 +47,11 @@ export function AppRoutes() {
       <Stack.Screen
         name="ScreenChat"
         component={ScreenChat}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="UserSearch"
+        component={UserSearch}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
