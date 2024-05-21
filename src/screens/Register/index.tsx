@@ -11,6 +11,8 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import api from '../../services/api';
 import {InputComponent} from '../../components/Input';
+import InputPicker from '../../components/InputPicker';
+
 interface UsuarioCreate {
   email: string;
   nome_usuario: string;
@@ -25,7 +27,6 @@ interface UsuarioCreate {
 const criarUsuario = async (usuarioCreate: UsuarioCreate) => {
   try {
     const response = await api.post('/usuarios/', usuarioCreate);
-
     return response.data;
   } catch (error) {
     console.error('Erro ao criar usuário:', error);
@@ -53,26 +54,23 @@ function Register() {
     const mes = cleanedText.substring(2, 4);
     const ano = cleanedText.substring(4, 8);
 
-    // Cria um novo objeto Date
     const novaData = new Date(
       parseInt(ano, 10),
       parseInt(mes, 10) - 1,
       parseInt(dia, 10),
     );
 
-    // Formata a data no formato desejado (yyyy-mm-dd)
     const dataFormatada = format(novaData, 'yyyy-MM-dd');
 
-    // Aqui você pode chamar a função para criar o usuário
     const usuarioCreate: UsuarioCreate = {
       email: email,
       nome_usuario: usuario,
-      login: login, // Ou qualquer outro valor que seja apropriado
+      login: login,
       senha: senha,
       tipo_usuario: tipoUsuario,
       data_nascimento: dataFormatada,
-      foto_perfil: '', // Você precisa definir um valor para a foto de perfil
-      bio: '', // Você precisa definir um valor para a bio
+      foto_perfil: '',
+      bio: '',
     };
 
     criarUsuario(usuarioCreate)
@@ -81,6 +79,13 @@ function Register() {
       })
       .catch(error => console.error('Erro ao criar usuário:', error));
   };
+
+  const tipoUsuarioItems = [
+    {label: 'Atleta', value: 'atleta'},
+    {label: 'Entusiasta', value: 'entusiasta'},
+    {label: 'Nutricionista', value: 'nutricionista'},
+    {label: 'Treinador', value: 'treinador'},
+  ];
 
   return (
     <ScreenBackgroundRegister>
@@ -95,7 +100,7 @@ function Register() {
             value={usuario}
             placeholderTextColor={'white'}
             placeholder="Nome"
-            isFocused={true} // O campo está focado quando esta prop é true
+            isFocused={true}
             inputId={10}
           />
           <InputComponent
@@ -104,7 +109,7 @@ function Register() {
             placeholderTextColor={'white'}
             placeholder="Email"
             keyboardType="email-address"
-            isFocused={true} // O campo está focado quando esta prop é true
+            isFocused={true}
             inputId={11}
           />
           <InputComponent
@@ -112,7 +117,7 @@ function Register() {
             value={login}
             placeholderTextColor={'white'}
             placeholder="Login"
-            isFocused={true} // O campo está focado quando esta prop é true
+            isFocused={true}
             inputId={12}
           />
           <InputComponent
@@ -121,7 +126,7 @@ function Register() {
             placeholderTextColor={'white'}
             placeholder="Senha"
             secureTextEntry={true}
-            isFocused={true} // O campo está focado quando esta prop é true
+            isFocused={true}
             inputId={3}
           />
           <InputComponent
@@ -130,7 +135,7 @@ function Register() {
             placeholderTextColor={'white'}
             placeholder="Confirmar Senha"
             secureTextEntry={true}
-            isFocused={true} // O campo está focado quando esta prop é true
+            isFocused={true}
             inputId={14}
           />
           <InputComponent
@@ -141,16 +146,13 @@ function Register() {
             placeholderTextColor={'white'}
             placeholder="Data de Nascimento"
             keyboardType="numeric"
-            isFocused={true} // O campo está focado quando esta prop é true
+            isFocused={true}
             inputId={15}
           />
-          <InputComponent
-            onChangeText={text => setTipoUsuario(text)}
-            value={tipoUsuario}
-            placeholderTextColor={'white'}
-            placeholder="Tipo de Usuário"
-            isFocused={true} // O campo está focado quando esta prop é true
-            inputId={16}
+          <InputPicker
+            items={tipoUsuarioItems}
+            onValueChange={(value: string) => setTipoUsuario(value)}
+            placeholder={{label: 'Tipo de Usuário', value: null}}
           />
         </ScrollView>
         <CustomButton texto="Cadastre-se" onPress={handleRegister} />

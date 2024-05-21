@@ -28,7 +28,6 @@ export const InputRegister = styled.TextInput`
 `;
 
 export const ContainerButtonRegister = styled.View`
-  margin-top: ${RFValue(18)}px;
   margin-bottom: ${RFValue(30)}px;
 `;
 

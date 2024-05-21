@@ -6,6 +6,7 @@ export const Input = styled(TextInputMask)<{isFocused: boolean}>`
   background-color: ${({theme}) => theme.colors.colorInput};
   color: ${({theme}) => theme.colors.colorWhite};
   padding-left: ${RFValue(14)}px;
+  padding-right: ${RFValue(14)}px;
   border-radius: ${RFValue(18)}px;
   margin-bottom: ${RFValue(12)}px;
   height: ${RFValue(50)}px;
