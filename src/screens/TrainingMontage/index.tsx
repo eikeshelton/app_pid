@@ -7,7 +7,7 @@ import {
   ContainerInputRegister,
   ScreenBackgroundRegister,
 } from './style';
-import {Input} from '../../components/Input/style';
+import {InputComponent} from '../../components/Input';
 
 interface Exercise {
   exercise: string;
@@ -59,30 +59,38 @@ function TrainingMontage({}) {
 
       <ContainerInputRegister>
         <ScrollView>
-          <Input
+          <InputComponent
             onChangeText={text => setCurrentDay(text)}
             value={currentDay}
             placeholderTextColor={'white'}
             placeholder="Dia da semana"
+            isFocused={true} // O campo está focado quando esta prop é true
+            inputId={23}
           />
-          <Input
+          <InputComponent
             onChangeText={text => setExercise(text)}
             value={exercise}
             placeholderTextColor={'white'}
             placeholder="Exercício"
+            isFocused={true} // O campo está focado quando esta prop é true
+            inputId={24}
           />
-          <Input
+          <InputComponent
             onChangeText={text => setDuration(text)}
             value={duration}
             placeholderTextColor={'white'}
             placeholder="Duração"
+            isFocused={true} // O campo está focado quando esta prop é true
+            inputId={25}
           />
 
-          <Input
+          <InputComponent
             onChangeText={text => setComment(text)}
             value={comment}
             placeholderTextColor={'white'}
             placeholder="Comentário:"
+            isFocused={true} // O campo está focado quando esta prop é true
+            inputId={25}
           />
         </ScrollView>
         <CustonButton texto="Adicionar Exercício" onPress={handleAddExercise} />

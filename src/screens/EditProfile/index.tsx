@@ -16,9 +16,9 @@ import {
   TextAlterImage,
 } from './style';
 import {useNavigation} from '@react-navigation/native';
-import {Input} from '../../components/Input/style';
 import {useAuth} from '../../hooks/auth';
 import BackButton from '../../components/BackButton';
+import {InputComponent} from '../../components/Input';
 
 const EditProfile = () => {
   const navigation = useNavigation();
@@ -98,23 +98,29 @@ const EditProfile = () => {
       <BackButton />
       <TopImage />
       <ContainerInputBio showsVerticalScrollIndicator={false}>
-        <Input
+        <InputComponent
           onChangeText={text => setUsuario(text)}
           value={usuario}
           placeholderTextColor={'white'}
           placeholder="Nome do usuário:"
+          isFocused={true} // O campo está focado quando esta prop é true
+          inputId={3}
         />
-        <Input
+        <InputComponent
           onChangeText={text => setTipoUsuario(text)}
           value={tipoUsuario}
           placeholderTextColor={'white'}
           placeholder="Tipo de usuário:"
+          isFocused={true} // O campo está focado quando esta prop é true
+          inputId={4}
         />
-        <Input
+        <InputComponent
           onChangeText={text => setBio(text)}
           value={bio}
           placeholderTextColor={'white'}
           placeholder="Bio:"
+          isFocused={true} // O campo está focado quando esta prop é true
+          inputId={5}
         />
 
         <ProfileImageContainer onPress={tirarFoto}>

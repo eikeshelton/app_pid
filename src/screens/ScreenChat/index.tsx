@@ -34,6 +34,8 @@ export function ScreenChat() {
         value={pesquisar}
         placeholderTextColor={'white'}
         placeholder="Pesquisar:"
+        isFocused={true} // O campo está focado quando esta prop é true
+        inputId={22}
       />
       <FlatList
         data={usersearch}

@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {Input} from '../../components/Input/style';
 import {Alert, FlatList} from 'react-native';
 import {useAuth} from '../../hooks/auth';
 import {
@@ -11,6 +10,7 @@ import {
 } from './style';
 import CustomButton from '../../components/CustomizeButton';
 import fotoPerfil from '../../assets/imagens/fotoperfil.png';
+import {InputComponent} from '../../components/Input';
 export default function Research() {
   const {usersearch, Search} = useAuth();
   const [showAlert, setShowAlert] = useState(false);
@@ -52,11 +52,13 @@ export default function Research() {
   return (
     <Background>
       <Container>
-        <Input
+        <InputComponent
           onChangeText={handleChangeText}
           value={pesquisar}
           placeholderTextColor={'white'}
           placeholder="Pesquisar"
+          isFocused={true} // O campo está focado quando esta prop é true
+          inputId={17}
         />
         <CustomButton texto="pesquisar" onPress={handleLogin} />
         <FlatList

@@ -1,12 +1,11 @@
 import React, {useState} from 'react';
-
 import {Container, ContainerEmail} from './style';
-import {Input} from '../../components/Input/style';
 import CustomButton from '../../components/CustomizeButton';
 import TopImage from '../../components/TopImage';
 import {useNavigation} from '@react-navigation/native';
 import {useAuth} from '../../hooks/auth';
 import BackButton from '../../components/BackButton';
+import {InputComponent} from '../../components/Input';
 
 export default function MyPassword() {
   const {requestPasswordReset} = useAuth();
@@ -23,11 +22,13 @@ export default function MyPassword() {
       <BackButton />
       <TopImage />
       <ContainerEmail>
-        <Input
+        <InputComponent
           onChangeText={text => setEmail(text)}
           value={Email}
           placeholderTextColor={'white'}
           placeholder="Email"
+          isFocused={true} // O campo está focado quando esta prop é true
+          inputId={9}
         />
         <CustomButton texto="Enviar" onPress={handlerequestPasswordReset} />
       </ContainerEmail>

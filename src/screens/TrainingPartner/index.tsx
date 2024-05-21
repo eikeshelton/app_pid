@@ -7,10 +7,9 @@ import {
   ContainerInputRegister,
   ScreenBackgroundRegister,
 } from './style';
-import {Input} from '../../components/Input/style';
+import {InputComponent} from '../../components/Input';
 
-
-export default function  TrainingPartner () {
+export default function TrainingPartner() {
   const [data, setData] = useState('');
   const [horario, setHorario] = useState('');
   const [grupamentoMuscular, setGrupamentoMuscular] = useState('');
@@ -21,8 +20,6 @@ export default function  TrainingPartner () {
     // Função vazia, não faz nada
   };
 
-
-
   return (
     <ScreenBackgroundRegister>
       <ContainerImagemRegister>
@@ -31,51 +28,58 @@ export default function  TrainingPartner () {
 
       <ContainerInputRegister>
         <ScrollView>
-          <Input
+          <InputComponent
             onChangeText={text => setData(text)}
             value={data}
             placeholderTextColor={'white'}
             placeholder="Data:"
+            isFocused={true} // O campo está focado quando esta prop é true
+            inputId={26}
           />
-          <Input
+          <InputComponent
             onChangeText={text => setHorario(text)}
             value={horario}
             placeholderTextColor={'white'}
             placeholder="Horário:"
+            isFocused={true} // O campo está focado quando esta prop é true
+            inputId={27}
           />
 
-          <Input
+          <InputComponent
             onChangeText={text => setGrupamentoMuscular(text)}
             value={grupamentoMuscular}
             placeholderTextColor={'white'}
             placeholder="Grupamento muscular:"
-
+            isFocused={true} // O campo está focado quando esta prop é true
+            inputId={28}
           />
-          <Input
+          <InputComponent
             onChangeText={text => setLocal(text)}
             value={local}
             placeholderTextColor={'white'}
             placeholder="Local:"
-
+            isFocused={true} // O campo está focado quando esta prop é true
+            inputId={29}
           />
-          <Input
+          <InputComponent
             onChangeText={text => setSexo(text)}
             value={sexo}
             placeholderTextColor={'white'}
             placeholder="Sexo:"
+            isFocused={true} // O campo está focado quando esta prop é true
+            inputId={30}
           />
-          <Input
+          <InputComponent
             onChangeText={text => setModalidade(text)}
             value={modalidade}
             placeholderTextColor={'white'}
             placeholder="Modalidade:"
+            isFocused={true} // O campo está focado quando esta prop é true
+            inputId={31}
           />
         </ScrollView>
         <CustonButton texto="Procurar" onPress={handlePress} />
-
       </ContainerInputRegister>
-
     </ScreenBackgroundRegister>
   );
 }
-

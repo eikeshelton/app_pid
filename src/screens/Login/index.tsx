@@ -20,23 +20,15 @@ import {
   NewHere,
   TermsUse,
 } from './style';
-import {Input} from '../../components/Input/style';
 import {useNavigation} from '@react-navigation/native';
 import {useAuth} from '../../hooks/auth';
+import {InputComponent} from '../../components/Input';
 function Login() {
   const {signIn} = useAuth();
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
   const [showAlert, setShowAlert] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
-  const [focusedInputId, setFocusedInputId] = useState(0);
-  const handleFocus = (inputId: number) => {
-    setIsFocused(true);
-    setFocusedInputId(inputId);
-  };
-  const handleBlur = () => {
-    setFocusedInputId(0);
-  };
+
   const navigation = useNavigation();
 
   const handlelogin = () => {
@@ -66,24 +58,22 @@ function Login() {
 
           <ContentLogin>
             <ContainerInputLogin>
-              <Input
+              <InputComponent
                 onChangeText={text => setLogin(text)}
                 value={login}
                 placeholderTextColor={'white'}
                 placeholder="Login"
-                onFocus={() => handleFocus(1)}
-                onBlur={handleBlur}
-                isFocused={focusedInputId === 1}
+                isFocused={true} // O campo está focado quando esta prop é true
+                inputId={1} // Identificador único do campo de entrada
               />
-              <Input
+              <InputComponent
                 onChangeText={text => setSenha(text)}
                 value={senha}
                 placeholderTextColor={'white'}
                 placeholder="Senha"
                 secureTextEntry={true}
-                onFocus={() => handleFocus(2)}
-                onBlur={handleBlur}
-                isFocused={focusedInputId === 2}
+                isFocused={true} // O campo está focado quando esta prop é true
+                inputId={2} // Identificador único do campo de entrada
               />
             </ContainerInputLogin>
 

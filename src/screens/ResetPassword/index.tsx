@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import {Alert} from 'react-native';
 import {Container, InputContainer} from './style';
-import {Input} from '../../components/Input/style';
 import CustomButton from '../../components/CustomizeButton';
 import TopImage from '../../components/TopImage';
 import {useNavigation} from '@react-navigation/native';
 import api from '../../services/api';
+import {InputComponent} from '../../components/Input';
 
 export default function ResetPassword() {
   const [token, setToken] = useState('');
@@ -41,31 +41,39 @@ export default function ResetPassword() {
     <Container>
       <TopImage />
       <InputContainer>
-        <Input
+        <InputComponent
           value={token}
           placeholder="Token de redefinição de senha"
           onChangeText={setToken}
           placeholderTextColor={'white'}
+          isFocused={true} // O campo está focado quando esta prop é true
+          inputId={18}
         />
-        <Input
+        <InputComponent
           value={email}
           placeholder="Email"
           onChangeText={setEmail}
           placeholderTextColor={'white'}
+          isFocused={true} // O campo está focado quando esta prop é true
+          inputId={19}
         />
-        <Input
+        <InputComponent
           value={newPassword}
           placeholder="Nova senha"
           onChangeText={setNewPassword}
           secureTextEntry={true}
           placeholderTextColor={'white'}
+          isFocused={true} // O campo está focado quando esta prop é true
+          inputId={20}
         />
-        <Input
+        <InputComponent
           value={confirmNewPassword}
           placeholder="Confirmar nova senha"
           onChangeText={setConfirmNewPassword}
           secureTextEntry={true}
           placeholderTextColor={'white'}
+          isFocused={true} // O campo está focado quando esta prop é true
+          inputId={21}
         />
         <CustomButton texto="Redefinir senha" onPress={handleResetPassword} />
       </InputContainer>

@@ -8,9 +8,9 @@ import {
   ContainerInputRegister,
   ScreenBackgroundRegister,
 } from './style';
-import {Input} from '../../components/Input/style';
 import {useNavigation} from '@react-navigation/native';
 import api from '../../services/api';
+import {InputComponent} from '../../components/Input';
 interface UsuarioCreate {
   email: string;
   nome_usuario: string;
@@ -90,40 +90,50 @@ function Register() {
 
       <ContainerInputRegister>
         <ScrollView>
-          <Input
+          <InputComponent
             onChangeText={text => setUsuario(text)}
             value={usuario}
             placeholderTextColor={'white'}
             placeholder="Nome"
+            isFocused={true} // O campo está focado quando esta prop é true
+            inputId={10}
           />
-          <Input
+          <InputComponent
             onChangeText={text => setEmail(text)}
             value={email}
             placeholderTextColor={'white'}
             placeholder="Email"
             keyboardType="email-address"
+            isFocused={true} // O campo está focado quando esta prop é true
+            inputId={11}
           />
-          <Input
+          <InputComponent
             onChangeText={text => setLogin(text)}
             value={login}
             placeholderTextColor={'white'}
             placeholder="Login"
+            isFocused={true} // O campo está focado quando esta prop é true
+            inputId={12}
           />
-          <Input
+          <InputComponent
             onChangeText={text => setSenha(text)}
             value={senha}
             placeholderTextColor={'white'}
             placeholder="Senha"
             secureTextEntry={true}
+            isFocused={true} // O campo está focado quando esta prop é true
+            inputId={3}
           />
-          <Input
+          <InputComponent
             onChangeText={text => setConfirmarSenha(text)}
             value={confirmarSenha}
             placeholderTextColor={'white'}
             placeholder="Confirmar Senha"
             secureTextEntry={true}
+            isFocused={true} // O campo está focado quando esta prop é true
+            inputId={14}
           />
-          <Input
+          <InputComponent
             onChangeText={(formatted, extracted: any) => {
               return setDataNascimento(extracted);
             }}
@@ -131,12 +141,16 @@ function Register() {
             placeholderTextColor={'white'}
             placeholder="Data de Nascimento"
             keyboardType="numeric"
+            isFocused={true} // O campo está focado quando esta prop é true
+            inputId={15}
           />
-          <Input
+          <InputComponent
             onChangeText={text => setTipoUsuario(text)}
             value={tipoUsuario}
             placeholderTextColor={'white'}
             placeholder="Tipo de Usuário"
+            isFocused={true} // O campo está focado quando esta prop é true
+            inputId={16}
           />
         </ScrollView>
         <CustomButton texto="Cadastre-se" onPress={handleRegister} />

@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {Container, ContainerInputBio} from './styles';
 import {useAuth} from '../../hooks/auth';
-import {Input} from '../../components/Input/style';
 import BackButton from '../../components/BackButton';
 import TopImage from '../../components/TopImage';
 import CustonButton from '../../components/CustomizeButton';
 import {useNavigation} from '@react-navigation/native';
 import {Alert} from 'react-native';
+import {InputComponent} from '../../components/Input';
 export function EditReg() {
   const navigation = useNavigation();
   const {updateLogin, checkCredentials} = useAuth();
@@ -43,25 +43,31 @@ export function EditReg() {
       <BackButton />
       <TopImage />
       <ContainerInputBio showsVerticalScrollIndicator={false}>
-        <Input
+        <InputComponent
           onChangeText={text => setSenha(text)}
           value={senha}
           placeholderTextColor={'white'}
           placeholder="Nova senha"
           secureTextEntry={true}
+          isFocused={true} // O campo está focado quando esta prop é true
+          inputId={6}
         />
-        <Input
+        <InputComponent
           onChangeText={text => setLogin(text)}
           value={login}
           placeholderTextColor={'white'}
           placeholder="Novo login"
+          isFocused={true} // O campo está focado quando esta prop é true
+          inputId={7}
         />
-        <Input
+        <InputComponent
           onChangeText={text => setEmail(text)}
           value={email}
           placeholderTextColor={'white'}
           placeholder="Novo email:"
           keyboardType="email-address"
+          isFocused={true} // O campo está focado quando esta prop é true
+          inputId={8}
         />
       </ContainerInputBio>
 
@@ -72,12 +78,14 @@ export function EditReg() {
       <BackButton />
       <TopImage />
       <ContainerInputBio showsVerticalScrollIndicator={false}>
-        <Input
+        <InputComponent
           value={senha_antiga}
           placeholderTextColor={'white'}
           placeholder="Senha atual"
           onChangeText={text => setSenha_antiga(text)}
           secureTextEntry={true}
+          isFocused={true} // O campo está focado quando esta prop é true
+          inputId={8}
         />
       </ContainerInputBio>
 
