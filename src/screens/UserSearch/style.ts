@@ -1,6 +1,5 @@
 import styled from 'styled-components/native';
 import {Dimensions} from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {RFValue} from 'react-native-responsive-fontsize';
 
@@ -11,11 +10,13 @@ export const ScreenBackground = styled.SafeAreaView`
   flex: 1;
   background-color: ${({theme}) => theme.colors.backgroundColor};
 `;
+export const Header = styled.View`
+  width: 10%;
+`;
 
 export const Container = styled.View`
   flex-direction: row;
-  justify-content: center;
-  padding: ${RFValue(22)}px 0;
+  padding: ${RFValue(10)}px 22px;
 `;
 
 export const PictureContainer = styled.View`

@@ -19,10 +19,12 @@ import {
   ButtonFollow,
   ContainerNameBio,
   SettingContainer,
+  Header,
 } from './style';
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 import fotoPerfil from '../../assets/imagens/fotoperfil.png';
+import BackButton from '../../components/BackButton';
 interface Params {
   selectedItem: {
     tipo_usuario: string;
@@ -39,9 +41,13 @@ export default function UserSearch() {
   const route = useRoute();
   const params = route.params as Params; // Converter para o tipo esperado
   const {selectedItem} = params;
+  const navigation = useNavigation();
   return (
     <ScreenBackground>
       <Container>
+        <Header>
+          <BackButton />
+        </Header>
         <SettingContainer>
           <PictureContainer>
             {selectedItem.foto_perfil ? (
@@ -81,7 +87,10 @@ export default function UserSearch() {
           <CustonButton texto="seguir" />
         </ButtonFollow>
         <ButtonFollow>
-          <CustonButton texto="Mensagem" />
+          <CustonButton
+            texto="Mensagem"
+            onPress={() => navigation.navigate('Chat')}
+          />
         </ButtonFollow>
       </ContainerButtons>
 
