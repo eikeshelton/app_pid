@@ -52,12 +52,13 @@ interface AuthContextData {
   userssearch: UsersSearchArray;
   signIn: (credentials: SignInCredentials) => Promise<void>;
   signOut: () => Promise<void>;
-  updateAvatar: (user: User) => Promise<void>;
-  updateLogin: (user: User) => Promise<void>;
+  editAvatar: (user: User) => Promise<void>;
+  editLogin: (user: User) => Promise<void>;
   checkCredentials: (user: UserCheck) => Promise<boolean>;
   requestPasswordReset: (user: User) => Promise<void>;
-  updateUser: (user: User) => Promise<void>;
+  editUser: (user: User) => Promise<void>;
   Search: (search: Search) => Promise<void>;
+  updateUser: (user: User) => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -105,7 +106,7 @@ function AuthProvider({children}: AuthProviderProps) {
       throw new Error('Erro ao fazer logout.');
     }
   }
-  async function updateUser(user: User) {
+  async function editUser(user: User) {
     try {
       const response = await api.post('/usuarios/', {
         email: user.email,
@@ -117,7 +118,7 @@ function AuthProvider({children}: AuthProviderProps) {
       console.log(err);
     }
   }
-  async function updateAvatar(user: User) {
+  async function editAvatar(user: User) {
     try {
       const response = await api.put(`/usuarios/${user.email}`, {
         foto_perfil: 'data:image/png;base64,' + user.foto_perfil,
@@ -150,6 +151,17 @@ function AuthProvider({children}: AuthProviderProps) {
       throw err;
     }
   }
+  async function updateUser() {
+    try {
+      const email = data.email;
+      const response = await api.get(`/usuarios/${email}`);
+      if (response.data) {
+        setData(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async function checkCredentials(user: UserCheck): Promise<boolean> {
     try {
       const response = await api.post('/check-credentials/', {
@@ -169,7 +181,7 @@ function AuthProvider({children}: AuthProviderProps) {
     }
   }
 
-  async function updateLogin(user: User) {
+  async function editLogin(user: User) {
     try {
       const response = await api.put('/Uploadlogin/', {
         email: user.email,
@@ -227,12 +239,13 @@ function AuthProvider({children}: AuthProviderProps) {
         userssearch: datausersearch,
         signIn,
         signOut,
-        updateUser,
-        updateAvatar,
-        updateLogin,
+        editUser,
+        editAvatar,
+        editLogin,
         checkCredentials,
         requestPasswordReset,
         Search,
+        updateUser,
       }}>
       {children}
     </AuthContext.Provider>

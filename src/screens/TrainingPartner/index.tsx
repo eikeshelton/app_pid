@@ -9,8 +9,7 @@ import {
 } from './style';
 import {Input} from '../../components/Input/style';
 
-
-export default function  TrainingPartner () {
+export default function TrainingPartner() {
   const [data, setData] = useState('');
   const [horario, setHorario] = useState('');
   const [grupamentoMuscular, setGrupamentoMuscular] = useState('');
@@ -20,8 +19,6 @@ export default function  TrainingPartner () {
   const handlePress = () => {
     // Função vazia, não faz nada
   };
-
-
 
   return (
     <ScreenBackgroundRegister>
@@ -49,14 +46,12 @@ export default function  TrainingPartner () {
             value={grupamentoMuscular}
             placeholderTextColor={'white'}
             placeholder="Grupamento muscular:"
-
           />
           <Input
             onChangeText={text => setLocal(text)}
             value={local}
             placeholderTextColor={'white'}
             placeholder="Local:"
-
           />
           <Input
             onChangeText={text => setSexo(text)}
@@ -72,10 +67,7 @@ export default function  TrainingPartner () {
           />
         </ScrollView>
         <CustonButton texto="Procurar" onPress={handlePress} />
-
       </ContainerInputRegister>
-
     </ScreenBackgroundRegister>
   );
 }
-
