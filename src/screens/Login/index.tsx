@@ -19,9 +19,10 @@ import {
   NewHere,
   TermsUse,
 } from './style';
-import {Input} from '../../components/Input/style';
+
 import {useNavigation} from '@react-navigation/native';
 import {useAuth} from '../../hooks/auth';
+import {InputComponent} from '../../components/Input';
 function Login() {
   const {signIn} = useAuth();
   const [login, setLogin] = useState('');
@@ -56,13 +57,13 @@ function Login() {
 
           <ContentLogin>
             <ContainerInputLogin>
-              <Input
+              <InputComponent
                 onChangeText={text => setLogin(text)}
                 value={login}
                 placeholderTextColor={'white'}
                 placeholder="Login:"
               />
-              <Input
+              <InputComponent
                 onChangeText={text => setSenha(text)}
                 value={senha}
                 placeholderTextColor={'white'}
