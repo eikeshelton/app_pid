@@ -42,6 +42,9 @@ export default function UserSearch() {
   const params = route.params as Params; // Converter para o tipo esperado
   const {selectedItem} = params;
   const navigation = useNavigation();
+  const handlepress = (item: any) => {
+    navigation.navigate('Chat', {selectedItem: item});
+  };
   return (
     <ScreenBackground>
       <Container>
@@ -89,7 +92,7 @@ export default function UserSearch() {
         <ButtonFollow>
           <CustonButton
             texto="Mensagem"
-            onPress={() => navigation.navigate('Chat')}
+            onPress={() => handlepress(selectedItem)}
           />
         </ButtonFollow>
       </ContainerButtons>

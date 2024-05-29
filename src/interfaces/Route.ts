@@ -13,4 +13,5 @@ export type RootStackParamsList = {
   ResetPassword: undefined;
   ScreenChat: undefined;
   UserSearch: {selectedItem: any};
+  Chat: {selectedItem: any};
 };

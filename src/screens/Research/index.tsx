@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Input} from '../../components/Input/style';
+
 import {FlatList} from 'react-native';
 import {useAuth} from '../../hooks/auth';
 import {
@@ -12,10 +12,14 @@ import {
 
 import fotoPerfil from '../../assets/imagens/fotoperfil.png';
 import {useNavigation} from '@react-navigation/native';
+import {ModalHistory} from '../../components/ModalHistory';
+import {InputComponent} from '../../components/Input';
 export default function Research() {
   const navigation = useNavigation();
-  const {userssearch, Search} = useAuth();
+  const {userssearch, Search, clearUsersSearch, RegisterSearch, user} =
+    useAuth();
   const [pesquisar, setPesquisar] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   const handleChangeText = (text: string) => {
     setPesquisar(text);
@@ -24,8 +28,12 @@ export default function Research() {
     if (pesquisar.length > 0) {
       handleChangeText(pesquisar);
       handleLogin();
+    } else {
+      clearUsersSearch();
+      // Chame a função para limpar userssearch
     }
   }, [pesquisar]);
+
   const handleLogin = React.useCallback(() => {
     Search({
       login: pesquisar,
@@ -35,7 +43,12 @@ export default function Research() {
   }, [Search, pesquisar]);
   const handleItemPress = (item: any) => {
     navigation.navigate('UserSearch', {selectedItem: item});
+    RegisterSearch({
+      usuario_id: user.id,
+      id: item.id,
+    });
   };
+
   const renderItem = ({item}: any) => (
     <PictureContainer onPress={() => handleItemPress(item)}>
       {item.foto_perfil ? (
@@ -47,15 +60,21 @@ export default function Research() {
       <Name>{item.tipo_usuario}</Name>
     </PictureContainer>
   );
+  const showmodels = () => {
+    if (pesquisar.length === 0) {
+      setShowModal(true);
+    }
+  };
 
   return (
     <Background>
       <Container>
-        <Input
+        <InputComponent
           onChangeText={handleChangeText}
           value={pesquisar}
           placeholderTextColor={'white'}
           placeholder="Pesquisar"
+          onFocus={showmodels}
         />
 
         <FlatList
@@ -65,6 +84,10 @@ export default function Research() {
           numColumns={2}
         />
       </Container>
+      <ModalHistory
+        onDismiss={() => setShowModal(false)}
+        showModal={showModal}
+      />
     </Background>
   );
 }

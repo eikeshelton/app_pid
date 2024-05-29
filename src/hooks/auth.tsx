@@ -46,18 +46,26 @@ interface UsersSearch {
   id: Number;
   token?: string;
 }
+interface RegisterSearch {
+  usuario_id: any;
+  id: Number;
+}
 type UsersSearchArray = UsersSearch[];
+type RegisterSearchArray = RegisterSearch[];
 interface AuthContextData {
   user: User;
   userssearch: UsersSearchArray;
+  registerSearch: RegisterSearchArray;
   signIn: (credentials: SignInCredentials) => Promise<void>;
   signOut: () => Promise<void>;
+  clearUsersSearch: () => Promise<void>;
   editAvatar: (user: User) => Promise<void>;
   editLogin: (user: User) => Promise<void>;
   checkCredentials: (user: UserCheck) => Promise<boolean>;
   requestPasswordReset: (user: User) => Promise<void>;
   editUser: (user: User) => Promise<void>;
   Search: (search: Search) => Promise<void>;
+  RegisterSearch: (registerSearch: RegisterSearch) => Promise<void>;
   updateUser: (user: User) => Promise<void>;
 }
 
@@ -70,6 +78,7 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 function AuthProvider({children}: AuthProviderProps) {
   const [data, setData] = useState<User>({foto_perfil: ''} as User);
   const [datausersearch, setusersearch] = useState<UsersSearchArray>([]);
+  const [registerSearch, setRegisterSearch] = useState<RegisterSearchArray>([]);
 
   async function signIn({login, senha}: SignInCredentials) {
     try {
@@ -210,7 +219,23 @@ function AuthProvider({children}: AuthProviderProps) {
       console.log(err);
     }
   }
+  async function RegisterSearch(registerSearch: RegisterSearch) {
+    try {
+      const response = await api.post('/usuarios/registra-buscar/', {
+        usuario_id: registerSearch.usuario_id,
+        pesquisado_id: registerSearch.id,
+      });
 
+      if (response.data) {
+        setRegisterSearch(response.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  const clearUsersSearch = async () => {
+    setusersearch([]);
+  };
   useEffect(() => {
     let isMounted = true;
 
@@ -237,14 +262,17 @@ function AuthProvider({children}: AuthProviderProps) {
       value={{
         user: data,
         userssearch: datausersearch,
+        registerSearch: registerSearch,
         signIn,
         signOut,
         editUser,
         editAvatar,
         editLogin,
+        clearUsersSearch,
         checkCredentials,
         requestPasswordReset,
         Search,
+        RegisterSearch,
         updateUser,
       }}>
       {children}
