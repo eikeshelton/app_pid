@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   Container,
   Header,
@@ -12,9 +12,10 @@ import BackButton from '../../components/BackButton';
 import {Input} from '../../components/Input/style';
 import CustomButton from '../../components/CustomizeButton';
 import {useAuth} from '../../hooks/auth';
-import {useRoute} from '@react-navigation/native';
+import {useFocusEffect, useRoute} from '@react-navigation/native';
 import {FlatList} from 'react-native';
 import fotoPerfil from '../../assets/imagens/fotoperfil.png';
+import axios from '../../services/api';
 interface Params {
   selectedItem: {
     tipo_usuario: string;
@@ -31,30 +32,57 @@ interface Mensagem {
   remetente_id: number;
   destinatario_id: number;
   texto: string;
+  nome_remetente: string;
+  nome_destinatario: string;
 }
+
 export function Chat() {
   const [mensagem, setMensagem] = useState('');
-  const [websocket, setWebsocket] = useState<WebSocket | null>(null);
+  const [mensagens, setMensagens] = useState<Mensagem[]>([]);
+  const flatListRef = useRef<FlatList>(null);
   const {user} = useAuth();
   const route = useRoute();
-  const params = route.params as Params; // Converter para o tipo esperado
+  const params = route.params as Params;
   const {selectedItem} = params;
-  const [mensagens, setMensagens] = useState<Mensagem[]>([]);
+  const websocketRef = useRef<WebSocket | null>(null);
+
+  // Chamada ao endpoint para recuperar mensagens ao abrir a tela
+  useFocusEffect(
+    useCallback(() => {
+      const fetchMessages = async () => {
+        try {
+          const response = await axios.get(
+            `/chat/mensagens/${user.id}/${selectedItem.id}`,
+          );
+
+          setMensagens(response.data);
+        } catch (error) {
+          console.error('Erro ao recuperar mensagens:', error);
+        }
+      };
+
+      fetchMessages();
+    }, [user.id, selectedItem.id]),
+  );
+
   useEffect(() => {
-    const ws = new WebSocket('ws://192.168.15.170:8000/ws');
+    const ws = new WebSocket(`ws://192.168.15.170:8000/ws/${user.id}`);
+    websocketRef.current = ws;
 
     ws.onopen = () => {
       console.log('Conexão estabelecida com sucesso.');
-      setWebsocket(ws);
     };
 
     ws.onmessage = event => {
-      console.log('Mensagem recebida:', event.data);
       try {
-        // Analisa a mensagem JSON recebida
         const data: Mensagem[] = JSON.parse(event.data);
-        console.log('Dados recebidos:', data);
-        setMensagens(data);
+        console.log(event.data);
+        setMensagens(prevMensagens => {
+          const newData = Array.isArray(data) ? data : [data];
+          return [...prevMensagens, ...newData];
+        });
+
+        flatListRef.current?.scrollToEnd({animated: true});
       } catch (error) {
         console.error('Erro ao analisar JSON:', error);
       }
@@ -80,14 +108,31 @@ export function Chat() {
         destinatario_id: selectedItem.id,
         texto: mensagem,
       };
-      websocket?.send(JSON.stringify(msg));
+      websocketRef.current?.send(JSON.stringify(msg));
       setMensagem('');
     }
   };
-  const renderItem = ({item}: any) => (
+
+  const renderItem = ({item}: {item: Mensagem}) => (
     <PictureContainer>
-      {item.foto_perfil ? (
-        <ProfilePicture source={{uri: item.foto_perfil}} resizeMode="contain" />
+      {item.remetente_id === user.id ? (
+        user.foto_perfil ? (
+          <ProfilePicture
+            source={{uri: user.foto_perfil}}
+            resizeMode="contain"
+          />
+        ) : (
+          <ProfilePicture source={fotoPerfil} resizeMode="contain" />
+        )
+      ) : item.remetente_id === selectedItem.id ? (
+        selectedItem.foto_perfil ? (
+          <ProfilePicture
+            source={{uri: selectedItem.foto_perfil}}
+            resizeMode="contain"
+          />
+        ) : (
+          <ProfilePicture source={fotoPerfil} resizeMode="contain" />
+        )
       ) : (
         <ProfilePicture source={fotoPerfil} resizeMode="contain" />
       )}
@@ -95,6 +140,7 @@ export function Chat() {
       <Name>{item.texto}</Name>
     </PictureContainer>
   );
+
   return (
     <Container>
       <Header>
@@ -102,6 +148,7 @@ export function Chat() {
         <PictureProfile source={fotopropid} />
       </Header>
       <FlatList
+        ref={flatListRef}
         data={mensagens}
         renderItem={renderItem}
         keyExtractor={item => item.id.toString()}
@@ -112,7 +159,7 @@ export function Chat() {
         placeholderTextColor={'white'}
         placeholder="Mensagem..."
       />
-      <CustomButton texto="enviar" onPress={sendMessage} />
+      <CustomButton texto="Enviar" onPress={sendMessage} />
     </Container>
   );
 }
