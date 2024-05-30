@@ -1,52 +1,81 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Container,
   ModalContent,
   Name,
   PictureContainer,
   ProfilePicture,
+  Title,
 } from './styles';
-import {useAuth} from '../../hooks/auth';
 import fotoPerfil from '../../assets/imagens/fotoperfil.png';
 import {FlatList} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import api from '../../services/api';
+import {useAuth} from '../../hooks/auth';
+
 interface Props {
   showModal: boolean;
   onDismiss: () => void;
 }
 
+interface User {
+  id: number;
+  nome_usuario: string;
+  foto_perfil: string | null;
+  tipo_usuario: string;
+}
+
 export function ModalHistory({showModal, onDismiss}: Props) {
-  const {registerSearch} = useAuth();
   const navigation = useNavigation();
-  const handleItemPress = (item: any) => {
+  const {user} = useAuth();
+  const [registeredUsers, setUserRegisteredUsers] = useState<User[]>([]);
+
+  useEffect(() => {
+    if (showModal) {
+      callRegistered();
+    }
+  }, [showModal]);
+
+  const handleItemPress = (item: User) => {
     navigation.navigate('UserSearch', {selectedItem: item});
   };
-  const renderItem = ({item}: any) => {
+
+  async function callRegistered() {
+    try {
+      const usuario_id = user.id;
+      const response = await api.get(`/usuarios-pesquisados/${usuario_id}`);
+      if (response.data) {
+        setUserRegisteredUsers(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const renderItem = ({item}: {item: User}) => {
     return (
       <PictureContainer onPress={() => handleItemPress(item)}>
-        {item.foto_perfil ? (
-          <ProfilePicture
-            source={{uri: item.foto_perfil}}
-            resizeMode="contain"
-          />
-        ) : (
-          <ProfilePicture source={fotoPerfil} resizeMode="contain" />
-        )}
+        <ProfilePicture
+          source={item.foto_perfil ? {uri: item.foto_perfil} : fotoPerfil}
+          resizeMode="cover"
+        />
         <Name>{item.nome_usuario}</Name>
         <Name>{item.tipo_usuario}</Name>
       </PictureContainer>
     );
   };
+
   return (
     <Container
       isVisible={showModal}
       onBackButtonPress={onDismiss}
       onBackdropPress={onDismiss}>
       <ModalContent>
+        <Title>Pesquisados recentemente</Title>
         <FlatList
-          data={registerSearch}
+          data={registeredUsers}
           renderItem={renderItem}
-          keyExtractor={item => item?.id?.toString()}
+          keyExtractor={item => item.id.toString()}
           numColumns={2}
         />
       </ModalContent>

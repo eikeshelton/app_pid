@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-
 import {FlatList} from 'react-native';
 import {useAuth} from '../../hooks/auth';
 import {
@@ -9,11 +8,11 @@ import {
   PictureContainer,
   ProfilePicture,
 } from './style';
-
 import fotoPerfil from '../../assets/imagens/fotoperfil.png';
 import {useNavigation} from '@react-navigation/native';
 import {ModalHistory} from '../../components/ModalHistory';
 import {InputComponent} from '../../components/Input';
+
 export default function Research() {
   const navigation = useNavigation();
   const {userssearch, Search, clearUsersSearch, RegisterSearch, user} =
@@ -24,6 +23,7 @@ export default function Research() {
   const handleChangeText = (text: string) => {
     setPesquisar(text);
   };
+
   useEffect(() => {
     if (pesquisar.length > 0) {
       handleChangeText(pesquisar);
@@ -41,18 +41,19 @@ export default function Research() {
       console.error(_error);
     });
   }, [Search, pesquisar]);
+
   const handleItemPress = (item: any) => {
     navigation.navigate('UserSearch', {selectedItem: item});
     RegisterSearch({
       usuario_id: user.id,
-      id: item.id,
+      pesquisado_id: item.id,
     });
   };
 
   const renderItem = ({item}: any) => (
     <PictureContainer onPress={() => handleItemPress(item)}>
       {item.foto_perfil ? (
-        <ProfilePicture source={{uri: item.foto_perfil}} resizeMode="contain" />
+        <ProfilePicture source={{uri: item.foto_perfil}} resizeMode="cover" />
       ) : (
         <ProfilePicture source={fotoPerfil} resizeMode="contain" />
       )}
@@ -60,6 +61,7 @@ export default function Research() {
       <Name>{item.tipo_usuario}</Name>
     </PictureContainer>
   );
+
   const showmodels = () => {
     if (pesquisar.length === 0) {
       setShowModal(true);
@@ -74,7 +76,9 @@ export default function Research() {
           value={pesquisar}
           placeholderTextColor={'white'}
           placeholder="Pesquisar"
-          onFocus={showmodels}
+          onFocus={() => {
+            showmodels();
+          }}
         />
 
         <FlatList

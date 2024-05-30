@@ -1,7 +1,10 @@
 import {Dimensions} from 'react-native';
 import {RFValue} from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
-
+interface ContentProps {
+  remetente_id: number;
+  user_id: any;
+}
 export const Container = styled.View`
   flex: 1;
   justify-content: space-between;
@@ -10,37 +13,69 @@ export const Container = styled.View`
 `;
 export const Header = styled.View`
   flex-direction: row;
-  width: 40%;
-  align-items: flex-start;
+  align-items: center;
   padding: 10px 0px;
 `;
-const PictureProfileHeight = Dimensions.get('window').height * 0.14;
-const PictureProfileWidth = Dimensions.get('window').width * 0.2;
+export const ContainerBackButton = styled.View`
+  width: 15%;
+`;
+export const Content = styled.View<ContentProps>`
+  align-self: ${props =>
+    props.remetente_id === props.user_id ? 'flex-end' : 'flex-start'};
+`;
+const PictureProfileHeight = Dimensions.get('window').height * 0.06;
+const PictureProfileWidth = Dimensions.get('window').width * 0.12;
 
 export const PictureProfile = styled.Image`
   border-radius: 100px;
   height: ${PictureProfileHeight}px;
   width: ${PictureProfileWidth}px;
 `;
-export const PictureContainer = styled.View`
-  align-items: center;
-  justify-content: center;
-  border-radius: 24px;
-  margin-bottom: ${RFValue(10)}px;
+export const Name = styled.Text`
+  font-size: ${RFValue(20)}px;
+  color: ${({theme}) => theme.colors.colorWhite};
+  text-align: center;
   margin-left: ${RFValue(10)}px;
-  height: ${RFValue(150)}px;
-  width: ${RFValue(130)}px;
 `;
 
-const ProfilePictureHeight = Dimensions.get('window').height * 0.1;
-const ProfilePictureWidth = Dimensions.get('window').width * 0.2;
+export const ContainerMessageUser = styled.View`
+  width: 100%;
+  justify-content: flex-end;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: ${RFValue(5)}px;
+`;
+export const ContainerMessageUser2 = styled.View``;
+export const PictureContainerUser = styled.View`
+  padding: 13px 12px 13px 30px;
+  border-radius: 24px;
+  margin-bottom: ${RFValue(15)}px;
+  background-color: ${({theme}) => theme.colors.primary};
+`;
+export const PictureContainerUser2 = styled.View`
+  padding: 13px 30px 13px 12px;
+  align-items: flex-start;
+  background-color: ${({theme}) => theme.colors.colorInput};
+  justify-content: center;
+  border-radius: 24px;
+  margin-bottom: ${RFValue(15)}px;
+`;
+
+const ProfilePictureHeight = Dimensions.get('window').height * 0.07;
+const ProfilePictureWidth = Dimensions.get('window').width * 0.15;
 export const ProfilePicture = styled.Image`
   border-radius: 100px;
   height: ${ProfilePictureHeight}px;
   width: ${ProfilePictureWidth}px;
 `;
-export const Name = styled.Text`
+
+export const Message = styled.Text`
   font-size: ${RFValue(15)}px;
   color: ${({theme}) => theme.colors.colorWhite};
-  text-align: center;
+  text-align: right;
+`;
+export const MessageUser2 = styled.Text`
+  font-size: ${RFValue(15)}px;
+  color: ${({theme}) => theme.colors.colorWhite};
+  text-align: justify;
 `;

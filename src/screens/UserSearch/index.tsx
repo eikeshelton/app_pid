@@ -4,7 +4,6 @@ import CustonButton from '../../components/CustomizeButton';
 import ProfilePost from '../../components/ProfilePost';
 import {
   Container,
-  ContainerButtons,
   ScreenBackground,
   ContainerFollowed,
   ContainerFollowers,
@@ -16,12 +15,12 @@ import {
   TextBio,
   TextNumber,
   TextPubFoll,
-  ButtonFollow,
   ContainerNameBio,
   SettingContainer,
-  Header,
+  ContainerBackbutton,
+  ProfileUser,
 } from './style';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useRoute} from '@react-navigation/native';
 
 import fotoPerfil from '../../assets/imagens/fotoperfil.png';
 import BackButton from '../../components/BackButton';
@@ -33,6 +32,7 @@ interface Params {
     seguidores: number;
     seguidos: number;
     bio: string;
+    login: string;
 
     // Adicione outras propriedades conforme necessário
   };
@@ -41,61 +41,48 @@ export default function UserSearch() {
   const route = useRoute();
   const params = route.params as Params; // Converter para o tipo esperado
   const {selectedItem} = params;
-  const navigation = useNavigation();
-  const handlepress = (item: any) => {
-    navigation.navigate('Chat', {selectedItem: item});
-  };
+
   return (
     <ScreenBackground>
+      <ContainerBackbutton>
+        <BackButton />
+        <ProfileUser>{selectedItem.login}</ProfileUser>
+      </ContainerBackbutton>
       <Container>
-        <Header>
-          <BackButton />
-        </Header>
+        <PictureContainer>
+          {selectedItem.foto_perfil ? (
+            <ProfilePicture
+              source={{uri: selectedItem.foto_perfil}}
+              resizeMode="cover" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
+            />
+          ) : (
+            <ProfilePicture
+              source={fotoPerfil}
+              resizeMode="contain" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
+            />
+          )}
+        </PictureContainer>
         <SettingContainer>
-          <PictureContainer>
-            {selectedItem.foto_perfil ? (
-              <ProfilePicture
-                source={{uri: selectedItem.foto_perfil}}
-                resizeMode="contain" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
-              />
-            ) : (
-              <ProfilePicture
-                source={fotoPerfil}
-                resizeMode="contain" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
-              />
-            )}
-            <ProfileName>{selectedItem.nome_usuario}</ProfileName>
-          </PictureContainer>
           <ContainerPubFoll>
             <ContainerPub>
               <TextNumber>8</TextNumber>
               <TextPubFoll>Publicações</TextPubFoll>
             </ContainerPub>
-            <ContainerFollowers>
+            <ContainerPub>
               <TextNumber>{selectedItem.seguidores}</TextNumber>
               <TextPubFoll>Seguidores</TextPubFoll>
-            </ContainerFollowers>
-            <ContainerFollowed>
+            </ContainerPub>
+            <ContainerPub>
               <TextNumber>{selectedItem.seguidos}</TextNumber>
               <TextPubFoll>Seguidos</TextPubFoll>
-            </ContainerFollowed>
+            </ContainerPub>
           </ContainerPubFoll>
         </SettingContainer>
       </Container>
       <ContainerNameBio>
+        <ProfileName>{selectedItem.nome_usuario}</ProfileName>
         <TextBio>{selectedItem.bio}</TextBio>
       </ContainerNameBio>
-      <ContainerButtons>
-        <ButtonFollow>
-          <CustonButton texto="seguir" />
-        </ButtonFollow>
-        <ButtonFollow>
-          <CustonButton
-            texto="Mensagem"
-            onPress={() => handlepress(selectedItem)}
-          />
-        </ButtonFollow>
-      </ContainerButtons>
 
       <ProfilePost />
     </ScreenBackground>

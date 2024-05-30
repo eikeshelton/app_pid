@@ -1,7 +1,6 @@
 export default {
   colors: {
     primary: '#934dd2',
-    primary_gradient: ['#cf9dfc', '#b17be3', '#985ecc'],
     backgroundColor: '#17161b',
     colorWhite: '#FFFFFF',
     colorBlue: '#0077FF',
@@ -9,6 +8,7 @@ export default {
     background: '#fff',
     border_tab: '#CCC',
     tabInactive: '#686c7d',
+    messageBackground: '#cf9dfc',
   },
   fonts: {
     regular: 'Roboto-Regular',

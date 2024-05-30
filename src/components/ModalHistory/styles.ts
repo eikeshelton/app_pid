@@ -9,9 +9,13 @@ export const Container = styled(Modal)`
 `;
 export const ModalContent = styled.View`
   background-color: white;
-  height: 90%;
-  overflow: hidden;
-  padding: 24px;
+  height: 60%;
+  padding: 0 24px 24px 24px;
+`;
+export const Title = styled.Text`
+  color: ${({theme}) => theme.colors.primary};
+  text-align: center;
+  font-size: ${RFValue(20)}px;
 `;
 export const PictureContainer = styled.TouchableOpacity`
   align-items: center;
@@ -19,7 +23,7 @@ export const PictureContainer = styled.TouchableOpacity`
   border: solid 1px ${({theme}) => theme.colors.primary};
   border-radius: 24px;
   margin-bottom: ${RFValue(10)}px;
-  margin-left: ${RFValue(10)}px;
+  margin-left: ${RFValue(15)}px;
   height: ${RFValue(150)}px;
   width: ${RFValue(130)}px;
 `;

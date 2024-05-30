@@ -1,9 +1,16 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   Container,
+  ContainerBackButton,
+  ContainerMessageUser,
+  ContainerMessageUser2,
+  Content,
   Header,
+  Message,
+  MessageUser2,
   Name,
-  PictureContainer,
+  PictureContainerUser,
+  PictureContainerUser2,
   PictureProfile,
   ProfilePicture,
 } from './style';
@@ -114,38 +121,31 @@ export function Chat() {
   };
 
   const renderItem = ({item}: {item: Mensagem}) => (
-    <PictureContainer>
+    <Content remetente_id={item.remetente_id} user_id={user.id}>
       {item.remetente_id === user.id ? (
-        user.foto_perfil ? (
-          <ProfilePicture
-            source={{uri: user.foto_perfil}}
-            resizeMode="contain"
-          />
-        ) : (
-          <ProfilePicture source={fotoPerfil} resizeMode="contain" />
-        )
-      ) : item.remetente_id === selectedItem.id ? (
-        selectedItem.foto_perfil ? (
-          <ProfilePicture
-            source={{uri: selectedItem.foto_perfil}}
-            resizeMode="contain"
-          />
-        ) : (
-          <ProfilePicture source={fotoPerfil} resizeMode="contain" />
-        )
+        <ContainerMessageUser>
+          <PictureContainerUser>
+            <Message>{item.texto}</Message>
+          </PictureContainerUser>
+        </ContainerMessageUser>
       ) : (
-        <ProfilePicture source={fotoPerfil} resizeMode="contain" />
+        <ContainerMessageUser2>
+          <PictureContainerUser2>
+            <MessageUser2>{item.texto}</MessageUser2>
+          </PictureContainerUser2>
+        </ContainerMessageUser2>
       )}
-      <Name>{item.nome_remetente}</Name>
-      <Name>{item.texto}</Name>
-    </PictureContainer>
+    </Content>
   );
 
   return (
     <Container>
       <Header>
-        <BackButton />
-        <PictureProfile source={fotopropid} />
+        <ContainerBackButton>
+          <BackButton />
+        </ContainerBackButton>
+        <PictureProfile source={{uri: selectedItem.foto_perfil}} />
+        <Name>{selectedItem.nome_usuario}</Name>
       </Header>
       <FlatList
         ref={flatListRef}

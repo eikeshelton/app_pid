@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 import {Dimensions} from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {RFValue} from 'react-native-responsive-fontsize';
 
@@ -9,19 +10,28 @@ export const TexLoading = styled.Text`
 export const ScreenBackground = styled.SafeAreaView`
   flex: 1;
   background-color: ${({theme}) => theme.colors.backgroundColor};
-`;
-export const Header = styled.View`
-  width: 10%;
+  padding: 0 ${RFValue(10)}px;
 `;
 
 export const Container = styled.View`
   flex-direction: row;
-  padding: ${RFValue(10)}px 22px;
-`;
 
+  align-items: center;
+`;
+export const ContainerBackbutton = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+export const ProfileUser = styled.Text`
+  color: ${({theme}) => theme.colors.colorWhite};
+  font-weight: bold;
+  font-size: ${RFValue(20)}px;
+  margin-left: ${RFValue(5)}px;
+`;
 export const PictureContainer = styled.View`
   align-items: center;
   justify-content: center;
+  padding: ${RFValue(10)}px 0;
 `;
 
 const ProfilePictureHeight = Dimensions.get('window').height * 0.14;
@@ -37,25 +47,15 @@ export const ProfileName = styled.Text`
 
   font-size: ${RFValue(16)}px;
 `;
-export const SettingContainer = styled.View`
-  width: 70%;
-  justify-content: center;
-`;
+
 export const ContainerPubFoll = styled.View`
+  padding-left: ${RFValue(5)}px;
   flex-direction: row;
-  align-items: center;
-  justify-content: center;
+
+  width: 100%;
 `;
 
 export const ContainerPub = styled.View`
-  flex: 1;
-`;
-
-export const ContainerFollowers = styled.View`
-  flex: 1;
-`;
-
-export const ContainerFollowed = styled.View`
   flex: 1;
 `;
 
@@ -70,8 +70,15 @@ export const TextPubFoll = styled.Text`
   font-size: ${RFValue(14)}px;
   color: ${({theme}) => theme.colors.colorWhite};
 `;
-
+export const SettingContainer = styled.View`
+  width: 80%;
+  align-items: flex-end;
+`;
 export const SettingButton = styled.TouchableOpacity``;
+export const SettingIcon = styled(Ionicons)`
+  color: ${({theme}) => theme.colors.primary};
+  font-size: ${RFValue(30)}px;
+`;
 
 const ContainerBioHeight = Dimensions.get('window').height * 0.1;
 const ContainerBioWidth = Dimensions.get('window').width * 1;
@@ -96,9 +103,7 @@ export const ContainerButtons = styled.View`
   padding: 0 20px;
 `;
 export const ButtonFollow = styled.View`
-  width: 45%;
-  padding: 0 ${RFValue(5)}px;
-  flex-direction: row;
+  width: 80%;
 `;
 export const ChatButton = styled.TouchableOpacity``;
 export const ChatIcon = styled(Entypo)`

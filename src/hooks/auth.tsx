@@ -48,7 +48,7 @@ interface UsersSearch {
 }
 interface RegisterSearch {
   usuario_id: any;
-  id: Number;
+  pesquisado_id: Number;
 }
 type UsersSearchArray = UsersSearch[];
 type RegisterSearchArray = RegisterSearch[];
@@ -223,7 +223,7 @@ function AuthProvider({children}: AuthProviderProps) {
     try {
       const response = await api.post('/usuarios/registra-buscar/', {
         usuario_id: registerSearch.usuario_id,
-        pesquisado_id: registerSearch.id,
+        pesquisado_id: registerSearch.pesquisado_id,
       });
 
       if (response.data) {
