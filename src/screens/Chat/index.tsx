@@ -12,16 +12,15 @@ import {
   PictureContainerUser,
   PictureContainerUser2,
   PictureProfile,
-  ProfilePicture,
 } from './style';
-import fotopropid from '../../assets/imagens/fotopropid.jpg';
+
 import BackButton from '../../components/BackButton';
 import {Input} from '../../components/Input/style';
 import CustomButton from '../../components/CustomizeButton';
 import {useAuth} from '../../hooks/auth';
 import {useFocusEffect, useRoute} from '@react-navigation/native';
-import {FlatList} from 'react-native';
-import fotoPerfil from '../../assets/imagens/fotoperfil.png';
+import {FlatList, KeyboardAvoidingView} from 'react-native';
+
 import axios from '../../services/api';
 interface Params {
   selectedItem: {
@@ -120,23 +119,38 @@ export function Chat() {
     }
   };
 
-  const renderItem = ({item}: {item: Mensagem}) => (
-    <Content remetente_id={item.remetente_id} user_id={user.id}>
-      {item.remetente_id === user.id ? (
-        <ContainerMessageUser>
-          <PictureContainerUser>
-            <Message>{item.texto}</Message>
-          </PictureContainerUser>
-        </ContainerMessageUser>
-      ) : (
-        <ContainerMessageUser2>
-          <PictureContainerUser2>
-            <MessageUser2>{item.texto}</MessageUser2>
-          </PictureContainerUser2>
-        </ContainerMessageUser2>
-      )}
-    </Content>
-  );
+  const renderItem = ({item, index}: {item: Mensagem; index: number}) => {
+    const isSameUserAsPrevious =
+      index > 0 && mensagens[index - 1].remetente_id === item.remetente_id;
+    const isSameUserAsNext =
+      index < mensagens.length - 1 &&
+      mensagens[index + 1].remetente_id === item.remetente_id;
+
+    const marginBottom = isSameUserAsNext ? 0 : 5;
+    const marginTop = isSameUserAsPrevious ? 8 : 20;
+
+    return (
+      <Content
+        remetente_id={item.remetente_id}
+        user_id={user.id}
+        marginBottom={marginBottom}
+        marginTop={marginTop}>
+        {item.remetente_id === user.id ? (
+          <ContainerMessageUser>
+            <PictureContainerUser>
+              <Message>{item.texto}</Message>
+            </PictureContainerUser>
+          </ContainerMessageUser>
+        ) : (
+          <ContainerMessageUser2>
+            <PictureContainerUser2>
+              <MessageUser2>{item.texto}</MessageUser2>
+            </PictureContainerUser2>
+          </ContainerMessageUser2>
+        )}
+      </Content>
+    );
+  };
 
   return (
     <Container>

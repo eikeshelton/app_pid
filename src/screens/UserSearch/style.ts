@@ -1,8 +1,8 @@
 import styled from 'styled-components/native';
 import {Dimensions} from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Entypo from 'react-native-vector-icons/Entypo';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {RFValue} from 'react-native-responsive-fontsize';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 export const TexLoading = styled.Text`
   color: ${({theme}) => theme.colors.primary};
@@ -44,14 +44,12 @@ export const ProfilePicture = styled.Image`
 
 export const ProfileName = styled.Text`
   color: ${({theme}) => theme.colors.colorWhite};
-
   font-size: ${RFValue(16)}px;
 `;
 
 export const ContainerPubFoll = styled.View`
   padding-left: ${RFValue(5)}px;
   flex-direction: row;
-
   width: 100%;
 `;
 
@@ -74,18 +72,25 @@ export const SettingContainer = styled.View`
   width: 80%;
   align-items: flex-end;
 `;
-export const SettingButton = styled.TouchableOpacity``;
-export const SettingIcon = styled(Ionicons)`
+export const ContainerButton = styled.View`
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-around;
+`;
+export const ButtonIcon = styled.TouchableOpacity``;
+export const FollowIcon = styled(SimpleLineIcons)`
   color: ${({theme}) => theme.colors.primary};
-  font-size: ${RFValue(30)}px;
+  font-size: ${RFValue(40)}px;
+`;
+export const ChatButton = styled.TouchableOpacity``;
+export const ChatIcon = styled(Entypo)`
+  color: ${({theme}) => theme.colors.primary};
+  font-size: ${RFValue(40)}px;
 `;
 
-const ContainerBioHeight = Dimensions.get('window').height * 0.1;
-const ContainerBioWidth = Dimensions.get('window').width * 1;
 export const ContainerNameBio = styled.View`
-  height: ${ContainerBioHeight}px;
-  width: ${ContainerBioWidth}px;
-  padding-left: ${RFValue(3)}px;
+  width: 100%;
+  padding: ${RFValue(1)}px ${RFValue(1)}px ${RFValue(1)}px ${RFValue(3)}px;
 `;
 
 export const TextBio = styled.Text`
@@ -93,20 +98,4 @@ export const TextBio = styled.Text`
   color: ${({theme}) => theme.colors.colorWhite};
   padding-bottom: ${RFValue(2)}px;
   font-family: ${({theme}) => theme.fonts.light};
-`;
-
-export const ContainerButtons = styled.View`
-  flex-direction: row;
-  width: 100%;
-
-  justify-content: space-between;
-  padding: 0 20px;
-`;
-export const ButtonFollow = styled.View`
-  width: 80%;
-`;
-export const ChatButton = styled.TouchableOpacity``;
-export const ChatIcon = styled(Entypo)`
-  color: ${({theme}) => theme.colors.primary};
-  font-size: ${RFValue(40)}px;
 `;

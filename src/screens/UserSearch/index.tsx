@@ -1,12 +1,8 @@
 import React from 'react';
-
-import CustonButton from '../../components/CustomizeButton';
 import ProfilePost from '../../components/ProfilePost';
 import {
   Container,
   ScreenBackground,
-  ContainerFollowed,
-  ContainerFollowers,
   ContainerPub,
   ContainerPubFoll,
   PictureContainer,
@@ -19,11 +15,17 @@ import {
   SettingContainer,
   ContainerBackbutton,
   ProfileUser,
+  FollowIcon,
+  ButtonIcon,
+  ChatButton,
+  ChatIcon,
+  ContainerButton,
 } from './style';
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 import fotoPerfil from '../../assets/imagens/fotoperfil.png';
 import BackButton from '../../components/BackButton';
+
 interface Params {
   selectedItem: {
     tipo_usuario: string;
@@ -41,7 +43,7 @@ export default function UserSearch() {
   const route = useRoute();
   const params = route.params as Params; // Converter para o tipo esperado
   const {selectedItem} = params;
-
+  const navigation = useNavigation();
   return (
     <ScreenBackground>
       <ContainerBackbutton>
@@ -83,7 +85,14 @@ export default function UserSearch() {
         <ProfileName>{selectedItem.nome_usuario}</ProfileName>
         <TextBio>{selectedItem.bio}</TextBio>
       </ContainerNameBio>
-
+      <ContainerButton>
+        <ButtonIcon>
+          <FollowIcon name="user-follow" />
+        </ButtonIcon>
+        <ChatButton onPress={() => navigation.navigate('Chat', {selectedItem})}>
+          <ChatIcon name="chat" />
+        </ChatButton>
+      </ContainerButton>
       <ProfilePost />
     </ScreenBackground>
   );

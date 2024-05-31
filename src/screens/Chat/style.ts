@@ -4,6 +4,8 @@ import styled from 'styled-components/native';
 interface ContentProps {
   remetente_id: number;
   user_id: any;
+  marginBottom: number;
+  marginTop: number;
 }
 export const Container = styled.View`
   flex: 1;
@@ -22,6 +24,8 @@ export const ContainerBackButton = styled.View`
 export const Content = styled.View<ContentProps>`
   align-self: ${props =>
     props.remetente_id === props.user_id ? 'flex-end' : 'flex-start'};
+  margin-bottom: ${props => props.marginBottom}px;
+  margin-top: ${props => props.marginTop}px;
 `;
 const PictureProfileHeight = Dimensions.get('window').height * 0.06;
 const PictureProfileWidth = Dimensions.get('window').width * 0.12;
@@ -43,22 +47,18 @@ export const ContainerMessageUser = styled.View`
   justify-content: flex-end;
   flex-direction: row;
   align-items: center;
-  margin-bottom: ${RFValue(5)}px;
 `;
 export const ContainerMessageUser2 = styled.View``;
 export const PictureContainerUser = styled.View`
   padding: 13px 12px 13px 30px;
   border-radius: 24px;
-  margin-bottom: ${RFValue(15)}px;
   background-color: ${({theme}) => theme.colors.primary};
 `;
 export const PictureContainerUser2 = styled.View`
   padding: 13px 30px 13px 12px;
   align-items: flex-start;
   background-color: ${({theme}) => theme.colors.colorInput};
-  justify-content: center;
   border-radius: 24px;
-  margin-bottom: ${RFValue(15)}px;
 `;
 
 const ProfilePictureHeight = Dimensions.get('window').height * 0.07;
