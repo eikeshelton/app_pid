@@ -1,6 +1,6 @@
-import React from 'react';
-import RNPickerSelect from 'react-native-picker-select';
-import {PickerContainer} from './style';
+import React, {useState} from 'react';
+import DropDownPicker from 'react-native-dropdown-picker';
+import {PickerContainer, dropDownPickerStyles} from './style';
 
 interface InputPickerProps {
   items: {label: string; value: any}[];
@@ -13,19 +13,27 @@ const InputPicker: React.FC<InputPickerProps> = ({
   onValueChange,
   placeholder,
 }) => {
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+
   return (
     <PickerContainer>
-      <RNPickerSelect
-        onValueChange={onValueChange}
+      <DropDownPicker
+        open={open}
+        value={value}
         items={items}
-        placeholder={placeholder}
-        useNativeAndroidPickerStyle={false}
-        style={{
-          inputAndroid: {
-            color: 'white',
-            fontSize: 16,
-          },
-        }}
+        setOpen={setOpen}
+        setValue={setValue}
+        onChangeValue={onValueChange}
+        placeholder={placeholder?.label || 'Select an option'}
+        style={dropDownPickerStyles.containerStyle}
+        dropDownContainerStyle={dropDownPickerStyles.dropDownContainerStyle}
+        textStyle={dropDownPickerStyles.textStyle}
+        placeholderStyle={dropDownPickerStyles.placeholderStyle}
+        selectedItemContainerStyle={
+          dropDownPickerStyles.selectedItemContainerStyle
+        }
+        itemSeparatorStyle={dropDownPickerStyles.itemSeparatorStyle}
       />
     </PickerContainer>
   );

@@ -154,8 +154,8 @@ function Register() {
             onValueChange={(value: string) => setTipoUsuario(value)}
             placeholder={{label: 'Tipo de Usuário', value: null}}
           />
+          <CustomButton texto="Cadastre-se" onPress={handleRegister} />
         </ScrollView>
-        <CustomButton texto="Cadastre-se" onPress={handleRegister} />
       </ContainerInputRegister>
     </ScreenBackgroundRegister>
   );

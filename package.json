@@ -12,7 +12,6 @@
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.23.1",
     "@react-native-community/viewpager": "^5.0.11",
-    "@react-native-picker/picker": "^2.7.6",
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/stack": "^6.3.20",
@@ -22,6 +21,7 @@
     "react": "18.2.0",
     "react-native": "0.72.4",
     "react-native-deep-linking": "^2.2.0",
+    "react-native-dropdown-picker": "^5.4.6",
     "react-native-gesture-handler": "^2.16.0",
     "react-native-image-picker": "^7.1.2",
     "react-native-linear-gradient": "^2.8.3",
