@@ -27,6 +27,10 @@ const InputPicker: React.FC<InputPickerProps> = ({
         onChangeValue={onValueChange}
         placeholder={placeholder?.label || 'Select an option'}
         style={dropDownPickerStyles.containerStyle}
+        listMode="SCROLLVIEW"
+        scrollViewProps={{
+          nestedScrollEnabled: true,
+        }}
         dropDownContainerStyle={dropDownPickerStyles.dropDownContainerStyle}
         textStyle={dropDownPickerStyles.textStyle}
         placeholderStyle={dropDownPickerStyles.placeholderStyle}
