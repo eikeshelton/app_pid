@@ -33,7 +33,7 @@ interface SignInCredentials {
 interface Search {
   login: string;
 }
-interface UserSearch {
+interface UsersSearch {
   nome_usuario?: string;
   tipo_usuario?: string;
   bio?: string;
@@ -46,18 +46,27 @@ interface UserSearch {
   id: Number;
   token?: string;
 }
-type UserSearchArray = UserSearch[];
+interface RegisterSearch {
+  usuario_id: any;
+  pesquisado_id: Number;
+}
+type UsersSearchArray = UsersSearch[];
+type RegisterSearchArray = RegisterSearch[];
 interface AuthContextData {
   user: User;
-  usersearch: UserSearchArray;
+  userssearch: UsersSearchArray;
+  registerSearch: RegisterSearchArray;
   signIn: (credentials: SignInCredentials) => Promise<void>;
   signOut: () => Promise<void>;
-  updateAvatar: (user: User) => Promise<void>;
-  updateLogin: (user: User) => Promise<void>;
+  clearUsersSearch: () => Promise<void>;
+  editAvatar: (user: User) => Promise<void>;
+  editLogin: (user: User) => Promise<void>;
   checkCredentials: (user: UserCheck) => Promise<boolean>;
   requestPasswordReset: (user: User) => Promise<void>;
-  updateUser: (user: User) => Promise<void>;
+  editUser: (user: User) => Promise<void>;
   Search: (search: Search) => Promise<void>;
+  RegisterSearch: (registerSearch: RegisterSearch) => Promise<void>;
+  updateUser: (user: User) => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -68,7 +77,8 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 function AuthProvider({children}: AuthProviderProps) {
   const [data, setData] = useState<User>({foto_perfil: ''} as User);
-  const [datausersearch, setusersearch] = useState<UserSearchArray>([]);
+  const [datausersearch, setusersearch] = useState<UsersSearchArray>([]);
+  const [registerSearch, setRegisterSearch] = useState<RegisterSearchArray>([]);
 
   async function signIn({login, senha}: SignInCredentials) {
     try {
@@ -105,7 +115,7 @@ function AuthProvider({children}: AuthProviderProps) {
       throw new Error('Erro ao fazer logout.');
     }
   }
-  async function updateUser(user: User) {
+  async function editUser(user: User) {
     try {
       const response = await api.post('/usuarios/', {
         email: user.email,
@@ -117,7 +127,7 @@ function AuthProvider({children}: AuthProviderProps) {
       console.log(err);
     }
   }
-  async function updateAvatar(user: User) {
+  async function editAvatar(user: User) {
     try {
       const response = await api.put(`/usuarios/${user.email}`, {
         foto_perfil: 'data:image/png;base64,' + user.foto_perfil,
@@ -150,6 +160,17 @@ function AuthProvider({children}: AuthProviderProps) {
       throw err;
     }
   }
+  async function updateUser() {
+    try {
+      const email = data.email;
+      const response = await api.get(`/usuarios/${email}`);
+      if (response.data) {
+        setData(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async function checkCredentials(user: UserCheck): Promise<boolean> {
     try {
       const response = await api.post('/check-credentials/', {
@@ -169,7 +190,7 @@ function AuthProvider({children}: AuthProviderProps) {
     }
   }
 
-  async function updateLogin(user: User) {
+  async function editLogin(user: User) {
     try {
       const response = await api.put('/Uploadlogin/', {
         email: user.email,
@@ -198,7 +219,23 @@ function AuthProvider({children}: AuthProviderProps) {
       console.log(err);
     }
   }
+  async function RegisterSearch(registerSearch: RegisterSearch) {
+    try {
+      const response = await api.post('/usuarios/registra-buscar/', {
+        usuario_id: registerSearch.usuario_id,
+        pesquisado_id: registerSearch.pesquisado_id,
+      });
 
+      if (response.data) {
+        setRegisterSearch(response.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  const clearUsersSearch = async () => {
+    setusersearch([]);
+  };
   useEffect(() => {
     let isMounted = true;
 
@@ -224,15 +261,19 @@ function AuthProvider({children}: AuthProviderProps) {
     <AuthContext.Provider
       value={{
         user: data,
-        usersearch: datausersearch,
+        userssearch: datausersearch,
+        registerSearch: registerSearch,
         signIn,
         signOut,
-        updateUser,
-        updateAvatar,
-        updateLogin,
+        editUser,
+        editAvatar,
+        editLogin,
+        clearUsersSearch,
         checkCredentials,
         requestPasswordReset,
         Search,
+        RegisterSearch,
+        updateUser,
       }}>
       {children}
     </AuthContext.Provider>

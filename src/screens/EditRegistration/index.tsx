@@ -9,7 +9,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Alert} from 'react-native';
 export function EditReg() {
   const navigation = useNavigation();
-  const {updateLogin, checkCredentials} = useAuth();
+  const {editLogin, checkCredentials} = useAuth();
   const {user} = useAuth();
   const [login, setLogin] = useState('');
   const [email, setEmail] = useState('');
@@ -19,7 +19,7 @@ export function EditReg() {
 
   const handleupdate = () => {
     if (senha_antiga !== senha) {
-      updateLogin({
+      editLogin({
         email: email,
         id: user.id,
         login: login,
