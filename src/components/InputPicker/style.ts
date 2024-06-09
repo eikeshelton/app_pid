@@ -31,8 +31,4 @@ export const dropDownPickerStyles = {
   selectedItemContainerStyle: {
     backgroundColor: '#934dd2',
   },
-  itemSeparatorStyle: {
-    height: 2,
-    color: 'red',
-  },
 };

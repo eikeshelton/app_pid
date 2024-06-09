@@ -37,7 +37,6 @@ const InputPicker: React.FC<InputPickerProps> = ({
         selectedItemContainerStyle={
           dropDownPickerStyles.selectedItemContainerStyle
         }
-        itemSeparatorStyle={dropDownPickerStyles.itemSeparatorStyle}
       />
     </PickerContainer>
   );
