@@ -25,44 +25,22 @@ import {
   ChatButton,
 } from './style';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
-import api from '../../services/api';
-
 import fotoPerfil from '../../assets/imagens/fotoperfil.png';
 import {useAuth} from '../../hooks/auth';
 import {Loading} from '../../components/Loading';
 
 export default function Profile() {
-  const {user} = useAuth();
+  const {user, updateUser} = useAuth();
   const isFocused = useIsFocused();
   const [loading, setLoading] = useState(true);
-  const [profileData, setProfileData] = useState({
-    nome_usuario: '',
-    tipo_usuario: '',
-    bio: '',
-    foto_perfil: '',
-    seguidores: 0,
-    seguidos: 0,
-  });
 
   const navigation = useNavigation();
 
-  const fetchProfileData = async () => {
-    try {
-      setLoading(true);
-      const {email} = user;
-      const response = await api.get(`/usuarios/${email}`);
-      const {data} = response;
-      if (!email) {
-        console.error('Email não encontrado no AsyncStorage');
-        return;
-      }
-
-      setProfileData(data);
-    } catch (error) {
-      console.error('Erro ao obter dados do perfil:', error);
-    } finally {
-      setLoading(false);
-    }
+  const fetchProfileData = () => {
+    updateUser({
+      email: user.email,
+    });
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -78,9 +56,9 @@ export default function Profile() {
     <ScreenBackground>
       <Container>
         <PictureContainer>
-          {profileData.foto_perfil ? (
+          {user.foto_perfil ? (
             <ProfilePicture
-              source={{uri: profileData.foto_perfil}}
+              source={{uri: user.foto_perfil}}
               resizeMode="contain" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
             />
           ) : (
@@ -100,19 +78,19 @@ export default function Profile() {
               <TextPubFoll>Publicações</TextPubFoll>
             </ContainerPub>
             <ContainerFollowers>
-              <TextNumber>{profileData.seguidores}</TextNumber>
+              <TextNumber>{user.seguidores}</TextNumber>
               <TextPubFoll>Seguidores</TextPubFoll>
             </ContainerFollowers>
             <ContainerFollowed>
-              <TextNumber>{profileData.seguidos}</TextNumber>
+              <TextNumber>{user.seguidos}</TextNumber>
               <TextPubFoll>Seguidos</TextPubFoll>
             </ContainerFollowed>
           </ContainerPubFoll>
         </SettingContainer>
       </Container>
       <ContainerNameBio>
-        <ProfileName>{profileData.nome_usuario}</ProfileName>
-        <TextBio>{profileData.bio}</TextBio>
+        <ProfileName>{user.nome_usuario}</ProfileName>
+        <TextBio>{user.bio}</TextBio>
       </ContainerNameBio>
       <ContainerButtons>
         <ButtonFollow>

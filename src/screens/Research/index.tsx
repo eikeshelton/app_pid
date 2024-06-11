@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Alert, FlatList} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {FlatList} from 'react-native';
 import {useAuth} from '../../hooks/auth';
 import {
   Background,
@@ -8,46 +8,65 @@ import {
   PictureContainer,
   ProfilePicture,
 } from './style';
-import CustomButton from '../../components/CustomizeButton';
 import fotoPerfil from '../../assets/imagens/fotoperfil.png';
+import {useNavigation} from '@react-navigation/native';
+import {ModalHistory} from '../../components/ModalHistory';
 import {InputComponent} from '../../components/Input';
+
 export default function Research() {
-  const {usersearch, Search} = useAuth();
-  const [showAlert, setShowAlert] = useState(false);
+  const navigation = useNavigation();
+  const {userssearch, Search, clearUsersSearch, RegisterSearch, user} =
+    useAuth();
   const [pesquisar, setPesquisar] = useState('');
+  const [showModal, setShowModal] = useState(false);
+
+  const handleChangeText = (text: string) => {
+    setPesquisar(text);
+  };
+
+  useEffect(() => {
+    if (pesquisar.length > 0) {
+      handleChangeText(pesquisar);
+      handleLogin();
+    } else {
+      clearUsersSearch();
+      // Chame a função para limpar userssearch
+    }
+  }, [pesquisar]);
 
   const handleLogin = React.useCallback(() => {
     Search({
       login: pesquisar,
     }).catch(_error => {
-      setShowAlert(true);
+      console.error(_error);
     });
   }, [Search, pesquisar]);
 
-  if (showAlert === true) {
-    Alert.alert('Erro ', 'Usuário não encontrado', [
-      {
-        text: 'OK',
-        onPress: () => setShowAlert(false),
-      },
-    ]);
-  }
-  const handleChangeText = (text: string) => {
-    // Atualizar o estado de 'pesquisar' e chamar handleLogin
-    setPesquisar(text);
-    handleLogin();
+  const handleItemPress = (item: any) => {
+    navigation.navigate('UserSearch', {selectedItem: item});
+    RegisterSearch({
+      usuario_id: user.id,
+      pesquisado_id: item.id,
+    });
   };
+
   const renderItem = ({item}: any) => (
-    <PictureContainer>
+    <PictureContainer onPress={() => handleItemPress(item)}>
       {item.foto_perfil ? (
-        <ProfilePicture source={{uri: item.foto_perfil}} resizeMode="contain" />
+        <ProfilePicture source={{uri: item.foto_perfil}} resizeMode="cover" />
       ) : (
         <ProfilePicture source={fotoPerfil} resizeMode="contain" />
       )}
-      <Name>{item.nome_usuario}</Name>
+      <Name>{item.login}</Name>
       <Name>{item.tipo_usuario}</Name>
     </PictureContainer>
   );
+
+  const showmodels = () => {
+    if (pesquisar.length === 0) {
+      setShowModal(true);
+    }
+  };
 
   return (
     <Background>
@@ -58,16 +77,22 @@ export default function Research() {
           placeholderTextColor={'white'}
           placeholder="Pesquisar"
           isFocused={true} // O campo está focado quando esta prop é true
-          inputId={17}
+          onFocus={() => {
+            showmodels();
+          }}
         />
-        <CustomButton texto="pesquisar" onPress={handleLogin} />
+
         <FlatList
-          data={usersearch}
+          data={userssearch}
           renderItem={renderItem}
           keyExtractor={item => item.id.toString()}
           numColumns={2}
         />
       </Container>
+      <ModalHistory
+        onDismiss={() => setShowModal(false)}
+        showModal={showModal}
+      />
     </Background>
   );
 }

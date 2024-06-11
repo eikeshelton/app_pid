@@ -6,12 +6,14 @@ import {format} from 'date-fns';
 import {
   ContainerImagemRegister,
   ContainerInputRegister,
+  Header,
   ScreenBackgroundRegister,
 } from './style';
 import {useNavigation} from '@react-navigation/native';
 import api from '../../services/api';
 import {InputComponent} from '../../components/Input';
 import InputPicker from '../../components/InputPicker';
+import BackButton from '../../components/BackButton';
 
 interface UsuarioCreate {
   email: string;
@@ -89,10 +91,12 @@ function Register() {
 
   return (
     <ScreenBackgroundRegister>
+      <Header>
+        <BackButton />
+      </Header>
       <ContainerImagemRegister>
         <TopImage />
       </ContainerImagemRegister>
-
       <ContainerInputRegister>
         <ScrollView>
           <InputComponent
@@ -101,7 +105,6 @@ function Register() {
             placeholderTextColor={'white'}
             placeholder="Nome"
             isFocused={true}
-            inputId={10}
           />
           <InputComponent
             onChangeText={text => setEmail(text)}
@@ -110,7 +113,6 @@ function Register() {
             placeholder="Email"
             keyboardType="email-address"
             isFocused={true}
-            inputId={11}
           />
           <InputComponent
             onChangeText={text => setLogin(text)}
@@ -118,7 +120,6 @@ function Register() {
             placeholderTextColor={'white'}
             placeholder="Login"
             isFocused={true}
-            inputId={12}
           />
           <InputComponent
             onChangeText={text => setSenha(text)}
@@ -127,7 +128,6 @@ function Register() {
             placeholder="Senha"
             secureTextEntry={true}
             isFocused={true}
-            inputId={3}
           />
           <InputComponent
             onChangeText={text => setConfirmarSenha(text)}
@@ -136,7 +136,6 @@ function Register() {
             placeholder="Confirmar Senha"
             secureTextEntry={true}
             isFocused={true}
-            inputId={14}
           />
           <InputComponent
             onChangeText={(formatted, extracted: any) => {
@@ -147,7 +146,6 @@ function Register() {
             placeholder="Data de Nascimento"
             keyboardType="numeric"
             isFocused={true}
-            inputId={15}
           />
           <InputPicker
             items={tipoUsuarioItems}

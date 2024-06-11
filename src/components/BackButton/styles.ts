@@ -3,7 +3,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {RFValue} from 'react-native-responsive-fontsize';
 
 export const Container = styled.TouchableOpacity`
-  width: 100%;
   padding-top: ${RFValue(10)}px;
   height: ${RFValue(50)}px;
 `;

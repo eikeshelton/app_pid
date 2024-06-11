@@ -1,8 +1,13 @@
-import {RFValue} from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
 import TextInputMask from 'react-native-text-input-mask';
+import {RFValue} from 'react-native-responsive-fontsize';
 
-export const Input = styled(TextInputMask)<{isFocused: boolean}>`
+interface InputProps {
+  isFocused: boolean;
+  inputId: number;
+}
+
+export const Input = styled(TextInputMask)<InputProps>`
   background-color: ${({theme}) => theme.colors.colorInput};
   color: ${({theme}) => theme.colors.colorWhite};
   padding-left: ${RFValue(14)}px;

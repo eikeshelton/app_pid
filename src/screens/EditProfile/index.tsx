@@ -11,7 +11,9 @@ import {
 import {
   ButtonSave,
   Container,
+  ContainerImagem,
   ContainerInputBio,
+  Header,
   ProfileImageContainer,
   TextAlterImage,
 } from './style';
@@ -22,12 +24,12 @@ import {InputComponent} from '../../components/Input';
 
 const EditProfile = () => {
   const navigation = useNavigation();
-  const {updateAvatar, user} = useAuth();
+  const {editAvatar, user} = useAuth();
 
-  const [bio, setBio] = useState('');
-  const [usuario, setUsuario] = useState('');
-  const [tipoUsuario, setTipoUsuario] = useState('');
-  const [fotoPerfil, setFotoPerfil] = useState('');
+  const [bio, setBio] = useState(user.bio);
+  const [usuario, setUsuario] = useState(user.nome_usuario);
+  const [tipoUsuario, setTipoUsuario] = useState(user.tipo_usuario);
+  const [fotoPerfil, setFotoPerfil] = useState(user.foto_perfil);
 
   const tirarFoto = async () => {
     Alert.alert('Escolha uma opção', 'De onde você quer selecionar a foto?', [
@@ -47,7 +49,7 @@ const EditProfile = () => {
   };
 
   async function handleUpdateUser() {
-    await updateAvatar({
+    await editAvatar({
       email: user.email,
       bio: bio,
       foto_perfil: fotoPerfil,
@@ -95,8 +97,14 @@ const EditProfile = () => {
 
   return (
     <Container>
-      <BackButton />
-      <TopImage />
+      <Header>
+        <BackButton />
+      </Header>
+
+      <ContainerImagem>
+        <TopImage />
+      </ContainerImagem>
+
       <ContainerInputBio showsVerticalScrollIndicator={false}>
         <InputComponent
           onChangeText={text => setUsuario(text)}
@@ -104,7 +112,6 @@ const EditProfile = () => {
           placeholderTextColor={'white'}
           placeholder="Nome do usuário:"
           isFocused={true} // O campo está focado quando esta prop é true
-          inputId={3}
         />
         <InputComponent
           onChangeText={text => setTipoUsuario(text)}
@@ -112,7 +119,6 @@ const EditProfile = () => {
           placeholderTextColor={'white'}
           placeholder="Tipo de usuário:"
           isFocused={true} // O campo está focado quando esta prop é true
-          inputId={4}
         />
         <InputComponent
           onChangeText={text => setBio(text)}
@@ -120,7 +126,6 @@ const EditProfile = () => {
           placeholderTextColor={'white'}
           placeholder="Bio:"
           isFocused={true} // O campo está focado quando esta prop é true
-          inputId={5}
         />
 
         <ProfileImageContainer onPress={tirarFoto}>

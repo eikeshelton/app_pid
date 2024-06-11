@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Container, ContainerEmail} from './style';
+import {Container, ContainerEmail, ContainerImagem} from './style';
 import CustomButton from '../../components/CustomizeButton';
 import TopImage from '../../components/TopImage';
 import {useNavigation} from '@react-navigation/native';
@@ -20,7 +20,9 @@ export default function MyPassword() {
   return (
     <Container>
       <BackButton />
-      <TopImage />
+      <ContainerImagem>
+        <TopImage />
+      </ContainerImagem>
       <ContainerEmail>
         <InputComponent
           onChangeText={text => setEmail(text)}
@@ -28,7 +30,6 @@ export default function MyPassword() {
           placeholderTextColor={'white'}
           placeholder="Email"
           isFocused={true} // O campo está focado quando esta prop é true
-          inputId={9}
         />
         <CustomButton texto="Enviar" onPress={handlerequestPasswordReset} />
       </ContainerEmail>

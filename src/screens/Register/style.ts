@@ -10,7 +10,10 @@ export const ContainerImagemRegister = styled.View`
   width: 100%;
   height: ${RFValue(180)}px;
 `;
-
+export const Header = styled.View`
+  flex-direction: row;
+  width: 100%;
+`;
 export const ContainerInputRegister = styled.View`
   width: 100%;
   flex: 1;
