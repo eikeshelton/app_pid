@@ -11,7 +11,9 @@ import {
 import {
   ButtonSave,
   Container,
+  ContainerImagem,
   ContainerInputBio,
+  Header,
   ProfileImageContainer,
   TextAlterImage,
 } from './style';
@@ -95,8 +97,14 @@ const EditProfile = () => {
 
   return (
     <Container>
-      <BackButton />
-      <TopImage />
+      <Header>
+        <BackButton />
+      </Header>
+
+      <ContainerImagem>
+        <TopImage />
+      </ContainerImagem>
+
       <ContainerInputBio showsVerticalScrollIndicator={false}>
         <InputComponent
           onChangeText={text => setUsuario(text)}
@@ -104,7 +112,6 @@ const EditProfile = () => {
           placeholderTextColor={'white'}
           placeholder="Nome do usuário:"
           isFocused={true} // O campo está focado quando esta prop é true
-          inputId={3}
         />
         <InputComponent
           onChangeText={text => setTipoUsuario(text)}
@@ -112,7 +119,6 @@ const EditProfile = () => {
           placeholderTextColor={'white'}
           placeholder="Tipo de usuário:"
           isFocused={true} // O campo está focado quando esta prop é true
-          inputId={4}
         />
         <InputComponent
           onChangeText={text => setBio(text)}
@@ -120,7 +126,6 @@ const EditProfile = () => {
           placeholderTextColor={'white'}
           placeholder="Bio:"
           isFocused={true} // O campo está focado quando esta prop é true
-          inputId={5}
         />
 
         <ProfileImageContainer onPress={tirarFoto}>

@@ -77,7 +77,6 @@ export default function Research() {
           placeholderTextColor={'white'}
           placeholder="Pesquisar"
           isFocused={true} // O campo está focado quando esta prop é true
-          inputId={17}
           onFocus={() => {
             showmodels();
           }}

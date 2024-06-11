@@ -8,7 +8,15 @@ export const Container = styled.View`
   background-color: ${({theme}) => theme.colors.backgroundColor};
   padding: 5px 25px;
 `;
-
+export const Header = styled.View`
+  flex-direction: row;
+  width: 100%;
+`;
+export const ContainerImagem = styled.View`
+  width: 100%;
+  height: ${RFValue(220)}px;
+  margin: ${RFValue(24)}px 0;
+`;
 export const ContainerInputBio = styled.ScrollView`
   flex: 1;
   width: 60%;

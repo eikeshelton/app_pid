@@ -15,13 +15,14 @@ import {
 } from './style';
 
 import BackButton from '../../components/BackButton';
-import {Input} from '../../components/Input/style';
+import fotoProfile from '../../assets/imagens/fotoperfil.png';
 import CustomButton from '../../components/CustomizeButton';
 import {useAuth} from '../../hooks/auth';
 import {useFocusEffect, useRoute} from '@react-navigation/native';
-import {FlatList, KeyboardAvoidingView} from 'react-native';
+import {FlatList} from 'react-native';
 
 import axios from '../../services/api';
+import {InputComponent} from '../../components/Input';
 interface Params {
   selectedItem: {
     tipo_usuario: string;
@@ -158,7 +159,11 @@ export function Chat() {
         <ContainerBackButton>
           <BackButton />
         </ContainerBackButton>
-        <PictureProfile source={{uri: selectedItem.foto_perfil}} />
+        {selectedItem.foto_perfil ? (
+          <PictureProfile source={{uri: selectedItem.foto_perfil}} />
+        ) : (
+          <PictureProfile source={fotoProfile} />
+        )}
         <Name>{selectedItem.nome_usuario}</Name>
       </Header>
       <FlatList
@@ -167,11 +172,12 @@ export function Chat() {
         renderItem={renderItem}
         keyExtractor={item => item.id.toString()}
       />
-      <Input
+      <InputComponent
         onChangeText={text => setMensagem(text)}
         value={mensagem}
         placeholderTextColor={'white'}
         placeholder="Mensagem..."
+        isFocused={true}
       />
       <CustomButton texto="Enviar" onPress={sendMessage} />
     </Container>

@@ -1,13 +1,20 @@
 import React from 'react';
 import {ScrollView} from 'react-native';
-import {Container, TermsText} from './style';
+import {Container, ContainerImagemTerms, Header, TermsText} from './style';
 import TopImage from '../../components/TopImage';
+import BackButton from '../../components/BackButton';
 
 function TermsUse() {
   return (
-    <ScrollView>
-      <Container>
+    <Container>
+      <Header>
+        <BackButton />
+      </Header>
+      <ContainerImagemTerms>
         <TopImage />
+      </ContainerImagemTerms>
+
+      <ScrollView>
         <TermsText>
           TERMOS DE USO DO APLICATIVO DE REDE SOCIAL Estes Termos de Uso
           ("Termos") regem o uso do aplicativo de rede social [Nome do
@@ -44,8 +51,8 @@ function TermsUse() {
           quaisquer litígios serão submetidos à jurisdição exclusiva dos
           tribunais de [Sua Cidade, Seu País].
         </TermsText>
-      </Container>
-    </ScrollView>
+      </ScrollView>
+    </Container>
   );
 }
 

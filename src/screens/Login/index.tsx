@@ -64,7 +64,6 @@ function Login() {
                 placeholderTextColor={'white'}
                 placeholder="Login"
                 isFocused={true} // O campo está focado quando esta prop é true
-                inputId={1} // Identificador único do campo de entrada
               />
               <InputComponent
                 onChangeText={text => setSenha(text)}
@@ -73,7 +72,6 @@ function Login() {
                 placeholder="Senha"
                 secureTextEntry={true}
                 isFocused={true} // O campo está focado quando esta prop é true
-                inputId={2} // Identificador único do campo de entrada
               />
             </ContainerInputLogin>
 

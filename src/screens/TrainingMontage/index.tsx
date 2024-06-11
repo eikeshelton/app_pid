@@ -65,7 +65,6 @@ function TrainingMontage({}) {
             placeholderTextColor={'white'}
             placeholder="Dia da semana"
             isFocused={true} // O campo está focado quando esta prop é true
-            inputId={23}
           />
           <InputComponent
             onChangeText={text => setExercise(text)}
@@ -73,7 +72,6 @@ function TrainingMontage({}) {
             placeholderTextColor={'white'}
             placeholder="Exercício"
             isFocused={true} // O campo está focado quando esta prop é true
-            inputId={24}
           />
           <InputComponent
             onChangeText={text => setDuration(text)}
@@ -81,7 +79,6 @@ function TrainingMontage({}) {
             placeholderTextColor={'white'}
             placeholder="Duração"
             isFocused={true} // O campo está focado quando esta prop é true
-            inputId={25}
           />
 
           <InputComponent
@@ -90,7 +87,6 @@ function TrainingMontage({}) {
             placeholderTextColor={'white'}
             placeholder="Comentário:"
             isFocused={true} // O campo está focado quando esta prop é true
-            inputId={25}
           />
         </ScrollView>
         <CustonButton texto="Adicionar Exercício" onPress={handleAddExercise} />
