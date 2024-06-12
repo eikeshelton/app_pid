@@ -111,14 +111,14 @@ const EditProfile = () => {
           value={usuario}
           placeholderTextColor={'white'}
           placeholder="Nome do usuário:"
-          isFocused={true} // O campo está focado quando esta prop é true
+          isFocused={true}
         />
         <InputComponent
           onChangeText={text => setTipoUsuario(text)}
           value={tipoUsuario}
           placeholderTextColor={'white'}
           placeholder="Tipo de usuário:"
-          isFocused={true} // O campo está focado quando esta prop é true
+          isFocused={true}
         />
         <InputComponent
           onChangeText={text => setBio(text)}

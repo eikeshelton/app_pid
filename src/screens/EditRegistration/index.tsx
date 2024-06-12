@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Container, ContainerInputBio} from './styles';
+import {Container, ContainerImagem, ContainerInputBio, Header} from './styles';
 import {useAuth} from '../../hooks/auth';
 import BackButton from '../../components/BackButton';
 import TopImage from '../../components/TopImage';
@@ -40,8 +40,13 @@ export function EditReg() {
   };
   return senha_verifica ? (
     <Container>
-      <BackButton />
-      <TopImage />
+      <Header>
+        <BackButton />
+      </Header>
+      <ContainerImagem>
+        <TopImage />
+      </ContainerImagem>
+
       <ContainerInputBio showsVerticalScrollIndicator={false}>
         <InputComponent
           onChangeText={text => setSenha(text)}
@@ -72,8 +77,13 @@ export function EditReg() {
     </Container>
   ) : (
     <Container>
-      <BackButton />
-      <TopImage />
+      <Header>
+        <BackButton />
+      </Header>
+
+      <ContainerImagem>
+        <TopImage />
+      </ContainerImagem>
       <ContainerInputBio showsVerticalScrollIndicator={false}>
         <InputComponent
           value={senha_antiga}

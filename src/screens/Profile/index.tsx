@@ -59,12 +59,12 @@ export default function Profile() {
           {user.foto_perfil ? (
             <ProfilePicture
               source={{uri: user.foto_perfil}}
-              resizeMode="contain" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
+              resizeMode="cover" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
             />
           ) : (
             <ProfilePicture
               source={fotoPerfil}
-              resizeMode="contain" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
+              resizeMode="cover" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
             />
           )}
         </PictureContainer>
