@@ -14,10 +14,21 @@ export const ScreenBackground = styled.SafeAreaView`
 `;
 
 export const Container = styled.View`
-  flex-direction: row;
-
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  padding: ${RFValue(10)}px 0;
 `;
+
+export const ContainerTest = styled.View`
+  width: 20%;
+`;
+
+export const HeaderContainer = styled.View`
+  padding: 0 ${RFValue(10)}px;
+  flex-direction: row;
+  justify-content: center;
+`;
+
 export const ContainerBackbutton = styled.View`
   flex-direction: row;
   align-items: center;
@@ -57,6 +68,14 @@ export const ContainerPub = styled.View`
   flex: 1;
 `;
 
+export const ContainerFollowers = styled.View`
+  flex: 1;
+`;
+
+export const ContainerFollowed = styled.View`
+  flex: 1;
+`;
+
 export const TextNumber = styled.Text`
   text-align: center;
   font-size: ${RFValue(17)}px;
@@ -72,6 +91,11 @@ export const SettingContainer = styled.View`
   width: 80%;
   align-items: flex-end;
 `;
+
+export const CountContainer = styled.View`
+  width: 100%;
+`;
+
 export const ContainerButton = styled.View`
   width: 100%;
   flex-direction: row;
@@ -89,13 +113,20 @@ export const ChatIcon = styled(Entypo)`
 `;
 
 export const ContainerNameBio = styled.View`
-  width: 100%;
-  padding: ${RFValue(1)}px ${RFValue(1)}px ${RFValue(1)}px ${RFValue(3)}px;
+  padding: 0 ${RFValue(16)}px ${RFValue(10)}px ${RFValue(16)}px;
 `;
 
 export const TextBio = styled.Text`
+  text-align: justify;
   font-size: ${RFValue(14)}px;
   color: ${({theme}) => theme.colors.colorWhite};
   padding-bottom: ${RFValue(2)}px;
   font-family: ${({theme}) => theme.fonts.light};
+`;
+
+export const ButtonFollow = styled.View`
+  gap: ${RFValue(10)}px;
+  width: 100%;
+  flex-direction: row;
+  padding: 0 ${RFValue(16)}px;
 `;

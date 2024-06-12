@@ -73,7 +73,7 @@ export function Chat() {
   );
 
   useEffect(() => {
-    const ws = new WebSocket(`ws://192.168.15.170:8000/ws/${user.id}`);
+    const ws = new WebSocket(`ws://192.168.1.6:8000/ws/${user.id}`);
     websocketRef.current = ws;
 
     ws.onopen = () => {
