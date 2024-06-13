@@ -32,8 +32,8 @@ export function ScreenChat() {
       <InputComponent
         onChangeText={setPesquisar}
         value={pesquisar}
-        placeholderTextColor={'white'}
-        placeholder="Pesquisar:"
+        placeholderTextColor={'silver'}
+        placeholder="Pesquisar conversas"
         isFocused={true} // O campo está focado quando esta prop é true
       />
       <FlatList

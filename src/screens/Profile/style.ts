@@ -1,5 +1,4 @@
 import styled from 'styled-components/native';
-import {Dimensions} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {RFValue} from 'react-native-responsive-fontsize';
@@ -32,17 +31,14 @@ export const PictureContainer = styled.View`
   padding: ${RFValue(10)}px 0;
 `;
 
-const ProfilePictureHeight = Dimensions.get('window').height * 0.14;
-const ProfilePictureWidth = Dimensions.get('window').width * 0.2;
 export const ProfilePicture = styled.Image`
   border-radius: 100px;
-  height: ${ProfilePictureHeight}px;
-  width: ${ProfilePictureWidth}px;
+  height: ${RFValue(100)}px;
+  width: ${RFValue(80)}px;
 `;
 
 export const ProfileName = styled.Text`
   color: ${({theme}) => theme.colors.colorWhite};
-
   font-size: ${RFValue(16)}px;
   font-weight: bold;
 `;

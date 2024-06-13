@@ -118,44 +118,44 @@ export default function TrainingPartner() {
           <InputComponent
             onChangeText={text => setData(text)}
             value={data}
-            placeholderTextColor={'white'}
-            placeholder="Data:"
+            placeholderTextColor={'silver'}
+            placeholder="Data"
             isFocused={true}
           />
           <InputComponent
             onChangeText={text => setHorario(text)}
             value={horario}
-            placeholderTextColor={'white'}
-            placeholder="Horário:"
+            placeholderTextColor={'silver'}
+            placeholder="Horário"
             isFocused={true}
           />
 
           <InputComponent
             onChangeText={text => setGrupamentoMuscular(text)}
             value={grupamentoMuscular}
-            placeholderTextColor={'white'}
-            placeholder="Grupamento muscular:"
+            placeholderTextColor={'silver'}
+            placeholder="Grupamento muscular"
             isFocused={true}
           />
           <InputComponent
             onChangeText={text => setLocal(text)}
             value={local}
-            placeholderTextColor={'white'}
-            placeholder="Local:"
+            placeholderTextColor={'silver'}
+            placeholder="Local"
             isFocused={true}
           />
           <InputComponent
             onChangeText={text => setSexo(text)}
             value={sexo}
-            placeholderTextColor={'white'}
-            placeholder="Sexo:"
+            placeholderTextColor={'silver'}
+            placeholder="Sexo"
             isFocused={true}
           />
           <InputComponent
             onChangeText={text => setModalidade(text)}
             value={modalidade}
-            placeholderTextColor={'white'}
-            placeholder="Modalidade:"
+            placeholderTextColor={'silver'}
+            placeholder="Modalidade"
             isFocused={true}
           />
 

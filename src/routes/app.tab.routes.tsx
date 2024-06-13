@@ -63,6 +63,8 @@ export default function AppTabNav() {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: theme.colors.background,
+          paddingTop: 6,
+          borderTopWidth: 1.5,
           borderTopColor: theme.colors.border_tab,
         },
         tabBarActiveTintColor: theme.colors.primary,
@@ -74,7 +76,7 @@ export default function AppTabNav() {
         name="Initial"
         component={Profile}
         options={{
-          tabBarLabel: 'profile',
+          tabBarLabel: 'Perfil',
 
           tabBarIcon: ({size, color, focused}) =>
             profileIcone(focused, size, color),
@@ -84,7 +86,7 @@ export default function AppTabNav() {
         name="Research"
         component={Research}
         options={{
-          tabBarLabel: 'Research',
+          tabBarLabel: 'Pesquisar',
           tabBarIcon: ({size, color, focused}) =>
             researchIcone(focused, size, color),
         }}
@@ -103,7 +105,7 @@ export default function AppTabNav() {
         name="TrainingPartner"
         component={TrainingPartner}
         options={{
-          tabBarLabel: 'TrainingPartner',
+          tabBarLabel: 'Parceiro',
 
           tabBarIcon: ({size, color, focused}) =>
             trainingPartnerIcone(focused, size, color),
@@ -113,7 +115,7 @@ export default function AppTabNav() {
         name="TrainingMontage"
         component={TrainingMontage}
         options={{
-          tabBarLabel: 'TrainingMontage',
+          tabBarLabel: 'Treino',
 
           tabBarIcon: ({size, color, focused}) =>
             trainingmontageIcone(focused, size, color),

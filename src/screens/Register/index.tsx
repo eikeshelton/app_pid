@@ -83,10 +83,10 @@ function Register() {
   };
 
   const tipoUsuarioItems = [
-    {label: 'Atleta', value: 'atleta'},
-    {label: 'Entusiasta', value: 'entusiasta'},
-    {label: 'Nutricionista', value: 'nutricionista'},
-    {label: 'Treinador', value: 'treinador'},
+    {label: 'Atleta', value: 'Atleta'},
+    {label: 'Entusiasta', value: 'Entusiasta'},
+    {label: 'Nutricionista', value: 'Nutricionista'},
+    {label: 'Treinador', value: 'Treinador'},
   ];
 
   return (
@@ -102,14 +102,14 @@ function Register() {
           <InputComponent
             onChangeText={text => setUsuario(text)}
             value={usuario}
-            placeholderTextColor={'white'}
+            placeholderTextColor={'silver'}
             placeholder="Nome"
             isFocused={true}
           />
           <InputComponent
             onChangeText={text => setEmail(text)}
             value={email}
-            placeholderTextColor={'white'}
+            placeholderTextColor={'silver'}
             placeholder="Email"
             keyboardType="email-address"
             isFocused={true}
@@ -117,14 +117,14 @@ function Register() {
           <InputComponent
             onChangeText={text => setLogin(text)}
             value={login}
-            placeholderTextColor={'white'}
+            placeholderTextColor={'silver'}
             placeholder="Login"
             isFocused={true}
           />
           <InputComponent
             onChangeText={text => setSenha(text)}
             value={senha}
-            placeholderTextColor={'white'}
+            placeholderTextColor={'silver'}
             placeholder="Senha"
             secureTextEntry={true}
             isFocused={true}
@@ -132,7 +132,7 @@ function Register() {
           <InputComponent
             onChangeText={text => setConfirmarSenha(text)}
             value={confirmarSenha}
-            placeholderTextColor={'white'}
+            placeholderTextColor={'silver'}
             placeholder="Confirmar Senha"
             secureTextEntry={true}
             isFocused={true}
@@ -142,7 +142,7 @@ function Register() {
               return setDataNascimento(extracted);
             }}
             mask="[00]/[00]/[0000]"
-            placeholderTextColor={'white'}
+            placeholderTextColor={'silver'}
             placeholder="Data de Nascimento"
             keyboardType="numeric"
             isFocused={true}
@@ -152,8 +152,8 @@ function Register() {
             onValueChange={(value: string) => setTipoUsuario(value)}
             placeholder={{label: 'Tipo de Usuário', value: null}}
           />
+          <CustomButton texto="Cadastre-se" onPress={handleRegister} />
         </ScrollView>
-        <CustomButton texto="Cadastre-se" onPress={handleRegister} />
       </ContainerInputRegister>
     </ScreenBackgroundRegister>
   );

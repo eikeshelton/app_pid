@@ -50,7 +50,7 @@ export function EditReg() {
         <InputComponent
           onChangeText={text => setSenha(text)}
           value={senha}
-          placeholderTextColor={'white'}
+          placeholderTextColor={'silver'}
           placeholder="Nova senha"
           secureTextEntry={true}
           isFocused={true} // O campo está focado quando esta prop é true
@@ -58,15 +58,15 @@ export function EditReg() {
         <InputComponent
           onChangeText={text => setLogin(text)}
           value={login}
-          placeholderTextColor={'white'}
+          placeholderTextColor={'silver'}
           placeholder="Novo login"
           isFocused={true} // O campo está focado quando esta prop é true
         />
         <InputComponent
           onChangeText={text => setEmail(text)}
           value={email}
-          placeholderTextColor={'white'}
-          placeholder="Novo email:"
+          placeholderTextColor={'silver'}
+          placeholder="Novo email"
           keyboardType="email-address"
           isFocused={true} // O campo está focado quando esta prop é true
         />
@@ -85,7 +85,7 @@ export function EditReg() {
       <ContainerInputBio showsVerticalScrollIndicator={false}>
         <InputComponent
           value={senha_antiga}
-          placeholderTextColor={'white'}
+          placeholderTextColor={'silver'}
           placeholder="Senha atual"
           onChangeText={text => setSenha_antiga(text)}
           secureTextEntry={true}

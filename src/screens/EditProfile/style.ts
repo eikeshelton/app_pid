@@ -1,4 +1,3 @@
-import {Dimensions} from 'react-native';
 import {RFValue} from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
 
@@ -6,28 +5,31 @@ export const Container = styled.View`
   flex: 1;
   align-items: center;
   background-color: ${({theme}) => theme.colors.backgroundColor};
-  padding: 5px 25px;
 `;
 export const Header = styled.View`
   flex-direction: row;
   width: 100%;
 `;
-export const ContainerImagem = styled.View`
-  width: 100%;
-  height: ${RFValue(220)}px;
-  margin: ${RFValue(24)}px 0;
+export const PageTitleContainer = styled.View`
+  padding: 0 0 ${RFValue(10)}px 0;
+`;
+export const PageTitleText = styled.Text`
+  color: ${({theme}) => theme.colors.colorWhite};
+  text-align: center;
+  font-size: ${RFValue(20)}px;
+  font-family: ${({theme}) => theme.fonts.bold};
 `;
 export const ContainerInputBio = styled.ScrollView`
+  width: 100%;
   flex: 1;
-  width: 60%;
+  padding-left: ${RFValue(24)}px;
+  padding-right: ${RFValue(24)}px;
   padding-top: ${RFValue(10)}px;
 `;
-const ProfilePictureHeight = Dimensions.get('window').height * 0.14;
-const ProfilePictureWidth = Dimensions.get('window').width * 0.2;
 export const ProfilePicture = styled.Image`
   border-radius: 100px;
-  height: ${ProfilePictureHeight}px;
-  width: ${ProfilePictureWidth}px;
+  height: ${RFValue(100)}px;
+  width: ${RFValue(80)}px;
 `;
 export const ProfileImageContainer = styled.TouchableOpacity`
   width: 100%;
@@ -36,9 +38,9 @@ export const ProfileImageContainer = styled.TouchableOpacity`
   background-color: ${({theme}) => theme.colors.colorInput};
   justify-content: center;
   align-items: center;
-  margin-bottom: 15px;
 `;
 export const TextAlterImage = styled.Text`
+  font-size: ${RFValue(14)}px;
   color: ${({theme}) => theme.colors.colorWhite};
 `;
 export const ButtonSave = styled.View`

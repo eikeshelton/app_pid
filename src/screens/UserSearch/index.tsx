@@ -88,7 +88,7 @@ export default function UserSearch() {
         <TextBio>{selectedItem.bio}</TextBio>
       </ContainerNameBio>
       <ButtonFollow>
-        <LiteButton texto="Seguir" />
+        <LiteButton texto="Seguir" onPress={() => {}} />
         <LiteButton
           texto="Mensagem"
           onPress={() => navigation.navigate('Chat', {selectedItem})}

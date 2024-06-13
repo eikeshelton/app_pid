@@ -25,7 +25,7 @@ export const dropDownPickerStyles = {
     fontSize: RFValue(14),
   },
   placeholderStyle: {
-    color: '#FFFFFF',
+    color: 'silver',
     fontSize: RFValue(14),
   },
   selectedItemContainerStyle: {
