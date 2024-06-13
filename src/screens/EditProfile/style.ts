@@ -24,7 +24,6 @@ export const ContainerInputBio = styled.ScrollView`
   flex: 1;
   padding-left: ${RFValue(24)}px;
   padding-right: ${RFValue(24)}px;
-  padding-top: ${RFValue(10)}px;
 `;
 export const ProfilePicture = styled.Image`
   border-radius: 100px;
@@ -32,12 +31,13 @@ export const ProfilePicture = styled.Image`
   width: ${RFValue(80)}px;
 `;
 export const ProfileImageContainer = styled.TouchableOpacity`
-  width: 100%;
+  width: 50%;
   height: 150px;
-  border-radius: 75px;
+  border-radius: 14px;
   background-color: ${({theme}) => theme.colors.colorInput};
   justify-content: center;
   align-items: center;
+  margin: 0 auto;
 `;
 export const TextAlterImage = styled.Text`
   font-size: ${RFValue(14)}px;
@@ -45,5 +45,10 @@ export const TextAlterImage = styled.Text`
 `;
 export const ButtonSave = styled.View`
   width: 100%;
-  padding: ${RFValue(10)}px;
+  padding-top: ${RFValue(10)}px;
+`;
+export const ClickableText = styled.Text`
+  color: ${({theme}) => theme.colors.colorWhite};
+  font-size: ${RFValue(16)}px;
+  margin: ${RFValue(10)}px 0 ${RFValue(6)}px 0;
 `;
