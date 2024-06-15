@@ -22,6 +22,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useAuth} from '../../hooks/auth';
 import BackButton from '../../components/BackButton';
 import {InputComponent} from '../../components/Input';
+import InputPicker from '../../components/InputPicker';
 
 const EditProfile = () => {
   const navigation = useNavigation();
@@ -133,12 +134,18 @@ const EditProfile = () => {
               <ClickableText>Tipo de usuário</ClickableText>
             </TouchableOpacity>
             {showTipoUsuario && (
-              <InputComponent
-                onChangeText={text => setTipoUsuario(text)}
-                value={tipoUsuario}
-                placeholderTextColor={'silver'}
-                placeholder="Tipo de usuário"
-                isFocused={true}
+              <InputPicker
+                items={[
+                  {label: 'Atleta', value: 'Atleta'},
+                  {label: 'Entusiasta', value: 'Entusiasta'},
+                  {label: 'Nutricionista', value: 'Nutricionista'},
+                  {label: 'Treinador', value: 'Treinador'},
+                ]}
+                onValueChange={(value: string) => setTipoUsuario(value)}
+                placeholder={{
+                  label: 'Selecione o tipo de usuário',
+                  value: null,
+                }}
               />
             )}
           </View>
@@ -176,10 +183,13 @@ const EditProfile = () => {
               </ProfileImageContainer>
             )}
           </View>
+          <ButtonSave>
+            <CustonButton
+              texto="Salvar alterações"
+              onPress={handleUpdateUser}
+            />
+          </ButtonSave>
         </ScrollView>
-        <ButtonSave>
-          <CustonButton texto="Salvar alterações" onPress={handleUpdateUser} />
-        </ButtonSave>
       </ContainerInputBio>
     </Container>
   );

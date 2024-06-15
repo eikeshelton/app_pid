@@ -16,6 +16,7 @@ export function Routes() {
         TermsUse: 'TermsUse',
         TrainingMontage: 'TrainingMontage',
         EditProfile: 'EditProfile',
+        TrainingPartnerRegister: 'TrainingPartnerRegister',
       },
     },
   };

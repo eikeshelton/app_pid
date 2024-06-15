@@ -12,6 +12,8 @@ export type RootStackParamsList = {
   EditReg: undefined;
   ResetPassword: undefined;
   ScreenChat: undefined;
+  TrainingPartnerRegister: undefined;
+  TrainingPartnerSearch: undefined;
   UserSearch: {selectedItem: any};
   Chat: {selectedItem: any};
 };

@@ -37,7 +37,7 @@ export const ProfileImageContainer = styled.TouchableOpacity`
   background-color: ${({theme}) => theme.colors.colorInput};
   justify-content: center;
   align-items: center;
-  margin: 0 auto;
+  margin: 0 auto ${RFValue(10)}px auto;
 `;
 export const TextAlterImage = styled.Text`
   font-size: ${RFValue(14)}px;

@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import CustomButton from '../../components/CustomizeButton';
 import {ScrollView} from 'react-native';
-import TopImage from '../../components/TopImage';
 import {format} from 'date-fns';
 import {
-  ContainerImagemRegister,
   ContainerInputRegister,
   Header,
+  PageTitleContainer,
+  PageTitleText,
   ScreenBackgroundRegister,
 } from './style';
 import {useNavigation} from '@react-navigation/native';
@@ -24,6 +24,7 @@ interface UsuarioCreate {
   data_nascimento: string;
   foto_perfil: string;
   bio: string;
+  sexo: string;
 }
 
 const criarUsuario = async (usuarioCreate: UsuarioCreate) => {
@@ -45,6 +46,7 @@ function Register() {
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
   const [tipoUsuario, setTipoUsuario] = useState('');
+  const [sexo, setSexo] = useState('');
 
   const handleRegister = () => {
     if (senha !== confirmarSenha) {
@@ -73,6 +75,7 @@ function Register() {
       data_nascimento: dataFormatada,
       foto_perfil: '',
       bio: '',
+      sexo: sexo,
     };
 
     criarUsuario(usuarioCreate)
@@ -89,14 +92,20 @@ function Register() {
     {label: 'Treinador', value: 'Treinador'},
   ];
 
+  const sexoItems = [
+    {label: 'Masculino', value: 'Masculino'},
+    {label: 'Feminino', value: 'Feminino'},
+    {label: 'Prefiro não responder', value: 'Outro'},
+  ];
+
   return (
     <ScreenBackgroundRegister>
       <Header>
         <BackButton />
       </Header>
-      <ContainerImagemRegister>
-        <TopImage />
-      </ContainerImagemRegister>
+      <PageTitleContainer>
+        <PageTitleText>Cadastro de Usuário</PageTitleText>
+      </PageTitleContainer>
       <ContainerInputRegister>
         <ScrollView>
           <InputComponent
@@ -106,19 +115,24 @@ function Register() {
             placeholder="Nome"
             isFocused={true}
           />
-          <InputComponent
-            onChangeText={text => setEmail(text)}
-            value={email}
-            placeholderTextColor={'silver'}
-            placeholder="Email"
-            keyboardType="email-address"
-            isFocused={true}
+          <InputPicker
+            items={tipoUsuarioItems}
+            onValueChange={(value: string) => setTipoUsuario(value)}
+            placeholder={{label: 'Tipo de Usuário', value: null}}
           />
           <InputComponent
             onChangeText={text => setLogin(text)}
             value={login}
             placeholderTextColor={'silver'}
             placeholder="Login"
+            isFocused={true}
+          />
+          <InputComponent
+            onChangeText={text => setEmail(text)}
+            value={email}
+            placeholderTextColor={'silver'}
+            placeholder="Email"
+            keyboardType="email-address"
             isFocused={true}
           />
           <InputComponent
@@ -137,6 +151,11 @@ function Register() {
             secureTextEntry={true}
             isFocused={true}
           />
+          <InputPicker
+            items={sexoItems}
+            onValueChange={(value: string) => setSexo(value)}
+            placeholder={{label: 'Sexo', value: null}}
+          />
           <InputComponent
             onChangeText={(formatted, extracted: any) => {
               return setDataNascimento(extracted);
@@ -146,11 +165,6 @@ function Register() {
             placeholder="Data de Nascimento"
             keyboardType="numeric"
             isFocused={true}
-          />
-          <InputPicker
-            items={tipoUsuarioItems}
-            onValueChange={(value: string) => setTipoUsuario(value)}
-            placeholder={{label: 'Tipo de Usuário', value: null}}
           />
           <CustomButton texto="Cadastre-se" onPress={handleRegister} />
         </ScrollView>
