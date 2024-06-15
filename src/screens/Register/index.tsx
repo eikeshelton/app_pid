@@ -162,7 +162,7 @@ function Register() {
             }}
             mask="[00]/[00]/[0000]"
             placeholderTextColor={'silver'}
-            placeholder="Data de Nascimento"
+            placeholder="Data de Nascimento (DD/MM/AAAA)"
             keyboardType="numeric"
             isFocused={true}
           />

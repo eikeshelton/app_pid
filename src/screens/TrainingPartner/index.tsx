@@ -28,7 +28,7 @@ export default function TrainingPartner() {
         <ContainerRegister>
           <RegisterText>
             Cadastre um treino para que outros usuários possam te chamar para
-            treinar junto!
+            treinar junto:
           </RegisterText>
           <CustomButton
             texto="Cadastrar Treino"
@@ -40,7 +40,7 @@ export default function TrainingPartner() {
         </ContainerSeparator>
         <ContainerSearch>
           <SearchText>
-            Busque por usuários que já possuam treinos cadastrados!
+            Busque por usuários que já possuam treinos cadastrados:
           </SearchText>
           <CustomButton
             texto="Buscar Parceiro"

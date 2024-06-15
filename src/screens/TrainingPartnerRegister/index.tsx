@@ -4,13 +4,30 @@ import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import CustonButton from '../../components/CustomizeButton';
-import TopImage from '../../components/TopImage';
 import {
-  ContainerImagemRegister,
+  ContainerButton,
   ContainerInputRegister,
+  Header,
+  LabelText,
+  PageTitleContainer,
+  PageTitleText,
   ScreenBackgroundRegister,
 } from './style';
 import {InputComponent} from '../../components/Input';
+import BackButton from '../../components/BackButton';
+import InputPicker from '../../components/InputPicker';
+
+interface TreinoCreate {
+  modalidade: string;
+  estado: string;
+  cidade: string;
+  local: string;
+  agrupamento_muscular: string;
+  dia_da_semana: string;
+  horario: string;
+  tempo_treino: string;
+  observacoes: string;
+}
 
 interface Place {
   name: string;
@@ -20,21 +37,82 @@ interface Place {
   opening_hours?: {open_now: boolean};
 }
 
-export default function TrainingPartner() {
-  const [data, setData] = useState('');
-  const [horario, setHorario] = useState('');
-  const [grupamentoMuscular, setGrupamentoMuscular] = useState('');
-  const [local, setLocal] = useState('');
-  const [sexo, setSexo] = useState('');
+export default function TrainingPartnerRegister() {
   const [modalidade, setModalidade] = useState('');
+  const [estado, setEstado] = useState('');
+  const [cidade, setCidade] = useState('');
+  const [local, setLocal] = useState('');
+  const [grupamentoMuscular, setGrupamentoMuscular] = useState('');
+  const [dia, setDia] = useState('');
+  const [hora, setHora] = useState('');
+  const [duracao, setDuracao] = useState('');
+  const [observacoes, setObservacoes] = useState('');
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
   const [places, setPlaces] = useState<Place[]>([]);
 
+  const treinoCreate: TreinoCreate = {
+    modalidade: modalidade,
+    estado: estado,
+    cidade: cidade,
+    local: local,
+    agrupamento_muscular: grupamentoMuscular,
+    dia_da_semana: dia,
+    horario: hora,
+    tempo_treino: duracao,
+    observacoes: observacoes,
+  };
+
+  const modalidadeItems = [
+    {label: 'Calistenia', value: 'Calistenia'},
+    {label: 'Caminhada', value: 'Caminhada'},
+    {label: 'Ciclismo', value: 'Ciclismo'},
+    {label: 'Corrida', value: 'Corrida'},
+    {label: 'Musculação', value: 'Musculacao'},
+  ];
+
+  const grupamentoMuscularItems = [
+    {label: 'Membros Inferiores', value: 'Inferiores'},
+    {label: 'Membros Superiores', value: 'Superiores'},
+    {label: 'Abdome', value: 'Abdome'},
+    {label: 'Bíceps', value: 'Biceps'},
+    {label: 'Costas', value: 'Costas'},
+    {label: 'Coxa', value: 'Coxa'},
+    {label: 'Ombros', value: 'Ombros'},
+    {label: 'Panturrilha', value: 'Panturrilha'},
+    {label: 'Peito', value: 'Peito'},
+    {label: 'Tríceps', value: 'Triceps'},
+  ];
+
+  const diaItems = [
+    {label: 'Domingo', value: 'Domingo'},
+    {label: 'Segunda', value: 'Segunda'},
+    {label: 'Terça', value: 'Terça'},
+    {label: 'Quarta', value: 'Quarta'},
+    {label: 'Quinta', value: 'Quinta'},
+    {label: 'Sexta', value: 'Sexta'},
+    {label: 'Sábado', value: 'Sabado'},
+  ];
+
+  const horaItems = [
+    {label: 'Manhã', value: 'Manha'},
+    {label: 'Tarde', value: 'Tarde'},
+    {label: 'Noite', value: 'Noite'},
+  ];
+
+  const duracaoItems = [
+    {label: '30min', value: '30'},
+    {label: '1h', value: '60'},
+    {label: '1h 30min', value: '90'},
+    {label: '2h', value: '120'},
+    {label: '2h 30min', value: '150'},
+    {label: '3h', value: '180'},
+  ];
+
   useEffect(() => {
     requestLocationPermission();
   }, []);
-  console.log(latitude, longitude);
+
   const requestLocationPermission = async () => {
     try {
       const status = await check(
@@ -109,55 +187,94 @@ export default function TrainingPartner() {
 
   return (
     <ScreenBackgroundRegister>
-      <ContainerImagemRegister>
-        <TopImage />
-      </ContainerImagemRegister>
+      <Header>
+        <BackButton />
+      </Header>
+
+      <PageTitleContainer>
+        <PageTitleText>Cadastrar Treino</PageTitleText>
+      </PageTitleContainer>
 
       <ContainerInputRegister>
         <ScrollView>
-          <InputComponent
-            onChangeText={text => setData(text)}
-            value={data}
-            placeholderTextColor={'silver'}
-            placeholder="Data"
-            isFocused={true}
+          <LabelText>Modalidade</LabelText>
+          <InputPicker
+            items={modalidadeItems}
+            onValueChange={(value: string) => setModalidade(value)}
+            placeholder={{label: 'Obrigatório', value: null}}
           />
+
+          <LabelText>Estado</LabelText>
           <InputComponent
-            onChangeText={text => setHorario(text)}
-            value={horario}
+            onChangeText={text => setEstado(text)}
+            value={estado}
             placeholderTextColor={'silver'}
-            placeholder="Horário"
+            placeholder="Obrigatório"
             isFocused={true}
           />
 
+          <LabelText>Cidade</LabelText>
           <InputComponent
-            onChangeText={text => setGrupamentoMuscular(text)}
-            value={grupamentoMuscular}
+            onChangeText={text => setCidade(text)}
+            value={cidade}
             placeholderTextColor={'silver'}
-            placeholder="Grupamento muscular"
+            placeholder="Obrigatório"
             isFocused={true}
           />
+
+          <LabelText>Local</LabelText>
           <InputComponent
             onChangeText={text => setLocal(text)}
             value={local}
             placeholderTextColor={'silver'}
-            placeholder="Local"
+            placeholder="Opcional"
             isFocused={true}
           />
+
+          {modalidade === 'Musculacao' && (
+            <>
+              <LabelText>Grupamento Muscular</LabelText>
+              <InputPicker
+                items={grupamentoMuscularItems}
+                onValueChange={(value: string) => setGrupamentoMuscular(value)}
+                placeholder={{label: 'Opcional', value: null}}
+              />
+            </>
+          )}
+
+          <LabelText>Dia da Semana</LabelText>
+          <InputPicker
+            items={diaItems}
+            onValueChange={(value: string) => setDia(value)}
+            placeholder={{label: 'Opcional', value: null}}
+          />
+
+          <LabelText>Horário do Treino</LabelText>
+          <InputPicker
+            items={horaItems}
+            onValueChange={(value: string) => setHora(value)}
+            placeholder={{label: 'Opcional', value: null}}
+          />
+
+          <LabelText>Duração do Treino</LabelText>
+          <InputPicker
+            items={duracaoItems}
+            onValueChange={(value: string) => setDuracao(value)}
+            placeholder={{label: 'Opcional', value: null}}
+          />
+
+          <LabelText>Observações</LabelText>
           <InputComponent
-            onChangeText={text => setSexo(text)}
-            value={sexo}
+            onChangeText={text => setObservacoes(text)}
+            value={observacoes}
             placeholderTextColor={'silver'}
-            placeholder="Sexo"
+            placeholder="Qualquer informação adicional"
             isFocused={true}
           />
-          <InputComponent
-            onChangeText={text => setModalidade(text)}
-            value={modalidade}
-            placeholderTextColor={'silver'}
-            placeholder="Modalidade"
-            isFocused={true}
-          />
+
+          <ContainerButton>
+            <CustonButton texto="Realizar cadastro" onPress={handlePress} />
+          </ContainerButton>
 
           <View>
             <Text>Latitude: {latitude}</Text>
@@ -176,9 +293,9 @@ export default function TrainingPartner() {
                   borderRadius: 5,
                 }}>
                 <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-                  nome:{item.name}
+                  nome: {item.name}
                 </Text>
-                <Text>endereço:{item.vicinity}</Text>
+                <Text>endereço: {item.vicinity}</Text>
                 <Text>Rating: {item.rating}</Text>
                 <Text>Total Ratings: {item.user_ratings_total}</Text>
                 {item.opening_hours && item.opening_hours.open_now ? (
@@ -191,8 +308,6 @@ export default function TrainingPartner() {
             keyExtractor={(item, index) => index.toString()}
           />
         </ScrollView>
-
-        <CustonButton texto="Procurar" onPress={handlePress} />
       </ContainerInputRegister>
     </ScreenBackgroundRegister>
   );
