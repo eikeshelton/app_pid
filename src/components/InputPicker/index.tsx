@@ -6,12 +6,18 @@ interface InputPickerProps {
   items: {label: string; value: any}[];
   onValueChange: (value: any) => void;
   placeholder?: {label: string; value: any};
+  onOpen?: () => void;
+  onClose?: () => void;
+  itemKey?: string; // Adicionando itemKey como opcional
 }
 
 const InputPicker: React.FC<InputPickerProps> = ({
   items,
   onValueChange,
   placeholder,
+  onOpen,
+  onClose,
+  itemKey,
 }) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
@@ -19,7 +25,10 @@ const InputPicker: React.FC<InputPickerProps> = ({
   return (
     <PickerContainer>
       <DropDownPicker
+        itemKey={itemKey}
         open={open}
+        onClose={onClose}
+        onOpen={onOpen}
         value={value}
         items={items}
         setOpen={setOpen}
@@ -29,7 +38,7 @@ const InputPicker: React.FC<InputPickerProps> = ({
         style={dropDownPickerStyles.containerStyle}
         listMode="SCROLLVIEW"
         scrollViewProps={{
-          nestedScrollEnabled: true,
+          nestedScrollEnabled: false,
         }}
         dropDownContainerStyle={dropDownPickerStyles.dropDownContainerStyle}
         textStyle={dropDownPickerStyles.textStyle}

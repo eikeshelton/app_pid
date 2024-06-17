@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, FlatList, ScrollView, Text, View, Platform} from 'react-native';
+import {Alert, ScrollView, Platform, FlatList, View, Text} from 'react-native';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
@@ -36,11 +36,36 @@ interface Place {
   user_ratings_total: number;
   opening_hours?: {open_now: boolean};
 }
-
+interface Estados {
+  id: string;
+  sigla: string;
+  nome: string;
+  regiao: {
+    id: number;
+    sigla: string;
+    nome: string;
+  };
+}
+interface Cidades {
+  id: string;
+  nome: string;
+  microrregiao: {
+    id: number;
+    nome: string;
+  };
+}
 export default function TrainingPartnerRegister() {
   const [modalidade, setModalidade] = useState('');
+  const [estados, setEstados] = useState<
+    {label: string; value: string; id: string}[]
+  >([]);
   const [estado, setEstado] = useState('');
+  const [estadoId, setEstadoId] = useState('');
+  const [cidades, setCidades] = useState<
+    {label: string; value: string; id: string}[]
+  >([]);
   const [cidade, setCidade] = useState('');
+  const [cidadeId, setCidadeId] = useState('');
   const [local, setLocal] = useState('');
   const [grupamentoMuscular, setGrupamentoMuscular] = useState('');
   const [dia, setDia] = useState('');
@@ -50,18 +75,7 @@ export default function TrainingPartnerRegister() {
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
   const [places, setPlaces] = useState<Place[]>([]);
-
-  const treinoCreate: TreinoCreate = {
-    modalidade: modalidade,
-    estado: estado,
-    cidade: cidade,
-    local: local,
-    agrupamento_muscular: grupamentoMuscular,
-    dia_da_semana: dia,
-    horario: hora,
-    tempo_treino: duracao,
-    observacoes: observacoes,
-  };
+  const [scrollEnabled, setScrollEnabled] = useState(true);
 
   const modalidadeItems = [
     {label: 'Calistenia', value: 'Calistenia'},
@@ -111,8 +125,8 @@ export default function TrainingPartnerRegister() {
 
   useEffect(() => {
     requestLocationPermission();
+    fetchEstadosFromAPI();
   }, []);
-
   const requestLocationPermission = async () => {
     try {
       const status = await check(
@@ -122,7 +136,7 @@ export default function TrainingPartnerRegister() {
       );
 
       if (status === RESULTS.GRANTED) {
-        getLocation();
+        //getLocation();
       } else {
         const result = await request(
           Platform.OS === 'ios'
@@ -131,7 +145,7 @@ export default function TrainingPartnerRegister() {
         );
 
         if (result === RESULTS.GRANTED) {
-          getLocation();
+          //getLocation();
         } else {
           Alert.alert(
             'Permissão de Localização Negada',
@@ -144,7 +158,30 @@ export default function TrainingPartnerRegister() {
     }
   };
 
-  const getLocation = () => {
+  const fetchEstadosFromAPI = async () => {
+    try {
+      const response = await axios.get<Estados[]>(
+        'https://servicodados.ibge.gov.br/api/v1/localidades/estados',
+      );
+
+      // Formatando os estados para o formato que o InputPicker espera
+      const estadosFormatted = response.data.map(estado => ({
+        label: `${estado.nome} - ${estado.sigla}`,
+        value: estado.sigla,
+        id: estado.id,
+      }));
+
+      setEstados(estadosFormatted);
+    } catch (error) {
+      console.error('Erro ao buscar estados:', error);
+      Alert.alert(
+        'Erro',
+        'Não foi possível carregar os estados. Verifique sua conexão.',
+      );
+    }
+  };
+
+  /*const getLocation = () => {
     Geolocation.getCurrentPosition(
       position => {
         setLatitude(position.coords.latitude);
@@ -160,29 +197,93 @@ export default function TrainingPartnerRegister() {
       {enableHighAccuracy: true, timeout: 12000, maximumAge: 1000},
     );
   };
+  */
 
-  const handlePress = async () => {
-    if (latitude && longitude) {
+  useEffect(() => {
+    const fetchPlaces = async () => {
+      if (latitude && longitude && local) {
+        try {
+          const response = await axios.get(
+            'https://maps.googleapis.com/maps/api/place/nearbysearch/json',
+            {
+              params: {
+                location: `${latitude},${longitude}`,
+                radius: 225347,
+                keyword: local,
+                key: 'AIzaSyBHCKxygf6ny6ek3q2LmQvFS75JYNISMwY',
+              },
+            },
+          );
+          console.log('latitude api', latitude, 'longitude api', longitude);
+          setPlaces(response.data.results);
+          console.log(response.data.results);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+
+    fetchPlaces();
+  }, [local, latitude, longitude]);
+  const toggleScroll = (enabled: boolean) => {
+    setScrollEnabled(enabled);
+  };
+  const fetchCidadesFromAPI = async () => {
+    try {
+      const response = await axios.get<Cidades[]>(
+        `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estado}/municipios`,
+      );
+      const data = response.data;
+      const cidadesFormatted = data.map(cidade => ({
+        label: cidade.nome,
+        value: cidade.id,
+        id: cidade.id,
+      }));
+      //console.log('cidadesFormatted:', cidadesFormatted);
+      setCidades(cidadesFormatted);
+    } catch (error) {
+      console.error('Erro ao buscar cidades:', error);
+    }
+  };
+  useEffect(() => {
+    if (estado) {
+      fetchCidadesFromAPI();
+    }
+  }, [estado]);
+  const handleValueChangeState = (value: string) => {
+    const estadoSelecionada = estados.find(estado => estado.value === value);
+    if (estadoSelecionada) {
+      setEstado(estadoSelecionada.value); // Aqui definimos o valor selecionado
+      setEstadoId(estadoSelecionada.id); // Aqui definimos o ID selecionado
+      console.log('estado selecionado:', estadoSelecionada.label);
+      console.log('id estado:', estadoSelecionada.id);
+    }
+  };
+  const handleValueChangeCity = async (value: string) => {
+    const cidadeSelecionada = cidades.find(cidade => cidade.value === value);
+    if (cidadeSelecionada) {
+      setCidade(cidadeSelecionada.label); // Aqui definimos o valor selecionado
+      setCidadeId(cidadeSelecionada.id); // Aqui definimos o ID selecionado
+      console.log('Cidade selecionada:', cidadeSelecionada.label);
+      console.log('id Cidade:', value);
       try {
         const response = await axios.get(
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json',
-          {
-            params: {
-              location: `${latitude},${longitude}`,
-              radius: 500,
-              keyword: local,
-              key: 'AIzaSyBHCKxygf6ny6ek3q2LmQvFS75JYNISMwY',
-            },
-          },
+          `https://servicodados.ibge.gov.br/api/v3/malhas/municipios/${cidadeSelecionada.id}/metadados`,
         );
-        setPlaces(response.data.results);
-        console.log(response.data.results);
-      } catch (error) {
-        console.error(error);
+        console.log('Dados da cidade:', response.data);
+        const {latitude, longitude} = response.data[0].centroide;
+        console.log('latitude da cidade:', latitude);
+        console.log('longitude da cidade:', longitude);
+        setLatitude(latitude);
+        setLongitude(longitude);
+      } catch (err) {
+        console.error('Erro ao buscar dados da cidade:', err);
       }
-    } else {
-      Alert.alert('Erro', 'Aguarde enquanto a localização é obtida.');
     }
+  };
+  const handlePress = () => {
+    console.log(estado);
+    console.log('cidade:', cidade);
   };
 
   return (
@@ -196,30 +297,31 @@ export default function TrainingPartnerRegister() {
       </PageTitleContainer>
 
       <ContainerInputRegister>
-        <ScrollView>
+        <ScrollView scrollEnabled={scrollEnabled}>
           <LabelText>Modalidade</LabelText>
           <InputPicker
             items={modalidadeItems}
             onValueChange={(value: string) => setModalidade(value)}
             placeholder={{label: 'Obrigatório', value: null}}
+            onOpen={() => toggleScroll(false)}
+            onClose={() => toggleScroll(true)}
           />
-
           <LabelText>Estado</LabelText>
-          <InputComponent
-            onChangeText={text => setEstado(text)}
-            value={estado}
-            placeholderTextColor={'silver'}
-            placeholder="Obrigatório"
-            isFocused={true}
+          <InputPicker
+            items={estados}
+            onValueChange={handleValueChangeState}
+            placeholder={{label: 'Obrigatório', value: null}}
+            onOpen={() => toggleScroll(false)}
+            onClose={() => toggleScroll(true)}
           />
-
           <LabelText>Cidade</LabelText>
-          <InputComponent
-            onChangeText={text => setCidade(text)}
-            value={cidade}
-            placeholderTextColor={'silver'}
-            placeholder="Obrigatório"
-            isFocused={true}
+          <InputPicker
+            items={cidades}
+            onValueChange={handleValueChangeCity}
+            placeholder={{label: 'Obrigatório', value: null}}
+            onOpen={() => toggleScroll(false)}
+            onClose={() => toggleScroll(true)}
+            itemKey="id"
           />
 
           <LabelText>Local</LabelText>
@@ -238,31 +340,35 @@ export default function TrainingPartnerRegister() {
                 items={grupamentoMuscularItems}
                 onValueChange={(value: string) => setGrupamentoMuscular(value)}
                 placeholder={{label: 'Opcional', value: null}}
+                onOpen={() => toggleScroll(false)}
+                onClose={() => toggleScroll(true)}
               />
             </>
           )}
-
           <LabelText>Dia da Semana</LabelText>
           <InputPicker
             items={diaItems}
             onValueChange={(value: string) => setDia(value)}
             placeholder={{label: 'Opcional', value: null}}
+            onOpen={() => toggleScroll(false)}
+            onClose={() => toggleScroll(true)}
           />
-
           <LabelText>Horário do Treino</LabelText>
           <InputPicker
             items={horaItems}
             onValueChange={(value: string) => setHora(value)}
             placeholder={{label: 'Opcional', value: null}}
+            onOpen={() => toggleScroll(false)}
+            onClose={() => toggleScroll(true)}
           />
-
           <LabelText>Duração do Treino</LabelText>
           <InputPicker
             items={duracaoItems}
             onValueChange={(value: string) => setDuracao(value)}
             placeholder={{label: 'Opcional', value: null}}
+            onOpen={() => toggleScroll(false)}
+            onClose={() => toggleScroll(true)}
           />
-
           <LabelText>Observações</LabelText>
           <InputComponent
             onChangeText={text => setObservacoes(text)}
@@ -275,39 +381,33 @@ export default function TrainingPartnerRegister() {
           <ContainerButton>
             <CustonButton texto="Realizar cadastro" onPress={handlePress} />
           </ContainerButton>
-
-          <View>
-            <Text>Latitude: {latitude}</Text>
-            <Text>Longitude: {longitude}</Text>
-          </View>
-
-          <FlatList
-            data={places}
-            renderItem={({item}) => (
-              <View
-                style={{
-                  marginVertical: 10,
-                  marginHorizontal: 20,
-                  padding: 10,
-                  backgroundColor: '#e0e0e0',
-                  borderRadius: 5,
-                }}>
-                <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-                  nome: {item.name}
-                </Text>
-                <Text>endereço: {item.vicinity}</Text>
-                <Text>Rating: {item.rating}</Text>
-                <Text>Total Ratings: {item.user_ratings_total}</Text>
-                {item.opening_hours && item.opening_hours.open_now ? (
-                  <Text style={{color: 'green'}}>Open Now</Text>
-                ) : (
-                  <Text style={{color: 'red'}}>Closed</Text>
-                )}
-              </View>
-            )}
-            keyExtractor={(item, index) => index.toString()}
-          />
         </ScrollView>
+        <FlatList
+          data={places}
+          renderItem={({item}) => (
+            <View
+              style={{
+                marginVertical: 10,
+                marginHorizontal: 20,
+                padding: 10,
+                backgroundColor: '#e0e0e0',
+                borderRadius: 5,
+              }}>
+              <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+                nome: {item.name}
+              </Text>
+              <Text>endereço: {item.vicinity}</Text>
+              <Text>Rating: {item.rating}</Text>
+              <Text>Total Ratings: {item.user_ratings_total}</Text>
+              {item.opening_hours && item.opening_hours.open_now ? (
+                <Text style={{color: 'green'}}>Open Now</Text>
+              ) : (
+                <Text style={{color: 'red'}}>Closed</Text>
+              )}
+            </View>
+          )}
+          keyExtractor={(item, index) => index.toString()}
+        />
       </ContainerInputRegister>
     </ScreenBackgroundRegister>
   );

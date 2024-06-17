@@ -38,7 +38,24 @@ interface BuscaParceiroCreate {
   tempo_treino: string;
   sexo: string;
 }
-
+interface Estados {
+  id: string;
+  sigla: string;
+  nome: string;
+  regiao: {
+    id: number;
+    sigla: string;
+    nome: string;
+  };
+}
+interface Cidades {
+  id: string;
+  nome: string;
+  microrregiao: {
+    id: number;
+    nome: string;
+  };
+}
 interface Place {
   name: string;
   vicinity: string;
@@ -49,8 +66,16 @@ interface Place {
 
 export default function TrainingPartnerSearch() {
   const [modalidade, setModalidade] = useState('');
+  const [estados, setEstados] = useState<
+    {label: string; value: string; id: string}[]
+  >([]);
   const [estado, setEstado] = useState('');
+  const [estadoId, setEstadoId] = useState('');
+  const [cidades, setCidades] = useState<
+    {label: string; value: string; id: string}[]
+  >([]);
   const [cidade, setCidade] = useState('');
+  const [cidadeId, setCidadeId] = useState('');
   const [local, setLocal] = useState('');
   const [grupamentoMuscular, setGrupamentoMuscular] = useState('');
   const [dia, setDia] = useState('');
@@ -60,6 +85,7 @@ export default function TrainingPartnerSearch() {
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
   const [places, setPlaces] = useState<Place[]>([]);
+  const [scrollEnabled, setScrollEnabled] = useState(true);
 
   const buscaParceiroCreate: BuscaParceiroCreate = {
     modalidade: modalidade,
@@ -133,8 +159,8 @@ export default function TrainingPartnerSearch() {
 
   useEffect(() => {
     requestLocationPermission();
+    fetchEstadosFromAPI();
   }, []);
-
   const requestLocationPermission = async () => {
     try {
       const status = await check(
@@ -166,6 +192,29 @@ export default function TrainingPartnerSearch() {
     }
   };
 
+  const fetchEstadosFromAPI = async () => {
+    try {
+      const response = await axios.get<Estados[]>(
+        'https://servicodados.ibge.gov.br/api/v1/localidades/estados',
+      );
+
+      // Formatando os estados para o formato que o InputPicker espera
+      const estadosFormatted = response.data.map(estado => ({
+        label: `${estado.nome} - ${estado.sigla}`,
+        value: estado.sigla,
+        id: estado.id,
+      }));
+
+      setEstados(estadosFormatted);
+    } catch (error) {
+      console.error('Erro ao buscar estados:', error);
+      Alert.alert(
+        'Erro',
+        'Não foi possível carregar os estados. Verifique sua conexão.',
+      );
+    }
+  };
+
   const getLocation = () => {
     Geolocation.getCurrentPosition(
       position => {
@@ -183,28 +232,77 @@ export default function TrainingPartnerSearch() {
     );
   };
 
-  const handlePress = async () => {
-    if (latitude && longitude) {
-      try {
-        const response = await axios.get(
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json',
-          {
-            params: {
-              location: `${latitude},${longitude}`,
-              radius: 500,
-              keyword: local,
-              key: 'AIzaSyBHCKxygf6ny6ek3q2LmQvFS75JYNISMwY',
+  useEffect(() => {
+    const fetchPlaces = async () => {
+      if (latitude && longitude && local) {
+        try {
+          const response = await axios.get(
+            'https://maps.googleapis.com/maps/api/place/nearbysearch/json',
+            {
+              params: {
+                location: `${latitude},${longitude}`,
+                radius: 500,
+                keyword: local,
+                key: 'AIzaSyBHCKxygf6ny6ek3q2LmQvFS75JYNISMwY',
+              },
             },
-          },
-        );
-        setPlaces(response.data.results);
-        console.log(response.data.results);
-      } catch (error) {
-        console.error(error);
+          );
+          setPlaces(response.data.results);
+          console.log(response.data.results);
+        } catch (error) {
+          console.error(error);
+        }
       }
-    } else {
-      Alert.alert('Erro', 'Aguarde enquanto a localização é obtida.');
+    };
+
+    fetchPlaces();
+  }, [local, latitude, longitude]);
+  const toggleScroll = (enabled: boolean) => {
+    setScrollEnabled(enabled);
+  };
+  const fetchCidadesFromAPI = async () => {
+    try {
+      const response = await axios.get<Cidades[]>(
+        `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estado}/municipios`,
+      );
+      const data = response.data;
+      const cidadesFormatted = data.map(cidade => ({
+        label: cidade.nome,
+        value: cidade.id,
+        id: cidade.id,
+      }));
+      //console.log('cidadesFormatted:', cidadesFormatted);
+      setCidades(cidadesFormatted);
+    } catch (error) {
+      console.error('Erro ao buscar cidades:', error);
     }
+  };
+  useEffect(() => {
+    if (estado) {
+      fetchCidadesFromAPI();
+    }
+  }, [estado]);
+  const handleValueChangeState = (value: string) => {
+    const estadoSelecionada = estados.find(estado => estado.value === value);
+    if (estadoSelecionada) {
+      setEstado(estadoSelecionada.value); // Aqui definimos o valor selecionado
+      setEstadoId(estadoSelecionada.id); // Aqui definimos o ID selecionado
+      console.log('estado selecionado:', estadoSelecionada.label);
+      console.log('id estado:', estadoSelecionada.id);
+    }
+  };
+  const handleValueChangeCity = (value: string) => {
+    const cidadeSelecionada = cidades.find(cidade => cidade.value === value);
+    if (cidadeSelecionada) {
+      setCidade(cidadeSelecionada.label); // Aqui definimos o valor selecionado
+      setCidadeId(cidadeSelecionada.id); // Aqui definimos o ID selecionado
+      console.log('Cidade selecionada:', cidadeSelecionada.label);
+      console.log('id Cidade:', value);
+    }
+  };
+  const handlePress = () => {
+    console.log(estado);
+    console.log('cidade:', cidade);
   };
 
   return (
@@ -213,7 +311,7 @@ export default function TrainingPartnerSearch() {
         <BackButton />
       </Header>
 
-      <ScrollView>
+      <ScrollView scrollEnabled={scrollEnabled}>
         <PageTitleContainer>
           <PageTitleText>Buscar Parceiro</PageTitleText>
         </PageTitleContainer>
@@ -224,24 +322,26 @@ export default function TrainingPartnerSearch() {
             items={modalidadeItems}
             onValueChange={(value: string) => setModalidade(value)}
             placeholder={{label: 'Obrigatório', value: null}}
+            onOpen={() => toggleScroll(false)}
+            onClose={() => toggleScroll(true)}
           />
 
           <LabelText>Estado</LabelText>
-          <InputComponent
-            onChangeText={text => setEstado(text)}
-            value={estado}
-            placeholderTextColor={'silver'}
-            placeholder="Obrigatório"
-            isFocused={true}
+          <InputPicker
+            items={estados}
+            onValueChange={handleValueChangeState}
+            placeholder={{label: 'Obrigatório', value: null}}
+            onOpen={() => toggleScroll(false)}
+            onClose={() => toggleScroll(true)}
           />
-
           <LabelText>Cidade</LabelText>
-          <InputComponent
-            onChangeText={text => setCidade(text)}
-            value={cidade}
-            placeholderTextColor={'silver'}
-            placeholder="Obrigatório"
-            isFocused={true}
+          <InputPicker
+            items={cidades}
+            onValueChange={handleValueChangeCity}
+            placeholder={{label: 'Obrigatório', value: null}}
+            onOpen={() => toggleScroll(false)}
+            onClose={() => toggleScroll(true)}
+            itemKey="id"
           />
 
           <TouchableOpacity onPress={() => setShowLocal(!showLocal)}>
@@ -272,6 +372,8 @@ export default function TrainingPartnerSearch() {
                     setGrupamentoMuscular(value)
                   }
                   placeholder={{label: 'Opcional', value: null}}
+                  onOpen={() => toggleScroll(false)}
+                  onClose={() => toggleScroll(true)}
                 />
               )}
             </>
@@ -285,6 +387,8 @@ export default function TrainingPartnerSearch() {
               items={diaItems}
               onValueChange={(value: string) => setDia(value)}
               placeholder={{label: 'Opcional', value: null}}
+              onOpen={() => toggleScroll(false)}
+              onClose={() => toggleScroll(true)}
             />
           )}
 
@@ -296,6 +400,8 @@ export default function TrainingPartnerSearch() {
               items={horaItems}
               onValueChange={(value: string) => setHora(value)}
               placeholder={{label: 'Opcional', value: null}}
+              onOpen={() => toggleScroll(false)}
+              onClose={() => toggleScroll(true)}
             />
           )}
 
@@ -307,6 +413,8 @@ export default function TrainingPartnerSearch() {
               items={duracaoItems}
               onValueChange={(value: string) => setDuracao(value)}
               placeholder={{label: 'Opcional', value: null}}
+              onOpen={() => toggleScroll(false)}
+              onClose={() => toggleScroll(true)}
             />
           )}
 
@@ -318,6 +426,8 @@ export default function TrainingPartnerSearch() {
               items={sexoItems}
               onValueChange={(value: string) => setSexo(value)}
               placeholder={{label: 'Opcional', value: null}}
+              onOpen={() => toggleScroll(false)}
+              onClose={() => toggleScroll(true)}
             />
           )}
 
