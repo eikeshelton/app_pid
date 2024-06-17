@@ -6,9 +6,14 @@ export const ScreenBackgroundRegister = styled.SafeAreaView`
   background-color: ${({theme}) => theme.colors.backgroundColor};
 `;
 
-export const ContainerImagemRegister = styled.View`
-  width: 100%;
-  height: ${RFValue(180)}px;
+export const PageTitleContainer = styled.View`
+  padding: 0 0 ${RFValue(24)}px 0;
+`;
+export const PageTitleText = styled.Text`
+  color: ${({theme}) => theme.colors.colorWhite};
+  text-align: center;
+  font-size: ${RFValue(20)}px;
+  font-family: ${({theme}) => theme.fonts.bold};
 `;
 export const Header = styled.View`
   flex-direction: row;

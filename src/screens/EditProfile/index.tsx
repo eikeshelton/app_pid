@@ -1,7 +1,5 @@
-// EditProfileScreen.js
 import React, {useState} from 'react';
-import {Alert} from 'react-native';
-import TopImage from '../../components/TopImage';
+import {Alert, ScrollView, View, TouchableOpacity} from 'react-native';
 import CustonButton from '../../components/CustomizeButton';
 import {
   OptionsCommon,
@@ -11,16 +9,20 @@ import {
 import {
   ButtonSave,
   Container,
-  ContainerImagem,
   ContainerInputBio,
   Header,
+  PageTitleContainer,
+  PageTitleText,
   ProfileImageContainer,
   TextAlterImage,
+  ProfilePicture,
+  ClickableText,
 } from './style';
 import {useNavigation} from '@react-navigation/native';
 import {useAuth} from '../../hooks/auth';
 import BackButton from '../../components/BackButton';
 import {InputComponent} from '../../components/Input';
+import InputPicker from '../../components/InputPicker';
 
 const EditProfile = () => {
   const navigation = useNavigation();
@@ -30,6 +32,11 @@ const EditProfile = () => {
   const [usuario, setUsuario] = useState(user.nome_usuario);
   const [tipoUsuario, setTipoUsuario] = useState(user.tipo_usuario);
   const [fotoPerfil, setFotoPerfil] = useState(user.foto_perfil);
+
+  const [showBio, setShowBio] = useState(false);
+  const [showUsuario, setShowUsuario] = useState(false);
+  const [showTipoUsuario, setShowTipoUsuario] = useState(false);
+  const [showFotoPerfil, setShowFotoPerfil] = useState(false);
 
   const tirarFoto = async () => {
     Alert.alert('Escolha uma opção', 'De onde você quer selecionar a foto?', [
@@ -78,7 +85,6 @@ const EditProfile = () => {
           result.errorCode,
           result.errorMessage,
         );
-
         return true;
       }
 
@@ -101,41 +107,92 @@ const EditProfile = () => {
         <BackButton />
       </Header>
 
-      <ContainerImagem>
-        <TopImage />
-      </ContainerImagem>
+      <PageTitleContainer>
+        <PageTitleText>Editar Perfil de Usuário</PageTitleText>
+      </PageTitleContainer>
 
       <ContainerInputBio showsVerticalScrollIndicator={false}>
-        <InputComponent
-          onChangeText={text => setUsuario(text)}
-          value={usuario}
-          placeholderTextColor={'white'}
-          placeholder="Nome do usuário:"
-          isFocused={true} // O campo está focado quando esta prop é true
-        />
-        <InputComponent
-          onChangeText={text => setTipoUsuario(text)}
-          value={tipoUsuario}
-          placeholderTextColor={'white'}
-          placeholder="Tipo de usuário:"
-          isFocused={true} // O campo está focado quando esta prop é true
-        />
-        <InputComponent
-          onChangeText={text => setBio(text)}
-          value={bio}
-          placeholderTextColor={'white'}
-          placeholder="Bio:"
-          isFocused={true} // O campo está focado quando esta prop é true
-        />
+        <ScrollView>
+          <View>
+            <TouchableOpacity onPress={() => setShowUsuario(!showUsuario)}>
+              <ClickableText>Nome</ClickableText>
+            </TouchableOpacity>
+            {showUsuario && (
+              <InputComponent
+                onChangeText={text => setUsuario(text)}
+                value={usuario}
+                placeholderTextColor={'silver'}
+                placeholder="Nome do usuário"
+                isFocused={true}
+              />
+            )}
+          </View>
 
-        <ProfileImageContainer onPress={tirarFoto}>
-          <TextAlterImage>alterar foto</TextAlterImage>
-        </ProfileImageContainer>
+          <View>
+            <TouchableOpacity
+              onPress={() => setShowTipoUsuario(!showTipoUsuario)}>
+              <ClickableText>Tipo de usuário</ClickableText>
+            </TouchableOpacity>
+            {showTipoUsuario && (
+              <InputPicker
+                items={[
+                  {label: 'Atleta', value: 'Atleta'},
+                  {label: 'Entusiasta', value: 'Entusiasta'},
+                  {label: 'Nutricionista', value: 'Nutricionista'},
+                  {label: 'Treinador', value: 'Treinador'},
+                ]}
+                onValueChange={(value: string) => setTipoUsuario(value)}
+                placeholder={{
+                  label: 'Selecione o tipo de usuário',
+                  value: null,
+                }}
+              />
+            )}
+          </View>
+
+          <View>
+            <TouchableOpacity onPress={() => setShowBio(!showBio)}>
+              <ClickableText>Bio</ClickableText>
+            </TouchableOpacity>
+            {showBio && (
+              <InputComponent
+                onChangeText={text => setBio(text)}
+                value={bio}
+                placeholderTextColor={'silver'}
+                placeholder="Bio"
+                isFocused={true}
+              />
+            )}
+          </View>
+
+          <View>
+            <TouchableOpacity
+              onPress={() => setShowFotoPerfil(!showFotoPerfil)}>
+              <ClickableText>Foto de perfil</ClickableText>
+            </TouchableOpacity>
+            {showFotoPerfil && (
+              <ProfileImageContainer onPress={tirarFoto}>
+                {fotoPerfil ? (
+                  <ProfilePicture
+                    source={{uri: `data:image/jpeg;base64,${fotoPerfil}`}}
+                  />
+                ) : (
+                  <TextAlterImage>Adicionar foto</TextAlterImage>
+                )}
+                <TextAlterImage>Alterar foto</TextAlterImage>
+              </ProfileImageContainer>
+            )}
+          </View>
+          <ButtonSave>
+            <CustonButton
+              texto="Salvar alterações"
+              onPress={handleUpdateUser}
+            />
+          </ButtonSave>
+        </ScrollView>
       </ContainerInputBio>
-      <ButtonSave>
-        <CustonButton texto="Salvar alterações" onPress={handleUpdateUser} />
-      </ButtonSave>
     </Container>
   );
 };
+
 export default EditProfile;

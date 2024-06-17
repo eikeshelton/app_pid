@@ -12,19 +12,19 @@ import {
   TextNumber,
   TextPubFoll,
   ContainerNameBio,
-  SettingContainer,
   ContainerBackbutton,
   ProfileUser,
-  FollowIcon,
-  ButtonIcon,
-  ChatButton,
-  ChatIcon,
-  ContainerButton,
+  HeaderContainer,
+  CountContainer,
+  ContainerFollowers,
+  ContainerFollowed,
+  ButtonFollow,
 } from './style';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import fotoPerfil from '../../assets/imagens/fotoperfil.png';
 import BackButton from '../../components/BackButton';
+import LiteButton from '../../components/LiteButton';
 
 interface Params {
   selectedItem: {
@@ -51,48 +51,49 @@ export default function UserSearch() {
         <ProfileUser>{selectedItem.login}</ProfileUser>
       </ContainerBackbutton>
       <Container>
-        <PictureContainer>
-          {selectedItem.foto_perfil ? (
-            <ProfilePicture
-              source={{uri: selectedItem.foto_perfil}}
-              resizeMode="cover" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
-            />
-          ) : (
-            <ProfilePicture
-              source={fotoPerfil}
-              resizeMode="contain" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
-            />
-          )}
-        </PictureContainer>
-        <SettingContainer>
+        <HeaderContainer>
+          <PictureContainer>
+            {selectedItem.foto_perfil ? (
+              <ProfilePicture
+                source={{uri: selectedItem.foto_perfil}}
+                resizeMode="cover" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
+              />
+            ) : (
+              <ProfilePicture
+                source={fotoPerfil}
+                resizeMode="cover" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
+              />
+            )}
+            <ProfileName>{selectedItem.nome_usuario}</ProfileName>
+          </PictureContainer>
+        </HeaderContainer>
+        <CountContainer>
           <ContainerPubFoll>
             <ContainerPub>
               <TextNumber>8</TextNumber>
               <TextPubFoll>Publicações</TextPubFoll>
             </ContainerPub>
-            <ContainerPub>
+            <ContainerFollowers>
               <TextNumber>{selectedItem.seguidores}</TextNumber>
               <TextPubFoll>Seguidores</TextPubFoll>
-            </ContainerPub>
-            <ContainerPub>
+            </ContainerFollowers>
+            <ContainerFollowed>
               <TextNumber>{selectedItem.seguidos}</TextNumber>
               <TextPubFoll>Seguidos</TextPubFoll>
-            </ContainerPub>
+            </ContainerFollowed>
           </ContainerPubFoll>
-        </SettingContainer>
+        </CountContainer>
       </Container>
       <ContainerNameBio>
-        <ProfileName>{selectedItem.nome_usuario}</ProfileName>
         <TextBio>{selectedItem.bio}</TextBio>
       </ContainerNameBio>
-      <ContainerButton>
-        <ButtonIcon>
-          <FollowIcon name="user-follow" />
-        </ButtonIcon>
-        <ChatButton onPress={() => navigation.navigate('Chat', {selectedItem})}>
-          <ChatIcon name="chat" />
-        </ChatButton>
-      </ContainerButton>
+      <ButtonFollow>
+        <LiteButton texto="Seguir" onPress={() => {}} />
+        <LiteButton
+          texto="Mensagem"
+          onPress={() => navigation.navigate('Chat', {selectedItem})}
+        />
+      </ButtonFollow>
       <ProfilePost />
     </ScreenBackground>
   );

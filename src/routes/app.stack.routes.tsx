@@ -9,6 +9,8 @@ import TermsUse from '../screens/TermsUse';
 import {ScreenChat} from '../screens/ScreenChats';
 import UserSearch from '../screens/UserSearch';
 import {Chat} from '../screens/Chat';
+import TrainingPartnerRegister from '../screens/TrainingPartnerRegister';
+import TrainingPartnerSearch from '../screens/TrainingPartnerSearch';
 
 const Stack = createStackNavigator();
 
@@ -58,6 +60,16 @@ export function AppRoutes() {
       <Stack.Screen
         name="Chat"
         component={Chat}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="TrainingPartnerRegister"
+        component={TrainingPartnerRegister}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="TrainingPartnerSearch"
+        component={TrainingPartnerSearch}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

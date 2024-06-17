@@ -1,63 +1,65 @@
-import { RFValue} from 'react-native-responsive-fontsize';
+import {RFValue} from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
 
+export const ScreenBackground = styled.SafeAreaView`
+  flex: 1;
+  background-color: ${({theme}) => theme.colors.backgroundColor};
+`;
 
-export const ScreenBackgroundRegister = styled.SafeAreaView`
-    flex: 1;
-    background-color: ${({theme}) => theme.colors.backgroundColor};
-
+export const ContainerTrainingPartnerNav = styled.View`
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 ${RFValue(24)}px;
 `;
 
 export const ContainerImagemRegister = styled.View`
-    width: 100%;
-    height:${RFValue(180)}px;
+  width: 100%;
+  height: ${RFValue(200)}px;
+  padding: 0 0 0 0;
 `;
 
-
-export const ContainerInputRegister = styled.View`
-    width:100%;
-    flex:1;
-    padding-left:${RFValue(24)}px;
-    padding-right:${RFValue(24)}px;
-  
+export const PageTitleText = styled.Text`
+  color: ${({theme}) => theme.colors.colorWhite};
+  text-align: center;
+  font-size: ${RFValue(24)}px;
+  font-family: ${({theme}) => theme.fonts.bold};
+  padding: ${RFValue(10)}px 0 0 0;
 `;
 
-
-export const InputRegister = styled.TextInput`
-    flex: 1;
-    background-color: ${({theme}) => theme.colors.colorInput};
-    color: ${({theme}) => theme.colors.colorWhite};
-    padding-left: ${RFValue(6)}px;
-    border-radius: 6px;
-    margin: 5px 10px;
-        
+export const ContainerRegister = styled.View`
+  width: 100%;
 `;
 
-
-
-export const ContainerButtonRegister = styled.View`
-    margin-top:  ${RFValue(18)}px;
-    margin-bottom:${RFValue(30)}px ;
-    
+export const RegisterText = styled.Text`
+  color: ${({theme}) => theme.colors.colorWhite};
+  text-align: center;
+  font-size: ${RFValue(16)}px;
+  font-family: ${({theme}) => theme.fonts.regular};
+  padding: 0 0 ${RFValue(10)}px 0;
 `;
 
-
-export const ContainerBaseBoardRegister = styled.View`
-    width: 100%;
-    flex: 1;
-    justify-content: space-between;
-    margin-top: ${RFValue(5)}px;
+export const ContainerSeparator = styled.View`
+  width: 100%;
+  padding: 0 0 ${RFValue(10)}px 0;
 `;
 
-
-export const FooterDescriptionRegister = styled.Text`
-    color:${({theme}) => theme.colors.colorWhite};
-    margin-left:${RFValue(6)}px ;
-    text-align: center;
+export const SeparatorText = styled.Text`
+  color: ${({theme}) => theme.colors.colorWhite};
+  text-align: center;
+  font-size: ${RFValue(16)}px;
+  font-family: ${({theme}) => theme.fonts.regular};
 `;
-export const FooterTermsRegister = styled.Text`
-    color:${({theme}) => theme.colors.primary};
-    text-align: center;
-    margin-bottom:${RFValue(5)}px ;
 
+export const ContainerSearch = styled.View`
+  width: 100%;
+`;
+
+export const SearchText = styled.Text`
+  color: ${({theme}) => theme.colors.colorWhite};
+  text-align: center;
+  font-size: ${RFValue(16)}px;
+  font-family: ${({theme}) => theme.fonts.regular};
+  padding: 0 0 ${RFValue(10)}px 0;
 `;

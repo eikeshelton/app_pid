@@ -1,9 +1,10 @@
 import {Dimensions} from 'react-native';
+import {RFValue} from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
 
 export const Container = styled.View`
   flex: 1;
-  padding: 10px;
+  padding: 0px ${RFValue(10)}px;
 `;
 
 const ImageWidth = Dimensions.get('window').width / 2 - 15;

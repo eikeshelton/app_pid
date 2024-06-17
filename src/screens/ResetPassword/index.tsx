@@ -45,14 +45,14 @@ export default function ResetPassword() {
           value={token}
           placeholder="Token de redefinição de senha"
           onChangeText={setToken}
-          placeholderTextColor={'white'}
+          placeholderTextColor={'silver'}
           isFocused={true} // O campo está focado quando esta prop é true
         />
         <InputComponent
           value={email}
           placeholder="Email"
           onChangeText={setEmail}
-          placeholderTextColor={'white'}
+          placeholderTextColor={'silver'}
           isFocused={true} // O campo está focado quando esta prop é true
         />
         <InputComponent
@@ -60,7 +60,7 @@ export default function ResetPassword() {
           placeholder="Nova senha"
           onChangeText={setNewPassword}
           secureTextEntry={true}
-          placeholderTextColor={'white'}
+          placeholderTextColor={'silver'}
           isFocused={true} // O campo está focado quando esta prop é true
         />
         <InputComponent
@@ -68,7 +68,7 @@ export default function ResetPassword() {
           placeholder="Confirmar nova senha"
           onChangeText={setConfirmNewPassword}
           secureTextEntry={true}
-          placeholderTextColor={'white'}
+          placeholderTextColor={'silver'}
           isFocused={true} // O campo está focado quando esta prop é true
         />
         <CustomButton texto="Redefinir senha" onPress={handleResetPassword} />

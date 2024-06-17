@@ -5,9 +5,9 @@ export default {
     colorWhite: '#FFFFFF',
     colorBlue: '#0077FF',
     colorInput: 'rgba(48,48,48,0.5)',
-    background: '#fff',
-    border_tab: '#CCC',
-    tabInactive: '#686c7d',
+    background: '#0a0a0a',
+    border_tab: '#934dd2',
+    tabInactive: '#AAAAAA',
     messageBackground: '#cf9dfc',
   },
   fonts: {

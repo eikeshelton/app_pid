@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Container, ContainerInputBio} from './styles';
+import {Container, ContainerImagem, ContainerInputBio, Header} from './styles';
 import {useAuth} from '../../hooks/auth';
 import BackButton from '../../components/BackButton';
 import TopImage from '../../components/TopImage';
@@ -40,13 +40,17 @@ export function EditReg() {
   };
   return senha_verifica ? (
     <Container>
-      <BackButton />
-      <TopImage />
+      <Header>
+        <BackButton />
+      </Header>
+      <ContainerImagem>
+        <TopImage />
+      </ContainerImagem>
       <ContainerInputBio showsVerticalScrollIndicator={false}>
         <InputComponent
           onChangeText={text => setSenha(text)}
           value={senha}
-          placeholderTextColor={'white'}
+          placeholderTextColor={'silver'}
           placeholder="Nova senha"
           secureTextEntry={true}
           isFocused={true} // O campo está focado quando esta prop é true
@@ -54,15 +58,15 @@ export function EditReg() {
         <InputComponent
           onChangeText={text => setLogin(text)}
           value={login}
-          placeholderTextColor={'white'}
+          placeholderTextColor={'silver'}
           placeholder="Novo login"
           isFocused={true} // O campo está focado quando esta prop é true
         />
         <InputComponent
           onChangeText={text => setEmail(text)}
           value={email}
-          placeholderTextColor={'white'}
-          placeholder="Novo email:"
+          placeholderTextColor={'silver'}
+          placeholder="Novo email"
           keyboardType="email-address"
           isFocused={true} // O campo está focado quando esta prop é true
         />
@@ -72,12 +76,16 @@ export function EditReg() {
     </Container>
   ) : (
     <Container>
-      <BackButton />
-      <TopImage />
+      <Header>
+        <BackButton />
+      </Header>
+      <ContainerImagem>
+        <TopImage />
+      </ContainerImagem>
       <ContainerInputBio showsVerticalScrollIndicator={false}>
         <InputComponent
           value={senha_antiga}
-          placeholderTextColor={'white'}
+          placeholderTextColor={'silver'}
           placeholder="Senha atual"
           onChangeText={text => setSenha_antiga(text)}
           secureTextEntry={true}

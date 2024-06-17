@@ -74,7 +74,7 @@ export default function Research() {
         <InputComponent
           onChangeText={handleChangeText}
           value={pesquisar}
-          placeholderTextColor={'white'}
+          placeholderTextColor={'silver'}
           placeholder="Pesquisar"
           isFocused={true} // O campo está focado quando esta prop é true
           onFocus={() => {

@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import CustomButton from '../../components/CustomizeButton';
 import {ScrollView} from 'react-native';
-import TopImage from '../../components/TopImage';
 import {format} from 'date-fns';
 import {
-  ContainerImagemRegister,
   ContainerInputRegister,
   Header,
+  PageTitleContainer,
+  PageTitleText,
   ScreenBackgroundRegister,
 } from './style';
 import {useNavigation} from '@react-navigation/native';
@@ -24,6 +24,7 @@ interface UsuarioCreate {
   data_nascimento: string;
   foto_perfil: string;
   bio: string;
+  sexo: string;
 }
 
 const criarUsuario = async (usuarioCreate: UsuarioCreate) => {
@@ -45,6 +46,7 @@ function Register() {
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
   const [tipoUsuario, setTipoUsuario] = useState('');
+  const [sexo, setSexo] = useState('');
 
   const handleRegister = () => {
     if (senha !== confirmarSenha) {
@@ -73,6 +75,7 @@ function Register() {
       data_nascimento: dataFormatada,
       foto_perfil: '',
       bio: '',
+      sexo: sexo,
     };
 
     criarUsuario(usuarioCreate)
@@ -83,10 +86,16 @@ function Register() {
   };
 
   const tipoUsuarioItems = [
-    {label: 'Atleta', value: 'atleta'},
-    {label: 'Entusiasta', value: 'entusiasta'},
-    {label: 'Nutricionista', value: 'nutricionista'},
-    {label: 'Treinador', value: 'treinador'},
+    {label: 'Atleta', value: 'Atleta'},
+    {label: 'Entusiasta', value: 'Entusiasta'},
+    {label: 'Nutricionista', value: 'Nutricionista'},
+    {label: 'Treinador', value: 'Treinador'},
+  ];
+
+  const sexoItems = [
+    {label: 'Masculino', value: 'Masculino'},
+    {label: 'Feminino', value: 'Feminino'},
+    {label: 'Prefiro não responder', value: 'Outro'},
   ];
 
   return (
@@ -94,57 +103,16 @@ function Register() {
       <Header>
         <BackButton />
       </Header>
-      <ContainerImagemRegister>
-        <TopImage />
-      </ContainerImagemRegister>
+      <PageTitleContainer>
+        <PageTitleText>Cadastro de Usuário</PageTitleText>
+      </PageTitleContainer>
       <ContainerInputRegister>
         <ScrollView>
           <InputComponent
             onChangeText={text => setUsuario(text)}
             value={usuario}
-            placeholderTextColor={'white'}
+            placeholderTextColor={'silver'}
             placeholder="Nome"
-            isFocused={true}
-          />
-          <InputComponent
-            onChangeText={text => setEmail(text)}
-            value={email}
-            placeholderTextColor={'white'}
-            placeholder="Email"
-            keyboardType="email-address"
-            isFocused={true}
-          />
-          <InputComponent
-            onChangeText={text => setLogin(text)}
-            value={login}
-            placeholderTextColor={'white'}
-            placeholder="Login"
-            isFocused={true}
-          />
-          <InputComponent
-            onChangeText={text => setSenha(text)}
-            value={senha}
-            placeholderTextColor={'white'}
-            placeholder="Senha"
-            secureTextEntry={true}
-            isFocused={true}
-          />
-          <InputComponent
-            onChangeText={text => setConfirmarSenha(text)}
-            value={confirmarSenha}
-            placeholderTextColor={'white'}
-            placeholder="Confirmar Senha"
-            secureTextEntry={true}
-            isFocused={true}
-          />
-          <InputComponent
-            onChangeText={(formatted, extracted: any) => {
-              return setDataNascimento(extracted);
-            }}
-            mask="[00]/[00]/[0000]"
-            placeholderTextColor={'white'}
-            placeholder="Data de Nascimento"
-            keyboardType="numeric"
             isFocused={true}
           />
           <InputPicker
@@ -152,8 +120,54 @@ function Register() {
             onValueChange={(value: string) => setTipoUsuario(value)}
             placeholder={{label: 'Tipo de Usuário', value: null}}
           />
+          <InputComponent
+            onChangeText={text => setLogin(text)}
+            value={login}
+            placeholderTextColor={'silver'}
+            placeholder="Login"
+            isFocused={true}
+          />
+          <InputComponent
+            onChangeText={text => setEmail(text)}
+            value={email}
+            placeholderTextColor={'silver'}
+            placeholder="Email"
+            keyboardType="email-address"
+            isFocused={true}
+          />
+          <InputComponent
+            onChangeText={text => setSenha(text)}
+            value={senha}
+            placeholderTextColor={'silver'}
+            placeholder="Senha"
+            secureTextEntry={true}
+            isFocused={true}
+          />
+          <InputComponent
+            onChangeText={text => setConfirmarSenha(text)}
+            value={confirmarSenha}
+            placeholderTextColor={'silver'}
+            placeholder="Confirmar Senha"
+            secureTextEntry={true}
+            isFocused={true}
+          />
+          <InputPicker
+            items={sexoItems}
+            onValueChange={(value: string) => setSexo(value)}
+            placeholder={{label: 'Sexo', value: null}}
+          />
+          <InputComponent
+            onChangeText={(formatted, extracted: any) => {
+              return setDataNascimento(extracted);
+            }}
+            mask="[00]/[00]/[0000]"
+            placeholderTextColor={'silver'}
+            placeholder="Data de Nascimento (DD/MM/AAAA)"
+            keyboardType="numeric"
+            isFocused={true}
+          />
+          <CustomButton texto="Cadastre-se" onPress={handleRegister} />
         </ScrollView>
-        <CustomButton texto="Cadastre-se" onPress={handleRegister} />
       </ContainerInputRegister>
     </ScreenBackgroundRegister>
   );

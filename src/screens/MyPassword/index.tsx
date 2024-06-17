@@ -27,7 +27,7 @@ export default function MyPassword() {
         <InputComponent
           onChangeText={text => setEmail(text)}
           value={Email}
-          placeholderTextColor={'white'}
+          placeholderTextColor={'silver'}
           placeholder="Email"
           isFocused={true} // O campo está focado quando esta prop é true
         />

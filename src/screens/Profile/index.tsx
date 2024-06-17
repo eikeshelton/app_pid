@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react';
 
-import CustonButton from '../../components/CustomizeButton';
+import LiteButton from '../../components/LiteButton';
 import ProfilePost from '../../components/ProfilePost';
 import {
   Container,
-  ContainerButtons,
   ScreenBackground,
   ContainerFollowed,
   ContainerFollowers,
@@ -21,8 +20,9 @@ import {
   SettingContainer,
   SettingButton,
   SettingIcon,
-  ChatIcon,
-  ChatButton,
+  CountContainer,
+  HeaderContainer,
+  ContainerTest,
 } from './style';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import fotoPerfil from '../../assets/imagens/fotoperfil.png';
@@ -55,23 +55,29 @@ export default function Profile() {
   ) : (
     <ScreenBackground>
       <Container>
-        <PictureContainer>
-          {user.foto_perfil ? (
-            <ProfilePicture
-              source={{uri: user.foto_perfil}}
-              resizeMode="contain" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
-            />
-          ) : (
-            <ProfilePicture
-              source={fotoPerfil}
-              resizeMode="contain" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
-            />
-          )}
-        </PictureContainer>
-        <SettingContainer>
-          <SettingButton onPress={handleSettings}>
-            <SettingIcon name="menu" />
-          </SettingButton>
+        <HeaderContainer>
+          <ContainerTest />
+          <PictureContainer>
+            {user.foto_perfil ? (
+              <ProfilePicture
+                source={{uri: user.foto_perfil}}
+                resizeMode="cover" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
+              />
+            ) : (
+              <ProfilePicture
+                source={fotoPerfil}
+                resizeMode="cover" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
+              />
+            )}
+            <ProfileName>{user.nome_usuario}</ProfileName>
+          </PictureContainer>
+          <SettingContainer>
+            <SettingButton onPress={handleSettings}>
+              <SettingIcon name="menu" />
+            </SettingButton>
+          </SettingContainer>
+        </HeaderContainer>
+        <CountContainer>
           <ContainerPubFoll>
             <ContainerPub>
               <TextNumber>8</TextNumber>
@@ -86,23 +92,21 @@ export default function Profile() {
               <TextPubFoll>Seguidos</TextPubFoll>
             </ContainerFollowed>
           </ContainerPubFoll>
-        </SettingContainer>
+        </CountContainer>
       </Container>
       <ContainerNameBio>
-        <ProfileName>{user.nome_usuario}</ProfileName>
         <TextBio>{user.bio}</TextBio>
       </ContainerNameBio>
-      <ContainerButtons>
-        <ButtonFollow>
-          <CustonButton
-            texto="Editar perfil"
-            onPress={() => navigation.navigate('EditProfile')}
-          />
-        </ButtonFollow>
-        <ChatButton onPress={() => navigation.navigate('ScreenChat')}>
-          <ChatIcon name="chat" />
-        </ChatButton>
-      </ContainerButtons>
+      <ButtonFollow>
+        <LiteButton
+          texto="Editar Perfil"
+          onPress={() => navigation.navigate('EditProfile')}
+        />
+        <LiteButton
+          texto="Abrir Chat"
+          onPress={() => navigation.navigate('ScreenChat')}
+        />
+      </ButtonFollow>
 
       <ProfilePost />
     </ScreenBackground>

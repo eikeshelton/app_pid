@@ -61,14 +61,14 @@ function Login() {
               <InputComponent
                 onChangeText={text => setLogin(text)}
                 value={login}
-                placeholderTextColor={'white'}
+                placeholderTextColor={'silver'}
                 placeholder="Login"
                 isFocused={true} // O campo está focado quando esta prop é true
               />
               <InputComponent
                 onChangeText={text => setSenha(text)}
                 value={senha}
-                placeholderTextColor={'white'}
+                placeholderTextColor={'silver'}
                 placeholder="Senha"
                 secureTextEntry={true}
                 isFocused={true} // O campo está focado quando esta prop é true

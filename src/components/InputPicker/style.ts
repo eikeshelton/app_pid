@@ -13,19 +13,21 @@ export const dropDownPickerStyles = {
     borderColor: 'gray',
     borderRadius: RFValue(18),
     paddingLeft: RFValue(14),
+    zIndex: 5,
   },
   dropDownContainerStyle: {
     backgroundColor: 'rgba(48,48,48,1)',
     borderWidth: 2,
     borderColor: 'gray',
     borderRadius: RFValue(18),
+    zIndex: 10,
   },
   textStyle: {
     color: '#FFFFFF',
     fontSize: RFValue(14),
   },
   placeholderStyle: {
-    color: '#FFFFFF',
+    color: 'silver',
     fontSize: RFValue(14),
   },
   selectedItemContainerStyle: {
