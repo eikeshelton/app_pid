@@ -77,9 +77,7 @@ export default function Research() {
           placeholderTextColor={'silver'}
           placeholder="Pesquisar"
           isFocused={true} // O campo está focado quando esta prop é true
-          onFocus={() => {
-            showmodels();
-          }}
+          showModels={showmodels}
         />
 
         <FlatList

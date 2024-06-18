@@ -39,3 +39,21 @@ export const LabelText = styled.Text`
   color: ${({theme}) => theme.colors.colorWhite};
   margin: ${RFValue(10)}px 0 ${RFValue(6)}px 0;
 `;
+export const SelectLocation = styled.TouchableOpacity`
+  background-color: ${({theme}) => theme.colors.colorInput};
+  padding: ${RFValue(6)}px ${RFValue(10)}px;
+  margin-bottom: ${RFValue(5)}px;
+  border-radius: 10px;
+  border: solid 1px gray;
+`;
+
+export const SelectLocationTitle = styled.Text`
+  color: ${({theme}) => theme.colors.colorWhite};
+  font-size: ${RFValue(14)}px;
+  font-family: ${({theme}) => theme.fonts.bold};
+`;
+export const SelectLocationSubTitle = styled.Text`
+  color: ${({theme}) => theme.colors.colorWhite};
+  font-size: ${RFValue(12)}px;
+  font-family: ${({theme}) => theme.fonts.regular};
+`;

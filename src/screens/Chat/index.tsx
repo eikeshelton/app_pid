@@ -82,14 +82,19 @@ export function Chat() {
 
     ws.onmessage = event => {
       try {
-        const data: Mensagem[] = JSON.parse(event.data);
+        const data: Mensagem = JSON.parse(event.data);
         console.log(event.data);
-        setMensagens(prevMensagens => {
-          const newData = Array.isArray(data) ? data : [data];
-          return [...prevMensagens, ...newData];
-        });
 
-        flatListRef.current?.scrollToEnd({animated: true});
+        // Verificar se a mensagem pertence à conversa atual
+        if (
+          (data.remetente_id === user.id &&
+            data.destinatario_id === selectedItem.id) ||
+          (data.remetente_id === selectedItem.id &&
+            data.destinatario_id === user.id)
+        ) {
+          setMensagens(prevMensagens => [...prevMensagens, data]);
+          flatListRef.current?.scrollToEnd({animated: true});
+        }
       } catch (error) {
         console.error('Erro ao analisar JSON:', error);
       }

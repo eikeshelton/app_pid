@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, ScrollView, Platform, FlatList, View, Text} from 'react-native';
+import {
+  Alert,
+  ScrollView,
+  Platform,
+  FlatList,
+  View,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
@@ -12,6 +20,9 @@ import {
   PageTitleContainer,
   PageTitleText,
   ScreenBackgroundRegister,
+  SelectLocation,
+  SelectLocationSubTitle,
+  SelectLocationTitle,
 } from './style';
 import {InputComponent} from '../../components/Input';
 import BackButton from '../../components/BackButton';
@@ -214,7 +225,7 @@ export default function TrainingPartnerRegister() {
               },
             },
           );
-          console.log('latitude api', latitude, 'longitude api', longitude);
+          //console.log('latitude api', latitude, 'longitude api', longitude);
           setPlaces(response.data.results);
           console.log(response.data.results);
         } catch (error) {
@@ -255,8 +266,8 @@ export default function TrainingPartnerRegister() {
     if (estadoSelecionada) {
       setEstado(estadoSelecionada.value); // Aqui definimos o valor selecionado
       setEstadoId(estadoSelecionada.id); // Aqui definimos o ID selecionado
-      console.log('estado selecionado:', estadoSelecionada.label);
-      console.log('id estado:', estadoSelecionada.id);
+      //console.log('estado selecionado:', estadoSelecionada.label);
+      //console.log('id estado:', estadoSelecionada.id);
     }
   };
   const handleValueChangeCity = async (value: string) => {
@@ -264,16 +275,16 @@ export default function TrainingPartnerRegister() {
     if (cidadeSelecionada) {
       setCidade(cidadeSelecionada.label); // Aqui definimos o valor selecionado
       setCidadeId(cidadeSelecionada.id); // Aqui definimos o ID selecionado
-      console.log('Cidade selecionada:', cidadeSelecionada.label);
-      console.log('id Cidade:', value);
+      //console.log('Cidade selecionada:', cidadeSelecionada.label);
+      //console.log('id Cidade:', value);
       try {
         const response = await axios.get(
           `https://servicodados.ibge.gov.br/api/v3/malhas/municipios/${cidadeSelecionada.id}/metadados`,
         );
-        console.log('Dados da cidade:', response.data);
+        //console.log('Dados da cidade:', response.data);
         const {latitude, longitude} = response.data[0].centroide;
-        console.log('latitude da cidade:', latitude);
-        console.log('longitude da cidade:', longitude);
+        //console.log('latitude da cidade:', latitude);
+        //console.log('longitude da cidade:', longitude);
         setLatitude(latitude);
         setLongitude(longitude);
       } catch (err) {
@@ -282,8 +293,8 @@ export default function TrainingPartnerRegister() {
     }
   };
   const handlePress = () => {
-    console.log(estado);
-    console.log('cidade:', cidade);
+    //console.log(estado);
+    //console.log('cidade:', cidade);
   };
 
   return (
@@ -331,6 +342,16 @@ export default function TrainingPartnerRegister() {
             placeholderTextColor={'silver'}
             placeholder="Opcional"
             isFocused={true}
+          />
+          <FlatList
+            data={places}
+            renderItem={({item}) => (
+              <SelectLocation>
+                <SelectLocationTitle>{item.name}</SelectLocationTitle>
+                <SelectLocationSubTitle>{item.vicinity}</SelectLocationSubTitle>
+              </SelectLocation>
+            )}
+            keyExtractor={(item, index) => index.toString()}
           />
 
           {modalidade === 'Musculacao' && (
@@ -382,32 +403,6 @@ export default function TrainingPartnerRegister() {
             <CustonButton texto="Realizar cadastro" onPress={handlePress} />
           </ContainerButton>
         </ScrollView>
-        <FlatList
-          data={places}
-          renderItem={({item}) => (
-            <View
-              style={{
-                marginVertical: 10,
-                marginHorizontal: 20,
-                padding: 10,
-                backgroundColor: '#e0e0e0',
-                borderRadius: 5,
-              }}>
-              <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-                nome: {item.name}
-              </Text>
-              <Text>endereço: {item.vicinity}</Text>
-              <Text>Rating: {item.rating}</Text>
-              <Text>Total Ratings: {item.user_ratings_total}</Text>
-              {item.opening_hours && item.opening_hours.open_now ? (
-                <Text style={{color: 'green'}}>Open Now</Text>
-              ) : (
-                <Text style={{color: 'red'}}>Closed</Text>
-              )}
-            </View>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-        />
       </ContainerInputRegister>
     </ScreenBackgroundRegister>
   );

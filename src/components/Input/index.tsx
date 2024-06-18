@@ -4,9 +4,14 @@ import {TextInputMaskProps} from 'react-native-text-input-mask';
 
 interface InputMaskProps extends TextInputMaskProps {
   isFocused: boolean;
+  showModels?: () => void;
 }
 
-export function InputComponent({isFocused, ...rest}: InputMaskProps) {
+export function InputComponent({
+  isFocused,
+  showModels,
+  ...rest
+}: InputMaskProps) {
   const [focusedInputId, setFocusedInputId] = useState<number | null>(null);
   const [inputId, setInputId] = useState<number>(0);
 
@@ -18,6 +23,9 @@ export function InputComponent({isFocused, ...rest}: InputMaskProps) {
 
   const handleFocus = () => {
     setFocusedInputId(inputId);
+    if (showModels) {
+      showModels();
+    }
   };
 
   const handleBlur = () => {
