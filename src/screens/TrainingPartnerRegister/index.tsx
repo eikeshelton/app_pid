@@ -1,15 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Alert,
-  ScrollView,
-  Platform,
-  FlatList,
-  View,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import {Alert, ScrollView, Platform, FlatList} from 'react-native';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
-import Geolocation from '@react-native-community/geolocation';
+//import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import CustonButton from '../../components/CustomizeButton';
 import {
@@ -27,18 +19,7 @@ import {
 import {InputComponent} from '../../components/Input';
 import BackButton from '../../components/BackButton';
 import InputPicker from '../../components/InputPicker';
-
-interface TreinoCreate {
-  modalidade: string;
-  estado: string;
-  cidade: string;
-  local: string;
-  agrupamento_muscular: string;
-  dia_da_semana: string;
-  horario: string;
-  tempo_treino: string;
-  observacoes: string;
-}
+import {useAuth} from '../../hooks/auth';
 
 interface Place {
   name: string;
@@ -66,6 +47,7 @@ interface Cidades {
   };
 }
 export default function TrainingPartnerRegister() {
+  const {PartnerRegister, user} = useAuth();
   const [modalidade, setModalidade] = useState('');
   const [estados, setEstados] = useState<
     {label: string; value: string; id: string}[]
@@ -75,7 +57,6 @@ export default function TrainingPartnerRegister() {
   const [cidades, setCidades] = useState<
     {label: string; value: string; id: string}[]
   >([]);
-  const [cidade, setCidade] = useState('');
   const [cidadeId, setCidadeId] = useState('');
   const [local, setLocal] = useState('');
   const [grupamentoMuscular, setGrupamentoMuscular] = useState('');
@@ -120,18 +101,55 @@ export default function TrainingPartnerRegister() {
   ];
 
   const horaItems = [
-    {label: 'Manhã', value: 'Manha'},
-    {label: 'Tarde', value: 'Tarde'},
-    {label: 'Noite', value: 'Noite'},
+    {label: '04:00', value: '04:00'},
+    {label: '04:30', value: '04:30'},
+    {label: '05:00', value: '05:00'},
+    {label: '05:30', value: '05:30'},
+    {label: '06:00', value: '06:00'},
+    {label: '06:30', value: '06:30'},
+    {label: '07:00', value: '07:00'},
+    {label: '07:30', value: '07:30'},
+    {label: '08:00', value: '08:00'},
+    {label: '08:30', value: '08:30'},
+    {label: '09:00', value: '09:00'},
+    {label: '09:30', value: '09:30'},
+    {label: '10:00', value: '10:00'},
+    {label: '10:30', value: '10:30'},
+    {label: '11:00', value: '11:00'},
+    {label: '11:30', value: '11:30'},
+    {label: '12:00', value: '12:00'},
+    {label: '12:30', value: '12:30'},
+    {label: '13:00', value: '13:00'},
+    {label: '13:30', value: '13:30'},
+    {label: '14:00', value: '14:00'},
+    {label: '14:30', value: '14:30'},
+    {label: '15:00', value: '15:00'},
+    {label: '15:30', value: '15:30'},
+    {label: '16:00', value: '16:00'},
+    {label: '16:30', value: '16:30'},
+    {label: '17:00', value: '17:00'},
+    {label: '17:30', value: '17:30'},
+    {label: '18:00', value: '18:00'},
+    {label: '18:30', value: '18:30'},
+    {label: '19:00', value: '19:00'},
+    {label: '19:30', value: '19:30'},
+    {label: '20:00', value: '20:00'},
+    {label: '20:30', value: '20:30'},
+    {label: '21:00', value: '21:00'},
+    {label: '21:30', value: '21:30'},
+    {label: '22:00', value: '22:00'},
+    {label: '22:30', value: '22:30'},
+    {label: '23:00', value: '23:00'},
+    {label: '23:30', value: '23:30'},
   ];
 
   const duracaoItems = [
-    {label: '30min', value: '30'},
-    {label: '1h', value: '60'},
-    {label: '1h 30min', value: '90'},
-    {label: '2h', value: '120'},
-    {label: '2h 30min', value: '150'},
-    {label: '3h', value: '180'},
+    {label: '30min', value: '00:30'},
+    {label: '1h', value: '01:00'},
+    {label: '1h 30min', value: '01:30'},
+    {label: '2h', value: '02:00'},
+    {label: '2h 30min', value: '02:30'},
+    {label: '3h', value: '03:00'},
   ];
 
   useEffect(() => {
@@ -273,7 +291,6 @@ export default function TrainingPartnerRegister() {
   const handleValueChangeCity = async (value: string) => {
     const cidadeSelecionada = cidades.find(cidade => cidade.value === value);
     if (cidadeSelecionada) {
-      setCidade(cidadeSelecionada.label); // Aqui definimos o valor selecionado
       setCidadeId(cidadeSelecionada.id); // Aqui definimos o ID selecionado
       //console.log('Cidade selecionada:', cidadeSelecionada.label);
       //console.log('id Cidade:', value);
@@ -295,6 +312,18 @@ export default function TrainingPartnerRegister() {
   const handlePress = () => {
     //console.log(estado);
     //console.log('cidade:', cidade);
+    PartnerRegister({
+      modalidade: modalidade,
+      dia_da_semana: dia,
+      estado_codigo_ibge: parseInt(estadoId, 10),
+      municipio_codigo_ibge: parseInt(cidadeId, 10),
+      agrupamento_muscular: grupamentoMuscular,
+      observacoes: observacoes,
+      horario: hora,
+      id_usuario: user.id,
+      tempo_treino: duracao,
+      local: local,
+    });
   };
 
   return (
@@ -343,15 +372,18 @@ export default function TrainingPartnerRegister() {
             placeholder="Opcional"
             isFocused={true}
           />
+
           <FlatList
+            nestedScrollEnabled={true}
+            scrollEnabled={false}
             data={places}
             renderItem={({item}) => (
-              <SelectLocation>
+              <SelectLocation onPress={() => setLocal(item.name)}>
                 <SelectLocationTitle>{item.name}</SelectLocationTitle>
                 <SelectLocationSubTitle>{item.vicinity}</SelectLocationSubTitle>
               </SelectLocation>
             )}
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={index => index.toString()}
           />
 
           {modalidade === 'Musculacao' && (
@@ -398,7 +430,6 @@ export default function TrainingPartnerRegister() {
             placeholder="Qualquer informação adicional"
             isFocused={true}
           />
-
           <ContainerButton>
             <CustonButton texto="Realizar cadastro" onPress={handlePress} />
           </ContainerButton>

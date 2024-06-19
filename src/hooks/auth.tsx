@@ -18,8 +18,9 @@ interface User {
   email?: string;
   login?: string;
   senha?: string;
-  id?: Number;
+  id?: number;
   token?: string;
+  sexo?: string;
 }
 interface UserCheck {
   email: any;
@@ -43,21 +44,61 @@ interface UsersSearch {
   email?: string;
   login?: string;
   senha?: string;
-  id: Number;
+  id_usuario: Number;
   token?: string;
 }
 interface RegisterSearch {
   usuario_id: any;
   pesquisado_id: Number;
 }
+interface PartnerRegister {
+  modalidade: string;
+  dia_da_semana: string;
+  estado_codigo_ibge: number;
+  municipio_codigo_ibge: number;
+  agrupamento_muscular?: string;
+  observacoes: string;
+  horario: string;
+  id_usuario?: number;
+  tempo_treino: string;
+  local: string;
+}
+interface PartnerSearch {
+  id?: number;
+  modalidade: string;
+  dia_da_semana: string | null;
+  estado_codigo_ibge: number;
+  local: string | undefined;
+  municipio_codigo_ibge: number;
+  agrupamento_muscular: string | null;
+  observacoes?: string | null;
+  tempo_treino: string | null;
+  horario: string | null;
+  sexo: string | null;
+}
+interface usersPartner {
+  id: number;
+  modalidade: string;
+  estado_codigo_ibge: number;
+  municipio_codigo_ibge: number;
+  local: string;
+  horario: string;
+  nome_usuario: string;
+  foto_perfil?: string;
+  sexo: string;
+}
 type UsersSearchArray = UsersSearch[];
 type RegisterSearchArray = RegisterSearch[];
+type usersPartnerArray = usersPartner[];
 interface AuthContextData {
   user: User;
+  usersPartner: usersPartnerArray;
   userssearch: UsersSearchArray;
   registerSearch: RegisterSearchArray;
   signIn: (credentials: SignInCredentials) => Promise<void>;
   signOut: () => Promise<void>;
+  PartnerRegister: (PartnerRegister: PartnerRegister) => Promise<void>;
+  PartnerSearch: (PartnerSearch: PartnerSearch) => Promise<void>;
   clearUsersSearch: () => Promise<void>;
   editAvatar: (user: User) => Promise<void>;
   editLogin: (user: User) => Promise<void>;
@@ -79,7 +120,7 @@ function AuthProvider({children}: AuthProviderProps) {
   const [data, setData] = useState<User>({foto_perfil: ''} as User);
   const [datausersearch, setusersearch] = useState<UsersSearchArray>([]);
   const [registerSearch, setRegisterSearch] = useState<RegisterSearchArray>([]);
-
+  const [usersPartner, setUsersPartner] = useState<usersPartnerArray>([]);
   async function signIn({login, senha}: SignInCredentials) {
     try {
       const response = await api.post('/login/', {
@@ -236,6 +277,50 @@ function AuthProvider({children}: AuthProviderProps) {
   const clearUsersSearch = async () => {
     setusersearch([]);
   };
+  async function PartnerRegister(Partnerregister: PartnerRegister) {
+    try {
+      const response = await api.post('/parceiros_treino/cadastro/', {
+        modalidade: Partnerregister.modalidade,
+        dia_da_semana: Partnerregister.dia_da_semana,
+        estado_codigo_ibge: Partnerregister.estado_codigo_ibge,
+        municipio_codigo_ibge: Partnerregister.municipio_codigo_ibge,
+        agrupamento_muscular: Partnerregister.agrupamento_muscular,
+        observacoes: Partnerregister.observacoes,
+        horario: Partnerregister.horario,
+        id_usuario: Partnerregister.id_usuario,
+        tempo_treino: Partnerregister.tempo_treino,
+        local: Partnerregister.local,
+      });
+
+      if (response.data) {
+        console.log('respondeu ');
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  async function PartnerSearch(Partnersearch: PartnerSearch) {
+    try {
+      const response = await api.post('/parceiros_treino/busca/', {
+        modalidade: Partnersearch.modalidade,
+        dia_da_semana: Partnersearch.dia_da_semana,
+        estado_codigo_ibge: Partnersearch.estado_codigo_ibge,
+        local: Partnersearch.local,
+        municipio_codigo_ibge: Partnersearch.municipio_codigo_ibge,
+        agrupamento_muscular: Partnersearch.agrupamento_muscular,
+        observacoes: Partnersearch.observacoes,
+        tempo_treino: Partnersearch.tempo_treino,
+        horario: Partnersearch.horario,
+        sexo: Partnersearch.sexo,
+      });
+
+      if (response.data) {
+        setUsersPartner(response.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
   useEffect(() => {
     let isMounted = true;
 
@@ -263,6 +348,7 @@ function AuthProvider({children}: AuthProviderProps) {
         user: data,
         userssearch: datausersearch,
         registerSearch: registerSearch,
+        usersPartner: usersPartner,
         signIn,
         signOut,
         editUser,
@@ -274,6 +360,8 @@ function AuthProvider({children}: AuthProviderProps) {
         Search,
         RegisterSearch,
         updateUser,
+        PartnerRegister,
+        PartnerSearch,
       }}>
       {children}
     </AuthContext.Provider>

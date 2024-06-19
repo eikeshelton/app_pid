@@ -3,15 +3,14 @@ import {
   Alert,
   FlatList,
   ScrollView,
-  Text,
-  View,
   TouchableOpacity,
   Platform,
 } from 'react-native';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
-import Geolocation from '@react-native-community/geolocation';
+//import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import CustonButton from '../../components/CustomizeButton';
+import fotoPerfil from '../../assets/imagens/fotoperfil.png';
 import {
   ContainerInputRegister,
   Header,
@@ -22,22 +21,19 @@ import {
   ContainerButton,
   LabelText,
   ContainerSearchResult,
+  SelectLocation,
+  SelectLocationTitle,
+  SelectLocationSubTitle,
+  PictureContainer,
+  ProfilePicture,
+  Name,
 } from './style';
 import {InputComponent} from '../../components/Input';
 import BackButton from '../../components/BackButton';
 import InputPicker from '../../components/InputPicker';
+import {useAuth} from '../../hooks/auth';
+import {useNavigation} from '@react-navigation/native';
 
-interface BuscaParceiroCreate {
-  modalidade: string;
-  estado: string;
-  cidade: string;
-  local: string;
-  agrupamento_muscular: string;
-  dia_da_semana: string;
-  horario: string;
-  tempo_treino: string;
-  sexo: string;
-}
 interface Estados {
   id: string;
   sigla: string;
@@ -57,6 +53,7 @@ interface Cidades {
   };
 }
 interface Place {
+  place_id: string;
   name: string;
   vicinity: string;
   rating: number;
@@ -74,30 +71,20 @@ export default function TrainingPartnerSearch() {
   const [cidades, setCidades] = useState<
     {label: string; value: string; id: string}[]
   >([]);
-  const [cidade, setCidade] = useState('');
   const [cidadeId, setCidadeId] = useState('');
-  const [local, setLocal] = useState('');
-  const [grupamentoMuscular, setGrupamentoMuscular] = useState('');
-  const [dia, setDia] = useState('');
-  const [hora, setHora] = useState('');
-  const [duracao, setDuracao] = useState('');
+  const [local, setLocal] = useState<string | undefined>(undefined);
+  const [grupamentoMuscular, setGrupamentoMuscular] = useState<string | null>(
+    null,
+  );
+  const [dia, setDia] = useState<string | null>(null);
+  const [hora, setHora] = useState<string | null>(null);
+  const [duracao, setDuracao] = useState<string | null>(null);
   const [sexo, setSexo] = useState('');
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
   const [places, setPlaces] = useState<Place[]>([]);
   const [scrollEnabled, setScrollEnabled] = useState(true);
-
-  const buscaParceiroCreate: BuscaParceiroCreate = {
-    modalidade: modalidade,
-    estado: estado,
-    cidade: cidade,
-    local: local,
-    agrupamento_muscular: grupamentoMuscular,
-    dia_da_semana: dia,
-    horario: hora,
-    tempo_treino: duracao,
-    sexo: sexo,
-  };
+  const {PartnerSearch, usersPartner, RegisterSearch, user} = useAuth();
 
   const modalidadeItems = [
     {label: 'Calistenia', value: 'Calistenia'},
@@ -131,18 +118,55 @@ export default function TrainingPartnerSearch() {
   ];
 
   const horaItems = [
-    {label: 'Manhã', value: 'Manha'},
-    {label: 'Tarde', value: 'Tarde'},
-    {label: 'Noite', value: 'Noite'},
+    {label: '04:00', value: '04:00'},
+    {label: '04:30', value: '04:30'},
+    {label: '05:00', value: '05:00'},
+    {label: '05:30', value: '05:30'},
+    {label: '06:00', value: '06:00'},
+    {label: '06:30', value: '06:30'},
+    {label: '07:00', value: '07:00'},
+    {label: '07:30', value: '07:30'},
+    {label: '08:00', value: '08:00'},
+    {label: '08:30', value: '08:30'},
+    {label: '09:00', value: '09:00'},
+    {label: '09:30', value: '09:30'},
+    {label: '10:00', value: '10:00'},
+    {label: '10:30', value: '10:30'},
+    {label: '11:00', value: '11:00'},
+    {label: '11:30', value: '11:30'},
+    {label: '12:00', value: '12:00'},
+    {label: '12:30', value: '12:30'},
+    {label: '13:00', value: '13:00'},
+    {label: '13:30', value: '13:30'},
+    {label: '14:00', value: '14:00'},
+    {label: '14:30', value: '14:30'},
+    {label: '15:00', value: '15:00'},
+    {label: '15:30', value: '15:30'},
+    {label: '16:00', value: '16:00'},
+    {label: '16:30', value: '16:30'},
+    {label: '17:00', value: '17:00'},
+    {label: '17:30', value: '17:30'},
+    {label: '18:00', value: '18:00'},
+    {label: '18:30', value: '18:30'},
+    {label: '19:00', value: '19:00'},
+    {label: '19:30', value: '19:30'},
+    {label: '20:00', value: '20:00'},
+    {label: '20:30', value: '20:30'},
+    {label: '21:00', value: '21:00'},
+    {label: '21:30', value: '21:30'},
+    {label: '22:00', value: '22:00'},
+    {label: '22:30', value: '22:30'},
+    {label: '23:00', value: '23:00'},
+    {label: '23:30', value: '23:30'},
   ];
 
   const duracaoItems = [
-    {label: '30min', value: '30'},
-    {label: '1h', value: '60'},
-    {label: '1h 30min', value: '90'},
-    {label: '2h', value: '120'},
-    {label: '2h 30min', value: '150'},
-    {label: '3h', value: '180'},
+    {label: '30min', value: '00:30'},
+    {label: '1h', value: '01:00'},
+    {label: '1h 30min', value: '01:30'},
+    {label: '2h', value: '02:00'},
+    {label: '2h 30min', value: '02:30'},
+    {label: '3h', value: '03:00'},
   ];
 
   const sexoItems = [
@@ -156,7 +180,7 @@ export default function TrainingPartnerSearch() {
   const [showHora, setShowHora] = useState(false);
   const [showDuracao, setShowDuracao] = useState(false);
   const [showSexo, setShowSexo] = useState(false);
-
+  const navigation = useNavigation();
   useEffect(() => {
     requestLocationPermission();
     fetchEstadosFromAPI();
@@ -170,7 +194,7 @@ export default function TrainingPartnerSearch() {
       );
 
       if (status === RESULTS.GRANTED) {
-        getLocation();
+        //getLocation();
       } else {
         const result = await request(
           Platform.OS === 'ios'
@@ -179,7 +203,7 @@ export default function TrainingPartnerSearch() {
         );
 
         if (result === RESULTS.GRANTED) {
-          getLocation();
+          //getLocation();
         } else {
           Alert.alert(
             'Permissão de Localização Negada',
@@ -215,7 +239,7 @@ export default function TrainingPartnerSearch() {
     }
   };
 
-  const getLocation = () => {
+  /*const getLocation = () => {
     Geolocation.getCurrentPosition(
       position => {
         setLatitude(position.coords.latitude);
@@ -230,7 +254,7 @@ export default function TrainingPartnerSearch() {
       },
       {enableHighAccuracy: true, timeout: 12000, maximumAge: 1000},
     );
-  };
+  };*/
 
   useEffect(() => {
     const fetchPlaces = async () => {
@@ -241,12 +265,13 @@ export default function TrainingPartnerSearch() {
             {
               params: {
                 location: `${latitude},${longitude}`,
-                radius: 500,
+                radius: 225347,
                 keyword: local,
                 key: 'AIzaSyBHCKxygf6ny6ek3q2LmQvFS75JYNISMwY',
               },
             },
           );
+          //console.log('latitude api', latitude, 'longitude api', longitude);
           setPlaces(response.data.results);
           console.log(response.data.results);
         } catch (error) {
@@ -291,18 +316,57 @@ export default function TrainingPartnerSearch() {
       console.log('id estado:', estadoSelecionada.id);
     }
   };
-  const handleValueChangeCity = (value: string) => {
+  const handleValueChangeCity = async (value: string) => {
     const cidadeSelecionada = cidades.find(cidade => cidade.value === value);
     if (cidadeSelecionada) {
-      setCidade(cidadeSelecionada.label); // Aqui definimos o valor selecionado
       setCidadeId(cidadeSelecionada.id); // Aqui definimos o ID selecionado
       console.log('Cidade selecionada:', cidadeSelecionada.label);
       console.log('id Cidade:', value);
+      try {
+        const response = await axios.get(
+          `https://servicodados.ibge.gov.br/api/v3/malhas/municipios/${cidadeSelecionada.id}/metadados`,
+        );
+        //console.log('Dados da cidade:', response.data);
+        const {latitude, longitude} = response.data[0].centroide;
+        console.log('latitude da cidade:', latitude);
+        console.log('longitude da cidade:', longitude);
+        setLatitude(latitude);
+        setLongitude(longitude);
+      } catch (err) {
+        console.error('Erro ao buscar dados da cidade:', err);
+      }
     }
   };
+  const renderItem = ({item}: any) => (
+    <PictureContainer onPress={() => handleItemPress(item)}>
+      {item.foto_perfil ? (
+        <ProfilePicture source={{uri: item.foto_perfil}} resizeMode="cover" />
+      ) : (
+        <ProfilePicture source={fotoPerfil} resizeMode="contain" />
+      )}
+      <Name>{item.nome_usuario}</Name>
+      <Name>{item.modalidade}</Name>
+    </PictureContainer>
+  );
+  const handleItemPress = (item: any) => {
+    navigation.navigate('UserSearch', {selectedItem: item});
+    RegisterSearch({
+      usuario_id: user.id,
+      pesquisado_id: item.id_usuario,
+    });
+  };
   const handlePress = () => {
-    console.log(estado);
-    console.log('cidade:', cidade);
+    PartnerSearch({
+      modalidade: modalidade,
+      dia_da_semana: dia,
+      estado_codigo_ibge: parseInt(estadoId, 10),
+      local: local,
+      municipio_codigo_ibge: parseInt(cidadeId, 10),
+      agrupamento_muscular: grupamentoMuscular,
+      tempo_treino: duracao,
+      horario: hora,
+      sexo: sexo,
+    });
   };
 
   return (
@@ -356,6 +420,18 @@ export default function TrainingPartnerSearch() {
               isFocused={true}
             />
           )}
+          <FlatList
+            nestedScrollEnabled={true}
+            scrollEnabled={false}
+            data={places}
+            renderItem={({item}) => (
+              <SelectLocation onPress={() => setLocal(item.name)}>
+                <SelectLocationTitle>{item.name}</SelectLocationTitle>
+                <SelectLocationSubTitle>{item.vicinity}</SelectLocationSubTitle>
+              </SelectLocation>
+            )}
+            keyExtractor={item => item.name}
+          />
 
           {modalidade === 'Musculacao' && (
             <>
@@ -434,38 +510,6 @@ export default function TrainingPartnerSearch() {
           <ContainerButton>
             <CustonButton texto="Buscar" onPress={handlePress} />
           </ContainerButton>
-
-          <View>
-            <Text>Latitude: {latitude}</Text>
-            <Text>Longitude: {longitude}</Text>
-          </View>
-
-          <FlatList
-            data={places}
-            renderItem={({item}) => (
-              <View
-                style={{
-                  marginVertical: 10,
-                  marginHorizontal: 20,
-                  padding: 10,
-                  backgroundColor: '#e0e0e0',
-                  borderRadius: 5,
-                }}>
-                <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-                  nome: {item.name}
-                </Text>
-                <Text>endereço: {item.vicinity}</Text>
-                <Text>Rating: {item.rating}</Text>
-                <Text>Total Ratings: {item.user_ratings_total}</Text>
-                {item.opening_hours && item.opening_hours.open_now ? (
-                  <Text style={{color: 'green'}}>Open Now</Text>
-                ) : (
-                  <Text style={{color: 'red'}}>Closed</Text>
-                )}
-              </View>
-            )}
-            keyExtractor={(item, index) => index.toString()}
-          />
         </ContainerInputRegister>
 
         <PageTitleContainer>
@@ -473,7 +517,13 @@ export default function TrainingPartnerSearch() {
         </PageTitleContainer>
 
         <ContainerSearchResult>
-          <LabelText>...</LabelText>
+          <FlatList
+            scrollEnabled={false}
+            data={usersPartner}
+            renderItem={renderItem}
+            keyExtractor={item => item.id.toString()}
+            numColumns={2}
+          />
         </ContainerSearchResult>
       </ScrollView>
     </ScreenBackgroundRegister>

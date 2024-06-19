@@ -15,7 +15,7 @@ import {
 } from './style';
 
 import BackButton from '../../components/BackButton';
-import fotoProfile from '../../assets/imagens/fotoperfil.png';
+import fotoPerfil from '../../assets/imagens/fotoperfil.png';
 import CustomButton from '../../components/CustomizeButton';
 import {useAuth} from '../../hooks/auth';
 import {useFocusEffect, useRoute} from '@react-navigation/native';
@@ -31,11 +31,12 @@ interface Params {
     seguidores: number;
     seguidos: number;
     bio: string;
-    id: number;
+    id_usuario: number;
   };
 }
 interface Mensagem {
   id: number;
+  id_conversa: number;
   remetente_id: number;
   destinatario_id: number;
   texto: string;
@@ -59,21 +60,24 @@ export function Chat() {
       const fetchMessages = async () => {
         try {
           const response = await axios.get(
-            `/chat/mensagens/${user.id}/${selectedItem.id}`,
+            `/chat/mensagens/${user.id}/${selectedItem.id_usuario}`,
           );
 
           setMensagens(response.data);
+          console.log('mensagens:', response.data);
         } catch (error) {
           console.error('Erro ao recuperar mensagens:', error);
         }
       };
 
       fetchMessages();
-    }, [user.id, selectedItem.id]),
+    }, [user.id, selectedItem.id_usuario]),
   );
 
   useEffect(() => {
-    const ws = new WebSocket(`ws://192.168.15.94:8000/ws/${user.id}`);
+    const ws = new WebSocket(
+      `ws://192.168.15.170:8000/ws/${user.id}/${selectedItem.id_usuario}`,
+    );
     websocketRef.current = ws;
 
     ws.onopen = () => {
@@ -82,19 +86,14 @@ export function Chat() {
 
     ws.onmessage = event => {
       try {
-        const data: Mensagem = JSON.parse(event.data);
+        const data: Mensagem[] = JSON.parse(event.data);
         console.log(event.data);
+        setMensagens(prevMensagens => {
+          const newData = Array.isArray(data) ? data : [data];
+          return [...prevMensagens, ...newData];
+        });
 
-        // Verificar se a mensagem pertence à conversa atual
-        if (
-          (data.remetente_id === user.id &&
-            data.destinatario_id === selectedItem.id) ||
-          (data.remetente_id === selectedItem.id &&
-            data.destinatario_id === user.id)
-        ) {
-          setMensagens(prevMensagens => [...prevMensagens, data]);
-          flatListRef.current?.scrollToEnd({animated: true});
-        }
+        flatListRef.current?.scrollToEnd({animated: true});
       } catch (error) {
         console.error('Erro ao analisar JSON:', error);
       }
@@ -117,7 +116,7 @@ export function Chat() {
     if (mensagem.trim() !== '') {
       const msg = {
         remetente_id: user.id,
-        destinatario_id: selectedItem.id,
+        destinatario_id: selectedItem.id_usuario,
         texto: mensagem,
       };
       websocketRef.current?.send(JSON.stringify(msg));
@@ -165,9 +164,12 @@ export function Chat() {
           <BackButton />
         </ContainerBackButton>
         {selectedItem.foto_perfil ? (
-          <PictureProfile source={{uri: selectedItem.foto_perfil}} />
+          <PictureProfile
+            source={{uri: selectedItem.foto_perfil}}
+            resizeMode="cover"
+          />
         ) : (
-          <PictureProfile source={fotoProfile} />
+          <PictureProfile source={fotoPerfil} resizeMode="contain" />
         )}
         <Name>{selectedItem.nome_usuario}</Name>
       </Header>

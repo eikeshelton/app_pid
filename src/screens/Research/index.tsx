@@ -46,7 +46,7 @@ export default function Research() {
     navigation.navigate('UserSearch', {selectedItem: item});
     RegisterSearch({
       usuario_id: user.id,
-      pesquisado_id: item.id,
+      pesquisado_id: item.id_usuario,
     });
   };
 
@@ -83,7 +83,7 @@ export default function Research() {
         <FlatList
           data={userssearch}
           renderItem={renderItem}
-          keyExtractor={item => item.id.toString()}
+          keyExtractor={item => item.id_usuario.toString()}
           numColumns={2}
         />
       </Container>
