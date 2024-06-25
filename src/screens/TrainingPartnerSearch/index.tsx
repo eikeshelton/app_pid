@@ -76,6 +76,7 @@ export default function TrainingPartnerSearch() {
   const [grupamentoMuscular, setGrupamentoMuscular] = useState<string | null>(
     null,
   );
+
   const [dia, setDia] = useState<string | null>(null);
   const [hora, setHora] = useState<string | null>(null);
   const [duracao, setDuracao] = useState<string | null>(null);
@@ -116,49 +117,21 @@ export default function TrainingPartnerSearch() {
     {label: 'Sexta', value: 'Sexta'},
     {label: 'Sábado', value: 'Sabado'},
   ];
-
-  const horaItems = [
-    {label: '04:00', value: '04:00'},
-    {label: '04:30', value: '04:30'},
-    {label: '05:00', value: '05:00'},
-    {label: '05:30', value: '05:30'},
-    {label: '06:00', value: '06:00'},
-    {label: '06:30', value: '06:30'},
-    {label: '07:00', value: '07:00'},
-    {label: '07:30', value: '07:30'},
-    {label: '08:00', value: '08:00'},
-    {label: '08:30', value: '08:30'},
-    {label: '09:00', value: '09:00'},
-    {label: '09:30', value: '09:30'},
-    {label: '10:00', value: '10:00'},
-    {label: '10:30', value: '10:30'},
-    {label: '11:00', value: '11:00'},
-    {label: '11:30', value: '11:30'},
-    {label: '12:00', value: '12:00'},
-    {label: '12:30', value: '12:30'},
-    {label: '13:00', value: '13:00'},
-    {label: '13:30', value: '13:30'},
-    {label: '14:00', value: '14:00'},
-    {label: '14:30', value: '14:30'},
-    {label: '15:00', value: '15:00'},
-    {label: '15:30', value: '15:30'},
-    {label: '16:00', value: '16:00'},
-    {label: '16:30', value: '16:30'},
-    {label: '17:00', value: '17:00'},
-    {label: '17:30', value: '17:30'},
-    {label: '18:00', value: '18:00'},
-    {label: '18:30', value: '18:30'},
-    {label: '19:00', value: '19:00'},
-    {label: '19:30', value: '19:30'},
-    {label: '20:00', value: '20:00'},
-    {label: '20:30', value: '20:30'},
-    {label: '21:00', value: '21:00'},
-    {label: '21:30', value: '21:30'},
-    {label: '22:00', value: '22:00'},
-    {label: '22:30', value: '22:30'},
-    {label: '23:00', value: '23:00'},
-    {label: '23:30', value: '23:30'},
-  ];
+  const gerarHorarios = () => {
+    let horarios = [];
+    for (let hora = 0; hora < 24; hora++) {
+      for (let minuto = 0; minuto < 60; minuto += 30) {
+        let horaFormatada = String(hora).padStart(2, '0');
+        let minutoFormatado = String(minuto).padStart(2, '0');
+        horarios.push({
+          label: `${horaFormatada}:${minutoFormatado}`,
+          value: `${horaFormatada}:${minutoFormatado}`,
+        });
+      }
+    }
+    return horarios;
+  };
+  const [horaItems] = useState(gerarHorarios());
 
   const duracaoItems = [
     {label: '30min', value: '00:30'},
@@ -367,6 +340,15 @@ export default function TrainingPartnerSearch() {
       horario: hora,
       sexo: sexo,
     });
+    console.log('Modalidade:', modalidade);
+    console.log('Dia da Semana:', dia);
+    console.log('Estado Código IBGE:', parseInt(estadoId, 10));
+    console.log('Município Código IBGE:', parseInt(cidadeId, 10));
+    console.log('Agrupamento Muscular:', grupamentoMuscular);
+    console.log('Horário:', hora);
+    console.log('ID Usuário:', user.id);
+    console.log('Tempo de Treino:', duracao);
+    console.log('Local:', local);
   };
 
   return (

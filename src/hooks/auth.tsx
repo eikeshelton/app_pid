@@ -53,15 +53,15 @@ interface RegisterSearch {
 }
 interface PartnerRegister {
   modalidade: string;
-  dia_da_semana: string;
+  dia_da_semana: string | null;
   estado_codigo_ibge: number;
   municipio_codigo_ibge: number;
-  agrupamento_muscular?: string;
-  observacoes: string;
-  horario: string;
+  agrupamento_muscular: string | null;
+  observacoes?: string | null;
+  horario: string | null;
   id_usuario?: number;
-  tempo_treino: string;
-  local: string;
+  tempo_treino: string | null;
+  local: string | undefined;
 }
 interface PartnerSearch {
   id?: number;
