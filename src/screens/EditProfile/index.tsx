@@ -173,11 +173,14 @@ const EditProfile = () => {
             {showFotoPerfil && (
               <ProfileImageContainer onPress={tirarFoto}>
                 {fotoPerfil ? (
-                  <ProfilePicture
-                    source={{uri: `data:image/jpeg;base64,${fotoPerfil}`}}
-                  />
+                  <ProfilePicture source={{uri: fotoPerfil}} />
                 ) : (
-                  <TextAlterImage>Adicionar foto</TextAlterImage>
+                  <>
+                    <ProfilePicture
+                      source={{uri: `data:image/jpeg;base64,${fotoPerfil}`}}
+                    />
+                    <TextAlterImage>Adicionar foto</TextAlterImage>
+                  </>
                 )}
                 <TextAlterImage>Alterar foto</TextAlterImage>
               </ProfileImageContainer>

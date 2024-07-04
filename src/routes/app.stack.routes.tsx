@@ -11,6 +11,7 @@ import UserSearch from '../screens/UserSearch';
 import {Chat} from '../screens/Chat';
 import TrainingPartnerRegister from '../screens/TrainingPartnerRegister';
 import TrainingPartnerSearch from '../screens/TrainingPartnerSearch';
+import {Followers_Followed} from '../screens/Followers_Followed';
 
 const Stack = createStackNavigator();
 
@@ -70,6 +71,11 @@ export function AppRoutes() {
       <Stack.Screen
         name="TrainingPartnerSearch"
         component={TrainingPartnerSearch}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Followers_Followed"
+        component={Followers_Followed}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

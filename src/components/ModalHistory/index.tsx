@@ -19,7 +19,7 @@ interface Props {
 }
 
 interface User {
-  id: number;
+  id_usuario: number;
   nome_usuario: string;
   foto_perfil: string | null;
   tipo_usuario: string;
@@ -75,7 +75,7 @@ export function ModalHistory({showModal, onDismiss}: Props) {
         <FlatList
           data={registeredUsers}
           renderItem={renderItem}
-          keyExtractor={item => item.id.toString()}
+          keyExtractor={item => item.id_usuario.toString()}
           numColumns={2}
         />
       </ModalContent>
