@@ -22,8 +22,10 @@ import {
   SettingButton,
   SettingIcon,
   CountContainer,
-  HeaderContainer,
-  ContainerTest,
+  Header,
+  RequestsButton,
+  RequestsIcon,
+  Number,
 } from './style';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import fotoPerfil from '../../assets/imagens/fotoperfil.png';
@@ -36,6 +38,7 @@ export default function Profile() {
   const isFocused = useIsFocused();
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
+  const [focado, setFocado] = useState(false);
   const requestUserPermission = async () => {
     try {
       const authStatus = await messaging().requestPermission();
@@ -74,23 +77,28 @@ export default function Profile() {
   };
 
   useEffect(() => {
+    if (!isFocused) {
+      return; // Retorna sem fazer nada se não estiver focado
+    }
     fetchProfileData();
     requestUserPermission();
     getToken();
-
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       if (remoteMessage.notification) {
+        setFocado(true);
         PushNotification.localNotification({
           channelId: 'teste',
           title: remoteMessage.notification.title || 'Nova Notificação',
           message: remoteMessage.notification.body || '',
           playSound: true,
           importance: 'default',
+          largeIcon: '',
         });
       }
     });
 
     messaging().setBackgroundMessageHandler(async remoteMessage => {
+      setFocado(true);
       console.log('Notificação em segundo plano:', remoteMessage);
     });
 
@@ -100,34 +108,42 @@ export default function Profile() {
   const handleSettings = () => {
     navigation.navigate('SettingsScreen');
   };
-
+  const handleRequests = () => {
+    setFocado(false);
+    navigation.navigate('Requests');
+  };
   return loading ? (
     <Loading />
   ) : (
     <ScreenBackground>
       <Container>
-        <HeaderContainer>
-          <ContainerTest />
-          <PictureContainer>
-            {user.foto_perfil ? (
-              <ProfilePicture
-                source={{uri: user.foto_perfil}}
-                resizeMode="cover" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
-              />
-            ) : (
-              <ProfilePicture
-                source={fotoPerfil}
-                resizeMode="cover" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
-              />
-            )}
-            <ProfileName>{user.nome_usuario}</ProfileName>
-          </PictureContainer>
+        <Header>
+          <RequestsButton onPress={handleRequests}>
+            <RequestsIcon name="addusergroup" focado={focado} />
+            <Number focado={focado}>{1}</Number>
+          </RequestsButton>
           <SettingContainer>
             <SettingButton onPress={handleSettings}>
               <SettingIcon name="menu" />
             </SettingButton>
           </SettingContainer>
-        </HeaderContainer>
+        </Header>
+
+        <PictureContainer>
+          {user.foto_perfil ? (
+            <ProfilePicture
+              source={{uri: user.foto_perfil}}
+              resizeMode="cover" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
+            />
+          ) : (
+            <ProfilePicture
+              source={fotoPerfil}
+              resizeMode="cover" // Esta propriedade define como a imagem deve se ajustar ao espaço disponível//
+            />
+          )}
+          <ProfileName>{user.nome_usuario}</ProfileName>
+        </PictureContainer>
+
         <CountContainer>
           <ContainerPubFoll>
             <ContainerPub>

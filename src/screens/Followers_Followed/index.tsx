@@ -32,6 +32,18 @@ export function Followers_Followed() {
           console.error('Erro ao buscar usuários seguidos:', error);
           // Tratar erro, exibindo mensagem na interface ou fazendo outra ação necessária
         }
+      } else {
+        try {
+          const response = await axios.get(`/usuarios_seguidores/${user.id}`); // Substitua 'user.id' pelo ID do usuário logado
+          if (!response.data) {
+            throw new Error('Não foi possível obter os usuários seguidore');
+          }
+          setUserData(response.data);
+          setLoading(false); // Armazena os dados dos usuários seguidos no estado
+        } catch (error) {
+          console.error('Erro ao buscar usuários seguidores:', error);
+          // Tratar erro, exibindo mensagem na interface ou fazendo outra ação necessária
+        }
       }
     }
 

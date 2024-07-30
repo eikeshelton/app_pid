@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import axios from '../../services/api';
 import {
   Container,
   Header,
@@ -7,13 +8,36 @@ import {
   Name,
 } from './style';
 import BackButton from '../../components/BackButton';
-import {useAuth} from '../../hooks/auth';
 import {InputComponent} from '../../components/Input';
 import {FlatList} from 'react-native';
 import fotoPerfil from '../../assets/imagens/fotoperfil.png';
+import {useAuth} from '../../hooks/auth';
+import {Loading} from '../../components/Loading';
+interface Conversas {
+  id_conversa: number;
+  nome_remetente: string;
+  nome_destinatario: string;
+  id_usuario: number;
+  foto_perfil: string | null;
+  ultima_mensagem: String;
+}
 export function ScreenChat() {
-  const {userssearch} = useAuth();
+  const [loading, setLoading] = useState(true);
+  const [conversas, setConversas] = useState<Conversas[]>([]);
   const [pesquisar, setPesquisar] = useState('');
+  const {user} = useAuth();
+  const getConversation = async () => {
+    try {
+      const response = await axios.get(`/conversas_usuario/${user.id}`);
+      setConversas(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    getConversation();
+  }, []);
   const renderItem = ({item}: any) => (
     <PictureContainer>
       {item.foto_perfil ? (
@@ -21,10 +45,13 @@ export function ScreenChat() {
       ) : (
         <ProfilePicture source={fotoPerfil} resizeMode="contain" />
       )}
-      <Name>{item.nome_usuario}</Name>
+      <Name>{item.nome_destinatario}</Name>
+      <Name>{item.ultima_mensagem}</Name>
     </PictureContainer>
   );
-  return (
+  return loading ? (
+    <Loading />
+  ) : (
     <Container>
       <Header>
         <BackButton />
@@ -37,9 +64,9 @@ export function ScreenChat() {
         isFocused={true} // O campo está focado quando esta prop é true
       />
       <FlatList
-        data={userssearch}
+        data={conversas}
         renderItem={renderItem}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={item => item.id_conversa.toString()}
       />
     </Container>
   );

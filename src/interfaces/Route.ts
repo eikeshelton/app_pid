@@ -17,4 +17,5 @@ export type RootStackParamsList = {
   UserSearch: {selectedItem: any};
   Chat: {selectedItem: any};
   Followers_Followed: {type: string};
+  Requests: undefined;
 };

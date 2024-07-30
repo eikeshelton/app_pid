@@ -12,6 +12,7 @@ import {Chat} from '../screens/Chat';
 import TrainingPartnerRegister from '../screens/TrainingPartnerRegister';
 import TrainingPartnerSearch from '../screens/TrainingPartnerSearch';
 import {Followers_Followed} from '../screens/Followers_Followed';
+import {Requests} from '../screens/Requests';
 
 const Stack = createStackNavigator();
 
@@ -76,6 +77,11 @@ export function AppRoutes() {
       <Stack.Screen
         name="Followers_Followed"
         component={Followers_Followed}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Requests"
+        component={Requests}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

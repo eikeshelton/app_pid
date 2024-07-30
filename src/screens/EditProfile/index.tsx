@@ -23,7 +23,6 @@ import {useAuth} from '../../hooks/auth';
 import BackButton from '../../components/BackButton';
 import {InputComponent} from '../../components/Input';
 import InputPicker from '../../components/InputPicker';
-
 const EditProfile = () => {
   const navigation = useNavigation();
   const {editAvatar, user} = useAuth();
@@ -92,7 +91,7 @@ const EditProfile = () => {
         const {base64} = result.assets[0];
 
         if (base64) {
-          return setFotoPerfil(base64);
+          return setFotoPerfil('data:image/png;base64,' + base64);
         }
       }
     } catch (error) {
@@ -176,9 +175,7 @@ const EditProfile = () => {
                   <ProfilePicture source={{uri: fotoPerfil}} />
                 ) : (
                   <>
-                    <ProfilePicture
-                      source={{uri: `data:image/jpeg;base64,${fotoPerfil}`}}
-                    />
+                    <ProfilePicture source={{uri: fotoPerfil}} />
                     <TextAlterImage>Adicionar foto</TextAlterImage>
                   </>
                 )}

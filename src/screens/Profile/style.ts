@@ -2,7 +2,10 @@ import styled from 'styled-components/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {RFValue} from 'react-native-responsive-fontsize';
-
+import AntDesign from 'react-native-vector-icons/AntDesign';
+interface iconsProps {
+  focado: boolean;
+}
 export const TexLoading = styled.Text`
   color: ${({theme}) => theme.colors.primary};
 `;
@@ -16,13 +19,23 @@ export const Container = styled.View`
   justify-content: center;
   padding: ${RFValue(10)}px 0;
 `;
-export const ContainerTest = styled.View`
-  width: 20%;
-`;
-export const HeaderContainer = styled.View`
-  padding: 0 ${RFValue(10)}px;
+export const Header = styled.View`
   flex-direction: row;
+  padding: 0 ${RFValue(10)}px;
   justify-content: space-between;
+`;
+export const RequestsButton = styled.TouchableOpacity`
+  flex-direction: row;
+`;
+
+export const RequestsIcon = styled(AntDesign)<iconsProps>`
+  color: ${({theme, focado}) => (focado ? theme.colors.primary : 'white')};
+  font-size: ${RFValue(35)}px;
+`;
+export const Number = styled.Text<iconsProps>`
+  font-size: ${RFValue(16)}px;
+  font-weight: bold;
+  color: ${({theme, focado}) => (focado ? theme.colors.primary : 'black')};
 `;
 export const PictureContainer = styled.View`
   gap: ${RFValue(5)}px;

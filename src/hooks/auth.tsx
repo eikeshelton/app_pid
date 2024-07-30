@@ -171,7 +171,7 @@ function AuthProvider({children}: AuthProviderProps) {
   async function editAvatar(user: User) {
     try {
       const response = await api.put(`/usuarios/${user.email}`, {
-        foto_perfil: 'data:image/png;base64,' + user.foto_perfil,
+        foto_perfil: user.foto_perfil,
         bio: user.bio,
         nome_usuario: user.nome_usuario,
         tipo_usuario: user.tipo_usuario,
