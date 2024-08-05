@@ -87,12 +87,14 @@ export default function Profile() {
       if (remoteMessage.notification) {
         setFocado(true);
         PushNotification.localNotification({
-          channelId: 'teste',
+          channelId: 'notificacao',
           title: remoteMessage.notification.title || 'Nova Notificação',
           message: remoteMessage.notification.body || '',
           playSound: true,
           importance: 'default',
           largeIcon: '',
+          smallIcon: 'ic_notification',
+          color: '#934dd2',
         });
       }
     });

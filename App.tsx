@@ -12,7 +12,7 @@ export default function MyApp() {
 
   PushNotification.createChannel(
     {
-      channelId: 'teste',
+      channelId: 'notificacao',
       channelName: 'Canal de notificação de seguidores', // (required) // (optional) default: undefined.
       playSound: false, // (optional) default: true
       importance: Importance.DEFAULT, // (optional) default: Importance.HIGH. Int value of the Android notification importance

@@ -39,6 +39,7 @@ export function Requests() {
         id_seguido: item.id_seguido,
         acao: 'aceito',
       });
+      navigation.goBack();
     } catch (error) {
       console.error(error);
     }
@@ -50,6 +51,7 @@ export function Requests() {
         id_seguido: item.id_seguido,
         acao: 'rejeitar',
       });
+      navigation.goBack();
     } catch (error) {
       console.error(error);
     }
