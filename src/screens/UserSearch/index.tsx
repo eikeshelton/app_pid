@@ -139,11 +139,23 @@ export default function UserSearch() {
               <TextNumber>8</TextNumber>
               <TextPubFoll>Publicações</TextPubFoll>
             </ContainerPub>
-            <ContainerFollowers>
+            <ContainerFollowers
+              onPress={() =>
+                navigation.navigate('Followers_Followed', {
+                  type: 'seguidores',
+                  id: selectedItem.id_usuario,
+                })
+              }>
               <TextNumber>{selectedItem.seguidores}</TextNumber>
               <TextPubFoll>Seguidores</TextPubFoll>
             </ContainerFollowers>
-            <ContainerFollowed>
+            <ContainerFollowed
+              onPress={() =>
+                navigation.navigate('Followers_Followed', {
+                  type: 'seguidos',
+                  id: selectedItem.id_usuario,
+                })
+              }>
               <TextNumber>{selectedItem.seguidos}</TextNumber>
               <TextPubFoll>Seguidos</TextPubFoll>
             </ContainerFollowed>

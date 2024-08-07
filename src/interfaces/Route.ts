@@ -16,6 +16,6 @@ export type RootStackParamsList = {
   TrainingPartnerSearch: undefined;
   UserSearch: {selectedItem: any};
   Chat: {selectedItem: any};
-  Followers_Followed: {type: string};
+  Followers_Followed: {type: string; id: any};
   Requests: undefined;
 };

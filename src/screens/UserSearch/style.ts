@@ -65,11 +65,11 @@ export const ContainerPub = styled.View`
   flex: 1;
 `;
 
-export const ContainerFollowers = styled.View`
+export const ContainerFollowers = styled.TouchableOpacity`
   flex: 1;
 `;
 
-export const ContainerFollowed = styled.View`
+export const ContainerFollowed = styled.TouchableOpacity`
   flex: 1;
 `;
 

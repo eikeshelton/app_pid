@@ -154,7 +154,10 @@ export default function Profile() {
             </ContainerPub>
             <ContainerFollowers
               onPress={() =>
-                navigation.navigate('Followers_Followed', {type: 'seguidores'})
+                navigation.navigate('Followers_Followed', {
+                  type: 'seguidores',
+                  id: user.id,
+                })
               }>
               <TextNumber>{user.seguidores}</TextNumber>
               <TextPubFoll>Seguidores</TextPubFoll>
@@ -162,7 +165,10 @@ export default function Profile() {
 
             <ContainerFollowed
               onPress={() =>
-                navigation.navigate('Followers_Followed', {type: 'seguidos'})
+                navigation.navigate('Followers_Followed', {
+                  type: 'seguidos',
+                  id: user.id,
+                })
               }>
               <TextNumber>{user.seguidos}</TextNumber>
               <TextPubFoll>Seguidos</TextPubFoll>
