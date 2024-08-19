@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {Alert, ScrollView, View, TouchableOpacity} from 'react-native';
+import {
+  Alert,
+  ScrollView,
+  View,
+  TouchableOpacity,
+  PermissionsAndroid,
+  Platform,
+} from 'react-native';
 import CustonButton from '../../components/CustomizeButton';
 import {
   OptionsCommon,
@@ -23,6 +30,14 @@ import {useAuth} from '../../hooks/auth';
 import BackButton from '../../components/BackButton';
 import {InputComponent} from '../../components/Input';
 import InputPicker from '../../components/InputPicker';
+import AWS from 'aws-sdk';
+import RNFS from 'react-native-fs';
+import {Buffer} from 'buffer';
+AWS.config.update({
+  accessKeyId: 'AKIA3FLD37D3FQ6W235T',
+  secretAccessKey: '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',
+  region: 'us-east-1',
+});
 const EditProfile = () => {
   const navigation = useNavigation();
   const {editAvatar, user} = useAuth();
@@ -66,13 +81,47 @@ const EditProfile = () => {
     });
   }
 
+  const requestCameraPermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'Permissão de Câmera',
+            message: 'Este aplicativo precisa acessar sua câmera',
+            buttonNeutral: 'Perguntar Depois',
+            buttonNegative: 'Cancelar',
+            buttonPositive: 'OK',
+          },
+        );
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    } else {
+      return true; // iOS ou outras plataformas que não requerem permissão manual
+    }
+  };
+
   const handlePickImage = async (source: string) => {
     const options: OptionsCommon = {
       mediaType: 'photo',
-      includeBase64: true,
+      includeBase64: false, // Não precisamos da base64 se vamos enviar o arquivo
     };
 
     try {
+      if (source === 'camera') {
+        const hasPermission = await requestCameraPermission();
+        if (!hasPermission) {
+          Alert.alert(
+            'Permissão Negada',
+            'Permissão para acessar a câmera foi negada.',
+          );
+          return;
+        }
+      }
+
       const result =
         source === 'camera'
           ? await launchCamera(options)
@@ -84,22 +133,48 @@ const EditProfile = () => {
           result.errorCode,
           result.errorMessage,
         );
-        return true;
+        return;
       }
 
-      if (result.assets) {
-        const {base64} = result.assets[0];
+      if (result.assets && result.assets.length > 0) {
+        const {uri, fileName} = result.assets[0];
 
-        if (base64) {
-          return setFotoPerfil('data:image/png;base64,' + base64);
+        if (uri) {
+          // Criar um nome de arquivo único para evitar conflitos
+          const uniqueFileName = `${Date.now()}_${fileName}`;
+
+          // Ler o arquivo usando react-native-fs
+          const fileData = await RNFS.readFile(uri, 'base64');
+          const buffer = Buffer.from(fileData, 'base64'); // Usando a biblioteca `buffer`
+
+          // Configurar os parâmetros de upload
+          const s3 = new AWS.S3();
+          const params = {
+            Bucket: 'apppid',
+            Key: uniqueFileName,
+            Body: buffer,
+            ContentType: result.assets[0].type, // Define o tipo de conteúdo corretamente
+          };
+
+          // Enviar a imagem para o S3
+          s3.upload(params, (err: any, data: any) => {
+            if (err) {
+              console.log('Erro ao fazer upload da imagem:', err);
+              Alert.alert('Erro', 'Não foi possível fazer upload da imagem.');
+              return;
+            }
+            console.log('Upload realizado com sucesso:', data.Location);
+
+            // Salvar a URL da imagem no estado
+            setFotoPerfil(data.Location);
+          });
         }
       }
     } catch (error) {
-      console.log('Erro ao selecionar a imagem da galeria:', error);
-      Alert.alert('Erro', 'Não foi possível selecionar a imagem da galeria.');
+      console.log('Erro ao selecionar a imagem:', error);
+      Alert.alert('Erro', 'Não foi possível selecionar a imagem.');
     }
   };
-
   return (
     <Container>
       <Header>

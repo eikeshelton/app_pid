@@ -121,3 +121,20 @@ export const ChatIcon = styled(Entypo)`
   color: ${({theme}) => theme.colors.primary};
   font-size: ${RFValue(40)}px;
 `;
+
+export const GuideButton = styled.TouchableOpacity``;
+export const GuildeContainer = styled.View``;
+export const GuildeImage = styled.ImageBackground<{
+  width: number;
+  height: number;
+}>`
+  width: ${({width}) => width}px;
+  height: ${({height}) => height}px;
+  justify-content: flex-end;
+  align-items: center;
+`;
+export const Guildetitle = styled.Text`
+  color: white;
+  font-family: ${({theme}) => theme.fonts.bold};
+  font-size: ${RFValue(30)}px;
+`;
