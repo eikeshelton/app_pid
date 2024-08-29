@@ -37,3 +37,17 @@ export const Name = styled.Text`
   color: ${({theme}) => theme.colors.colorWhite};
   text-align: center;
 `;
+export const FilterButton = styled.TouchableOpacity`
+  border-radius: ${RFValue(12)}px;
+  background-color: ${({theme}) => theme.colors.backgroundColor};
+  width: 40%;
+  align-items: center;
+  padding: 0 ${RFValue(6)}px 0 ${RFValue(6)}px;
+  border: solid 2px ${({theme}) => theme.colors.primary};
+  margin-bottom: ${RFValue(10)}px;
+`;
+export const ClickableText = styled.Text`
+  color: ${({theme}) => theme.colors.colorWhite};
+  font-size: ${RFValue(16)}px;
+  margin: ${RFValue(10)}px 0 ${RFValue(6)}px 0;
+`;

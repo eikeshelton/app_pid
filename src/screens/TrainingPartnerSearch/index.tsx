@@ -340,15 +340,6 @@ export default function TrainingPartnerSearch() {
       horario: hora,
       sexo: sexo,
     });
-    console.log('Modalidade:', modalidade);
-    console.log('Dia da Semana:', dia);
-    console.log('Estado Código IBGE:', parseInt(estadoId, 10));
-    console.log('Município Código IBGE:', parseInt(cidadeId, 10));
-    console.log('Agrupamento Muscular:', grupamentoMuscular);
-    console.log('Horário:', hora);
-    console.log('ID Usuário:', user.id);
-    console.log('Tempo de Treino:', duracao);
-    console.log('Local:', local);
   };
 
   return (
