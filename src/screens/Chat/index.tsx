@@ -76,7 +76,7 @@ export function Chat() {
 
   useEffect(() => {
     const ws = new WebSocket(
-      `ws://192.168.15.170:8000/ws/${user.id}/${selectedItem.id_usuario}`,
+      `ws://192.168.15.94:8000/ws/${user.id}/${selectedItem.id_usuario}`,
     );
     websocketRef.current = ws;
 
