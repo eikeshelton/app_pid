@@ -6,6 +6,7 @@ import {
   ClickableText,
   Container,
   FilterButton,
+  FilterContainer,
   Name,
   PictureContainer,
   ProfilePicture,
@@ -53,10 +54,10 @@ export default function Research() {
       pesquisado_id: item.id_usuario,
     });
   };
-  const Buscar_usuario_por_tipo = async () => {
+  const Buscar_usuario_por_tipo = async (item: any) => {
     try {
       const response = await axios.post('/usuarios/buscar/filtro', {
-        tipo_Usuario = item.tipo_usuario,
+        tipo_Usuario: item.tipo_usuario,
       });
     } catch (error) {}
   };
@@ -102,19 +103,24 @@ export default function Research() {
           <ClickableText>Filtros</ClickableText>
         </FilterButton>
         {showFiltros && (
-          <InputPicker
-            items={[
-              {label: 'Atleta', value: 'Atleta'},
-              {label: 'Entusiasta', value: 'Entusiasta'},
-              {label: 'Nutricionista', value: 'Nutricionista'},
-              {label: 'Treinador', value: 'Treinador'},
-            ]}
-            onValueChange={(value: string) => setTipoUsuario(value)}
-            placeholder={{
-              label: 'Selecione o tipo de usuário',
-              value: null,
-            }}
-          />
+          <FilterContainer>
+            <InputPicker
+              items={[
+                {label: 'Atleta', value: 'Atleta'},
+                {label: 'Entusiasta', value: 'Entusiasta'},
+                {label: 'Nutricionista', value: 'Nutricionista'},
+                {label: 'Treinador', value: 'Treinador'},
+              ]}
+              onValueChange={(value: string) => setTipoUsuario(value)}
+              placeholder={{
+                label: 'Selecione o tipo de usuário',
+                value: null,
+              }}
+            />
+            <FilterButton onPress={() => Buscar_usuario_por_tipo(tipoUsuario)}>
+              <ClickableText>selecionar</ClickableText>
+            </FilterButton>
+          </FilterContainer>
         )}
       </Container>
       <ModalHistory
