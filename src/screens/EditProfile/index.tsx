@@ -33,9 +33,10 @@ import InputPicker from '../../components/InputPicker';
 import AWS from 'aws-sdk';
 import RNFS from 'react-native-fs';
 import {Buffer} from 'buffer';
+import {AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY} from '@env';
 AWS.config.update({
-  accessKeyId: 'AKIA3FLD37D3FQ6W235T',
-  secretAccessKey: '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',
+  accessKeyId: AWS_ACCESS_KEY_ID,
+  secretAccessKey: AWS_SECRET_ACCESS_KEY,
   region: 'us-east-1',
 });
 const EditProfile = () => {

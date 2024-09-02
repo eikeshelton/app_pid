@@ -157,7 +157,7 @@ function Register() {
             placeholder={{label: 'Sexo', value: null}}
           />
           <InputComponent
-            onChangeText={(formatted, extracted: any) => {
+            onChangeText={(extracted: any) => {
               return setDataNascimento(extracted);
             }}
             mask="[00]/[00]/[0000]"
