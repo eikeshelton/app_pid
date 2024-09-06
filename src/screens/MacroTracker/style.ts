@@ -11,8 +11,7 @@ export const Navbar = styled.View`
   justify-content: space-between;
   align-content: center;
   align-items: center;
-  padding-vertical: ${RFValue(10)}px;
-  padding-horizontal: ${RFValue(20)}px;
+  padding: ${RFValue(10)}px ${RFValue(20)}px;
   margin-bottom: ${RFValue(20)}px;
   background-color: 'rgb(48, 48, 48)';
 `;
@@ -31,7 +30,7 @@ export const Day = styled.Text`
 export const DailyDisplay = styled.View`
   margin-bottom: ${RFValue(20)}px;
   align-items: center;
-  padding-horizontal: ${RFValue(20)}px;
+  padding: 0 ${RFValue(20)}px;
 `;
 
 export const DailyCalories = styled.Text`
@@ -67,8 +66,7 @@ export const MealTitleContainer = styled.View`
   align-items: center;
   width: 100%;
   background-color: 'rgb(48, 48, 48)';
-  padding-vertical: ${RFValue(10)}px;
-  padding-horizontal: ${RFValue(20)}px;
+  padding: ${RFValue(10)}px ${RFValue(20)}px;
 `;
 
 export const MealTitle = styled.Text`
@@ -86,15 +84,15 @@ export const MealText = styled.Text`
 export const AddFoodContainer = styled.View`
   justify-content: center;
   margin: 0 auto;
-  padding-horizontal: ${RFValue(20)}px;
+  padding: 0 ${RFValue(20)}px;
   margin-top: ${RFValue(10)}px;
 `;
 
 export const FoodItem = styled.View`
   flex-direction: row;
   justify-content: space-between;
-  margin-botton: ${RFValue(10)}px;
-  padding-horizontal: ${RFValue(20)}px;
+  margin-bottom: ${RFValue(10)}px;
+  padding: 0 ${RFValue(20)}px;
 `;
 
 export const ModalContainer = styled.View`

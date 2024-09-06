@@ -22,33 +22,31 @@ import CustomButton from '../../components/CustomizeButton';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const meals = ['Café da Manhã', 'Almoço', 'Lanche da Tarde', 'Janta', 'Ceia'];
-
+interface FoodItem {
+  name: string;
+  calories: number;
+  grams: number;
+  carbs: number;
+  protein: number;
+  fats: number;
+}
 const MacroTracker = () => {
   const [selectedDay, setSelectedDay] = useState('Hoje');
   const [calories] = useState(0);
   const [carbs] = useState(0);
   const [protein] = useState(0);
   const [fats] = useState(0);
-  const [mealData, setMealData] = useState<{[key: string]: FoodItemType[]}>({});
+  const [mealData, setMealData] = useState<{[key: string]: FoodItem[]}>({});
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMeal, setSelectedMeal] = useState<string | null>(null);
   const [foodName, setFoodName] = useState('');
   const [foodGrams, setFoodGrams] = useState('');
 
-  type FoodItemType = {
-    name: string;
-    calories: number;
-    grams: number;
-    carbs: number;
-    protein: number;
-    fats: number;
-  };
-
   const handleAddFood = () => {
     if (foodName && foodGrams) {
       const updatedMeal = mealData[selectedMeal!] || [];
-      const foodMacros: FoodItemType = {
+      const foodMacros: FoodItem = {
         name: foodName,
         grams: parseInt(foodGrams, 10),
         calories: Math.floor(Math.random() * 20),
@@ -109,6 +107,7 @@ const MacroTracker = () => {
             </MealTitleContainer>
 
             <FlatList
+              nestedScrollEnabled={true}
               data={mealData[meal]}
               renderItem={({item, index}) => (
                 <FoodItem>
