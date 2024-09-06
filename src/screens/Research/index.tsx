@@ -56,7 +56,7 @@ export default function Research() {
   const Buscar_usuario_por_tipo = async () => {
     try {
       const response = await axios.post('/usuarios/buscar/filtro', {
-        tipo_Usuario = item.tipo_usuario,
+        tipo_Usuario: item.tipo_usuario,
       });
     } catch (error) {}
   };

@@ -14,6 +14,7 @@ export type RootStackParamsList = {
   ScreenChat: undefined;
   TrainingPartnerRegister: undefined;
   TrainingPartnerSearch: undefined;
+  MacroTracker: undefined;
   UserSearch: {selectedItem: any};
   Chat: {selectedItem: any};
   Followers_Followed: {type: string; id: any};

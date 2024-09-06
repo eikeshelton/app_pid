@@ -2,7 +2,7 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Profile from '../screens/Profile';
 import Research from '../screens/Research';
-import FeedScreen from '../screens/Feed';
+import MacroTracker from '../screens/MacroTracker';
 import TrainingPartner from '../screens/TrainingPartner';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useTheme} from 'styled-components';
@@ -27,9 +27,9 @@ export default function AppTabNav() {
       color={color}
     />
   );
-  const feedScreenIcone = (focused: boolean, size: number, color: string) => (
+  const macroTrackerIcone = (focused: boolean, size: number, color: string) => (
     <Ionicons
-      name={focused ? 'newspaper' : 'newspaper-outline'}
+      name={focused ? 'nutrition' : 'nutrition-outline'}
       size={size}
       color={color}
     />
@@ -92,16 +92,6 @@ export default function AppTabNav() {
         }}
       />
       <Screen
-        name="FeedScreen"
-        component={FeedScreen}
-        options={{
-          tabBarLabel: 'Feed',
-
-          tabBarIcon: ({size, color, focused}) =>
-            feedScreenIcone(focused, size, color),
-        }}
-      />
-      <Screen
         name="TrainingPartner"
         component={TrainingPartner}
         options={{
@@ -109,6 +99,16 @@ export default function AppTabNav() {
 
           tabBarIcon: ({size, color, focused}) =>
             trainingPartnerIcone(focused, size, color),
+        }}
+      />
+      <Screen
+        name="FeedScreen"
+        component={MacroTracker}
+        options={{
+          tabBarLabel: 'Dieta',
+
+          tabBarIcon: ({size, color, focused}) =>
+            macroTrackerIcone(focused, size, color),
         }}
       />
       <Screen

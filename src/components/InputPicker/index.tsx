@@ -8,7 +8,7 @@ interface InputPickerProps {
   placeholder?: {label: string; value: any};
   onOpen?: () => void;
   onClose?: () => void;
-  itemKey?: string; // Adicionando itemKey como opcional
+  itemKey?: string;
 }
 
 const InputPicker: React.FC<InputPickerProps> = ({
@@ -22,25 +22,43 @@ const InputPicker: React.FC<InputPickerProps> = ({
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
 
+  const borderColor = open ? '#934dd2' : 'gray';
+
   return (
     <PickerContainer>
       <DropDownPicker
         itemKey={itemKey}
         open={open}
-        onClose={onClose}
-        onOpen={onOpen}
+        onClose={() => {
+          setOpen(false);
+          if (onClose) {
+            onClose();
+          }
+        }}
+        onOpen={() => {
+          setOpen(true);
+          if (onOpen) {
+            onOpen();
+          }
+        }}
         value={value}
         items={items}
         setOpen={setOpen}
         setValue={setValue}
         onChangeValue={onValueChange}
         placeholder={placeholder?.label || 'Select an option'}
-        style={dropDownPickerStyles.containerStyle}
+        style={{
+          ...dropDownPickerStyles.containerStyle,
+          borderColor: borderColor,
+        }}
         listMode="SCROLLVIEW"
         scrollViewProps={{
           nestedScrollEnabled: false,
         }}
-        dropDownContainerStyle={dropDownPickerStyles.dropDownContainerStyle}
+        dropDownContainerStyle={{
+          ...dropDownPickerStyles.dropDownContainerStyle,
+          borderColor: borderColor,
+        }}
         textStyle={dropDownPickerStyles.textStyle}
         placeholderStyle={dropDownPickerStyles.placeholderStyle}
         selectedItemContainerStyle={
