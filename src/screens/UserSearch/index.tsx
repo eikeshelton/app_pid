@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import ProfilePost from '../../components/ProfilePost';
 import {
   Container,
   ScreenBackground,
@@ -177,7 +176,6 @@ export default function UserSearch() {
           onPress={() => navigation.navigate('Chat', {selectedItem})}
         />
       </ButtonFollow>
-      <ProfilePost />
     </ScreenBackground>
   );
 }

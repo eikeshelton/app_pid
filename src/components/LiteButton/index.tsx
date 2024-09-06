@@ -7,10 +7,10 @@ interface LiteButtonProps extends TouchableOpacityProps {
   onPress: () => void;
 }
 
-function LiteButton({texto, ...rest}: LiteButtonProps) {
+function LiteButton({texto, onPress}: LiteButtonProps) {
   return (
     <Container>
-      <InputButton {...rest}>
+      <InputButton onPress={onPress}>
         <TextButton>{texto}</TextButton>
       </InputButton>
     </Container>
