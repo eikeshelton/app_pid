@@ -16,11 +16,12 @@ import {
   MealTitleContainer,
   MealTitle,
   AddFoodContainer,
+  DailyMacrosBoxGraphic,
 } from './style';
 import {InputComponent} from '../../components/Input';
 import CustomButton from '../../components/CustomizeButton';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import {PieChart} from 'react-native-chart-kit';
 const meals = ['Café da Manhã', 'Almoço', 'Lanche da Tarde', 'Janta', 'Ceia'];
 interface FoodItem {
   name: string;
@@ -42,7 +43,34 @@ const MacroTracker = () => {
   const [selectedMeal, setSelectedMeal] = useState<string | null>(null);
   const [foodName, setFoodName] = useState('');
   const [foodGrams, setFoodGrams] = useState('');
-
+  const data = [
+    {
+      name: 'Carboidrato',
+      population: 50,
+      color: '#934dd2',
+      legendFontColor: '#7F7F7F',
+      legendFontSize: 15,
+    },
+    {
+      name: 'Gordura',
+      population: 20,
+      color: '#FFFFFF',
+      legendFontColor: '#7F7F7F',
+      legendFontSize: 15,
+    },
+    {
+      name: 'Proteína',
+      population: 30,
+      color: '#303030',
+      legendFontColor: '#7F7F7F',
+      legendFontSize: 15,
+    },
+  ];
+  const chartConfig = {
+    backgroundGradientToOpacity: 0.5,
+    color: (opacity = 2) => `rgba(26, 255, 146, ${opacity})`,
+    strokeWidth: 2, // optional, default 3
+  };
   const handleAddFood = () => {
     if (foodName && foodGrams) {
       const updatedMeal = mealData[selectedMeal!] || [];
@@ -85,11 +113,21 @@ const MacroTracker = () => {
         <DailyDisplay>
           <DailyCalories>Calorias Diárias</DailyCalories>
           <DailyCalories>{calories} kcal</DailyCalories>
-          <DailyMacrosBox>
-            <DailyMacros>Carb: {carbs} g</DailyMacros>
-            <DailyMacros>Prot: {protein} g</DailyMacros>
-            <DailyMacros>Gord: {fats} g</DailyMacros>
-          </DailyMacrosBox>
+
+          <DailyMacrosBoxGraphic>
+            <PieChart
+              data={data}
+              width={240}
+              height={150}
+              accessor={'population'}
+              chartConfig={chartConfig}
+              backgroundColor={'transparent'}
+              center={[0, 0]}
+              paddingLeft="0"
+              absolute={false}
+              style={{flexDirection: 'column', alignItems: 'center'}}
+            />
+          </DailyMacrosBoxGraphic>
         </DailyDisplay>
 
         {meals.map(meal => (

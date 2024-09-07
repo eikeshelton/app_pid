@@ -53,7 +53,7 @@ export const DailyMacros = styled.Text`
   font-family: ${({theme}) => theme.fonts.bold};
   color: ${({theme}) => theme.colors.colorWhite};
 `;
-
+export const DailyMacrosBoxGraphic = styled.View``;
 export const MealContainer = styled.View`
   margin-bottom: ${RFValue(20)}px;
 `;
