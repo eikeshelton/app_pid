@@ -108,6 +108,7 @@ const MacroTracker = () => {
 
             <FlatList
               nestedScrollEnabled={true}
+              scrollEnabled={false}
               data={mealData[meal]}
               renderItem={({item, index}) => (
                 <FoodItem>

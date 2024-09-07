@@ -1,7 +1,8 @@
 import axios from 'axios';
+import {url_key} from '@env';
 
 const api = axios.create({
-  baseURL: 'http://192.168.15.170:8000', // substitua pela URL do seu servidor FastAPI
+  baseURL: url_key, // substitua pela URL do seu servidor FastAPI
 });
 
 export default api;

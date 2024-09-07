@@ -1,6 +1,7 @@
 # OSX
 #
 .DS_Store
+.env
 
 # Xcode
 #
@@ -39,6 +40,8 @@ local.properties
 node_modules/
 npm-debug.log
 yarn-error.log
+yarn.lock
+
 
 # fastlane
 #
@@ -67,4 +70,4 @@ yarn-error.log
 
 # vm python
 server/venv
-server/__pycache__
+server/_pycache_
