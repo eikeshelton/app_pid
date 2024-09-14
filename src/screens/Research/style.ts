@@ -46,6 +46,7 @@ export const FilterButton = styled.TouchableOpacity`
   border: solid 2px ${({theme}) => theme.colors.primary};
   margin-bottom: ${RFValue(10)}px;
 `;
+export const FilterContainer = styled.View``;
 export const ClickableText = styled.Text`
   color: ${({theme}) => theme.colors.colorWhite};
   font-size: ${RFValue(16)}px;

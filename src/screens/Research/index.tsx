@@ -6,6 +6,7 @@ import {
   ClickableText,
   Container,
   FilterButton,
+  FilterContainer,
   Name,
   PictureContainer,
   ProfilePicture,
@@ -16,6 +17,16 @@ import {ModalHistory} from '../../components/ModalHistory';
 import {InputComponent} from '../../components/Input';
 import InputPicker from '../../components/InputPicker';
 import axios from '../../services/api';
+interface Usersfilter {
+  id_usuario: number;
+  login: string;
+  tipo_usuario: string;
+  foto_perfil: string;
+  nome_usuario: string;
+  bio: string;
+  seguidores: number;
+  seguidos: number;
+}
 export default function Research() {
   const navigation = useNavigation();
   const {userssearch, Search, clearUsersSearch, RegisterSearch, user} =
@@ -23,7 +34,8 @@ export default function Research() {
   const [pesquisar, setPesquisar] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [showFiltros, setshowFiltros] = useState(false);
-  const [tipoUsuario, setTipoUsuario] = useState(user.tipo_usuario);
+  const [tipoUsuario, setTipoUsuario] = useState('');
+  const [usersfilter, setUserFilter] = useState<Usersfilter[]>([]);
   const handleChangeText = (text: string) => {
     setPesquisar(text);
   };
@@ -56,12 +68,25 @@ export default function Research() {
   const Buscar_usuario_por_tipo = async () => {
     try {
       const response = await axios.post('/usuarios/buscar/filtro', {
-        tipo_Usuario: item.tipo_usuario,
+        tipo_usuario: tipoUsuario,
       });
+
+      setUserFilter(response.data);
     } catch (error) {}
   };
 
   const renderItem = ({item}: any) => (
+    <PictureContainer onPress={() => handleItemPress(item)}>
+      {item.foto_perfil ? (
+        <ProfilePicture source={{uri: item.foto_perfil}} resizeMode="cover" />
+      ) : (
+        <ProfilePicture source={fotoPerfil} resizeMode="contain" />
+      )}
+      <Name>{item.login}</Name>
+      <Name>{item.tipo_usuario}</Name>
+    </PictureContainer>
+  );
+  const renderItemFilter = ({item}: any) => (
     <PictureContainer onPress={() => handleItemPress(item)}>
       {item.foto_perfil ? (
         <ProfilePicture source={{uri: item.foto_perfil}} resizeMode="cover" />
@@ -102,20 +127,31 @@ export default function Research() {
           <ClickableText>Filtros</ClickableText>
         </FilterButton>
         {showFiltros && (
-          <InputPicker
-            items={[
-              {label: 'Atleta', value: 'Atleta'},
-              {label: 'Entusiasta', value: 'Entusiasta'},
-              {label: 'Nutricionista', value: 'Nutricionista'},
-              {label: 'Treinador', value: 'Treinador'},
-            ]}
-            onValueChange={(value: string) => setTipoUsuario(value)}
-            placeholder={{
-              label: 'Selecione o tipo de usuário',
-              value: null,
-            }}
-          />
+          <FilterContainer>
+            <InputPicker
+              items={[
+                {label: 'Atleta', value: 'Atleta'},
+                {label: 'Entusiasta', value: 'Entusiasta'},
+                {label: 'Nutricionista', value: 'Nutricionista'},
+                {label: 'Treinador', value: 'Treinador'},
+              ]}
+              onValueChange={(value: string) => setTipoUsuario(value)}
+              placeholder={{
+                label: 'Selecione o tipo de usuário',
+                value: null,
+              }}
+            />
+            <FilterButton onPress={() => Buscar_usuario_por_tipo()}>
+              <ClickableText>selecionar</ClickableText>
+            </FilterButton>
+          </FilterContainer>
         )}
+        <FlatList
+          data={usersfilter}
+          renderItem={renderItemFilter}
+          keyExtractor={item => item.id_usuario.toString()}
+          numColumns={2}
+        />
       </Container>
       <ModalHistory
         onDismiss={() => setShowModal(false)}

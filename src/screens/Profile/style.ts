@@ -125,15 +125,27 @@ export const ChatIcon = styled(Entypo)`
 export const GuideFlex = styled.View`
   padding: ${RFValue(6)}px ${RFValue(6)}px 0;
 `;
+export const AddFoodContainer = styled.View`
+  justify-content: center;
+  margin: 0 auto;
+  padding: 0 ${RFValue(20)}px;
+  margin-top: ${RFValue(10)}px;
+`;
 
 export const GuideButton = styled.TouchableOpacity`
   margin: 0 ${RFValue(10)}px ${RFValue(16)}px;
 `;
-export const GuildeContainer = styled.View``;
+export const GuildeContainer = styled.View`
+  width: ${RFValue(120)}px;
+`;
 export const GuildeImage = styled.Image`
-  width: ${RFValue(150)}px;
+  width: ${RFValue(120)}px;
   height: ${RFValue(200)}px;
   border-radius: ${RFValue(12)}px;
+`;
+export const GuildetitleContainer = styled.View`
+  width: ${RFValue(120)}px;
+  height: ${RFValue(30)}px;
 `;
 export const Guildetitle = styled.Text`
   color: white;

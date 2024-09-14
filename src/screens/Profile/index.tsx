@@ -37,6 +37,8 @@ import {
   ModalPictureContainer,
   ModalText,
   ModalTextContainer,
+  GuildetitleContainer,
+  AddFoodContainer,
 } from './style';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import fotoPerfil from '../../assets/imagens/fotoperfil.png';
@@ -45,12 +47,13 @@ import {useAuth} from '../../hooks/auth';
 import {Loading} from '../../components/Loading';
 import PushNotification from 'react-native-push-notification';
 import {Image, Dimensions, FlatList, Modal, ScrollView} from 'react-native';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 interface Guia {
   id_guias: number;
   titulo: string;
   foto_url: string | 'https://apppid.s3.amazonaws.com/logo.png';
   id_usuario: number;
+  isIcon?: boolean;
 }
 
 export default function Profile() {
@@ -99,7 +102,7 @@ export default function Profile() {
 
   const getGuilde = async () => {
     try {
-      const response = await axios.get(`/buscar/guias/${user.id}`);
+      const response = await axios.get(`/buscar/capas/guias/${user.id}`);
       setGuias(response.data);
       response.data.forEach((guia: Guia) => {
         Image.getSize(
@@ -183,9 +186,17 @@ export default function Profile() {
   const renderItem = ({item}: {item: Guia}) => {
     return (
       <GuideButton onPress={() => handleGuidePress(item.id_guias)}>
-        {/* <Guildetitle>{item.titulo}</Guildetitle> */}
         <GuildeContainer>
-          <GuildeImage source={{uri: item.foto_url}} />
+          <GuildetitleContainer>
+            <Guildetitle adjustsFontSizeToFit numberOfLines={3}>
+              {item.titulo}
+            </Guildetitle>
+          </GuildetitleContainer>
+          <GuildeImage
+            source={{uri: item.foto_url}}
+            resizeMode="cover"
+            resizeMethod="scale"
+          />
         </GuildeContainer>
       </GuideButton>
     );
@@ -268,9 +279,30 @@ export default function Profile() {
           <FlatList
             nestedScrollEnabled={true}
             scrollEnabled={false}
-            data={guias}
-            renderItem={renderItem}
-            keyExtractor={item => item.id_guias.toString()}
+            data={[...guias, {isIcon: true} as Guia]} // Adiciona um item extra no final da lista
+            renderItem={({item}) => {
+              if (item.isIcon) {
+                // Renderiza o ícone
+                return (
+                  <AddFoodContainer>
+                    <Ionicons
+                      name="add"
+                      size={100}
+                      color="#934dd2"
+                      onPress={() => {
+                        setModalVisible(true);
+                      }}
+                    />
+                  </AddFoodContainer>
+                );
+              }
+
+              // Renderiza os outros itens normalmente
+              return renderItem({item: item as Guia});
+            }}
+            keyExtractor={(item, index) =>
+              item.isIcon ? `icon-${index}` : item.id_guias.toString()
+            }
             numColumns={2}
           />
         </GuideFlex>
