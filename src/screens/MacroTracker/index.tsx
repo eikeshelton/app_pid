@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {FlatList, ScrollView, Modal} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {FlatList, ScrollView, Modal, Dimensions} from 'react-native';
 import {
   Container,
   Navbar,
@@ -17,11 +17,16 @@ import {
   MealTitle,
   AddFoodContainer,
   DailyMacrosBoxGraphic,
+  FoodListContainer,
+  FoodName,
+  ModalBody,
+  ModalHeader,
 } from './style';
 import {InputComponent} from '../../components/Input';
 import CustomButton from '../../components/CustomizeButton';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {PieChart} from 'react-native-chart-kit';
+import api from '../../services/api';
 const meals = ['Café da Manhã', 'Almoço', 'Lanche da Tarde', 'Janta', 'Ceia'];
 interface FoodItem {
   name: string;
@@ -31,36 +36,50 @@ interface FoodItem {
   protein: number;
   fats: number;
 }
+interface FoodList {
+  id: number;
+  grupo: string;
+  descricao: string;
+  energia_kcal: number;
+  proteina_g: number;
+  carboidrato_g: number;
+  quantidade_g: number;
+  lipideos_g: number;
+}
 const MacroTracker = () => {
   const [selectedDay, setSelectedDay] = useState('Hoje');
   const [calories] = useState(0);
-  const [carbs] = useState(0);
-  const [protein] = useState(0);
-  const [fats] = useState(0);
+  const [carbs] = useState(30);
+  const [protein] = useState(50);
+  const [fats] = useState(20);
   const [mealData, setMealData] = useState<{[key: string]: FoodItem[]}>({});
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMeal, setSelectedMeal] = useState<string | null>(null);
   const [foodName, setFoodName] = useState('');
+  const [foodNameList, setFoodNameList] = useState<FoodList[]>([]);
+  const [MyfoodList, setMyFoodNameList] = useState<FoodList[]>([]);
   const [foodGrams, setFoodGrams] = useState('');
+  const width = Dimensions.get('window').width * 1;
+  const height = Dimensions.get('window').height * 0.18;
   const data = [
     {
-      name: 'Carboidrato',
-      population: 50,
+      name: 'Carboidratos',
+      population: carbs,
       color: '#934dd2',
       legendFontColor: '#7F7F7F',
       legendFontSize: 15,
     },
     {
-      name: 'Gordura',
-      population: 20,
+      name: 'Gorduras',
+      population: fats,
       color: '#FFFFFF',
       legendFontColor: '#7F7F7F',
       legendFontSize: 15,
     },
     {
-      name: 'Proteína',
-      population: 30,
+      name: 'Proteínas',
+      population: protein,
       color: '#303030',
       legendFontColor: '#7F7F7F',
       legendFontSize: 15,
@@ -71,35 +90,58 @@ const MacroTracker = () => {
     color: (opacity = 2) => `rgba(26, 255, 146, ${opacity})`,
     strokeWidth: 2, // optional, default 3
   };
-  const handleAddFood = () => {
-    if (foodName && foodGrams) {
-      const updatedMeal = mealData[selectedMeal!] || [];
-      const foodMacros: FoodItem = {
-        name: foodName,
-        grams: parseInt(foodGrams, 10),
-        calories: Math.floor(Math.random() * 20),
-        carbs: Math.floor(Math.random() * 10),
-        protein: Math.floor(Math.random() * 10),
-        fats: Math.floor(Math.random() * 10),
-      };
-      setMealData({
-        ...mealData,
-        [selectedMeal!]: [...updatedMeal, foodMacros],
-      });
-      setFoodName('');
-      setFoodGrams('');
-      setModalVisible(false);
-    }
-  };
 
-  const handleRemoveFood = (meal: string, index: number) => {
-    const updatedMeal = [...mealData[meal]];
-    updatedMeal.splice(index, 1);
-    setMealData({
-      ...mealData,
-      [meal]: updatedMeal,
-    });
+  const handleFoodList = React.useCallback(async () => {
+    try {
+      const response = await api.get(`/alimentos/${foodName}`);
+      if (response.data) {
+        setFoodNameList(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [foodName]);
+
+  useEffect(() => {
+    if (foodName.length > 0) {
+      handleFoodList();
+    } else {
+      setFoodNameList([]);
+    }
+  }, [foodName, handleFoodList]);
+  const addToFoodList = (item: FoodList) => {
+    const foodGramsNumber = foodGrams ? parseFloat(foodGrams) : 1;
+    const adjustedItem = {
+      ...item,
+      proteina_g: (item.proteina_g * foodGramsNumber) / 100,
+      carboidrato_g: (item.carboidrato_g * foodGramsNumber) / 100,
+      lipideos_g: (item.lipideos_g * foodGramsNumber) / 100,
+      quantidade_g: (item.quantidade_g * foodGramsNumber) / 100,
+    };
+    setMyFoodNameList(prevList => [...prevList, adjustedItem]);
   };
+  const renderItem = ({item}: {item: FoodList}) => (
+    <FoodListContainer onPress={() => addToFoodList(item)}>
+      <FoodName>Nome: {item.descricao}</FoodName>
+      <FoodName>Proteína: {item.proteina_g} gramas</FoodName>
+      <FoodName>Carboidratos: {item.carboidrato_g} gramas</FoodName>
+      <FoodName>Gorduras: {item.lipideos_g} gramas</FoodName>
+      <FoodName>
+        Quantidades de nutrientes para {item.quantidade_g} gramas
+      </FoodName>
+    </FoodListContainer>
+  );
+  const renderItemMyList = ({item}: any) => (
+    <FoodListContainer>
+      <FoodName>Nome: {item.descricao}</FoodName>
+      <FoodName>Proteína: {item.proteina_g} gramas</FoodName>
+      <FoodName>Carboidratos: {item.carboidrato_g} gramas</FoodName>
+      <FoodName>Gorduras: {item.lipideos_g} gramas</FoodName>
+      <FoodName>
+        Quantidades de nutrientes para {item.quantidade_g} gramas
+      </FoodName>
+    </FoodListContainer>
+  );
 
   return (
     <Container>
@@ -113,19 +155,26 @@ const MacroTracker = () => {
         <DailyDisplay>
           <DailyCalories>Calorias Diárias</DailyCalories>
           <DailyCalories>{calories} kcal</DailyCalories>
-
+          <DailyMacrosBox>
+            <DailyMacros>Carb: {carbs} g</DailyMacros>
+            <DailyMacros>Prot: {protein} g</DailyMacros>
+            <DailyMacros>Gord: {fats} g</DailyMacros>
+          </DailyMacrosBox>
           <DailyMacrosBoxGraphic>
             <PieChart
               data={data}
-              width={240}
-              height={150}
+              width={width}
+              height={height}
               accessor={'population'}
               chartConfig={chartConfig}
               backgroundColor={'transparent'}
               center={[0, 0]}
               paddingLeft="0"
               absolute={false}
-              style={{flexDirection: 'column', alignItems: 'center'}}
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
             />
           </DailyMacrosBoxGraphic>
         </DailyDisplay>
@@ -183,25 +232,39 @@ const MacroTracker = () => {
 
         <Modal visible={modalVisible} animationType="slide">
           <ModalContainer>
-            <InputComponent
-              placeholder="Nome do alimento"
-              placeholderTextColor={'silver'}
-              value={foodName}
-              onChangeText={setFoodName}
-              isFocused={false}
-            />
-            <InputComponent
-              placeholder="Quantidade (g)"
-              placeholderTextColor={'silver'}
-              keyboardType="numeric"
-              value={foodGrams}
-              onChangeText={setFoodGrams}
-              isFocused={false}
-            />
-            <CustomButton texto="Adicionar" onPress={handleAddFood} />
-            <CustomButton
-              texto="Cancelar"
-              onPress={() => setModalVisible(false)}
+            <FlatList
+              data={foodNameList}
+              renderItem={renderItem}
+              keyExtractor={item => item.id.toString()}
+              ListHeaderComponent={
+                <ModalHeader>
+                  <InputComponent
+                    placeholder="Nome do alimento"
+                    placeholderTextColor={'silver'}
+                    value={foodName}
+                    onChangeText={setFoodName}
+                    isFocused={false}
+                  />
+                </ModalHeader>
+              }
+              ListFooterComponent={
+                <ModalBody>
+                  <InputComponent
+                    placeholder="Quantidade (g)"
+                    placeholderTextColor={'silver'}
+                    keyboardType="numeric"
+                    value={foodGrams}
+                    onChangeText={setFoodGrams}
+                    isFocused={false}
+                  />
+                  <CustomButton texto="Adicionar" />
+                  <FlatList data={MyfoodList} renderItem={renderItemMyList} />
+                  <CustomButton
+                    texto="Cancelar"
+                    onPress={() => setModalVisible(false)}
+                  />
+                </ModalBody>
+              }
             />
           </ModalContainer>
         </Modal>

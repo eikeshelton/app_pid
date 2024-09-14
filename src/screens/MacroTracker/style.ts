@@ -95,10 +95,26 @@ export const FoodItem = styled.View`
   padding: 0 ${RFValue(20)}px;
 `;
 
-export const ModalContainer = styled.View`
+export const ModalContainer = styled.SafeAreaView`
   flex: 1;
-  justify-content: center;
-  padding: ${RFValue(20)}px;
+
   background-color: ${({theme}) => theme.colors.backgroundColor};
+  color: ${({theme}) => theme.colors.colorWhite};
+`;
+export const ModalHeader = styled.View`
+  padding: ${RFValue(25)}px ${RFValue(20)}px 0 ${RFValue(20)}px;
+`;
+export const ModalBody = styled.View`
+  padding: ${RFValue(20)}px;
+  justify-content: space-between;
+`;
+export const FoodListContainer = styled.TouchableOpacity`
+  border: solid ${({theme}) => theme.colors.primary};
+  border-radius: 16px;
+  margin-bottom: ${RFValue(8)}px;
+  padding: ${RFValue(8)}px 0 ${RFValue(8)}px ${RFValue(8)}px;
+`;
+
+export const FoodName = styled.Text`
   color: ${({theme}) => theme.colors.colorWhite};
 `;

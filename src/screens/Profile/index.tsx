@@ -134,6 +134,12 @@ export default function Profile() {
 
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       if (remoteMessage.notification) {
+        // Verifique se o campo android e imageUrl existem
+        const imageUrl = remoteMessage.notification.android?.imageUrl || '';
+
+        // Log para verificar o conteúdo da notificação, incluindo a imagem
+        console.log('Remote Message Notification:', remoteMessage.notification);
+
         setFocado(true);
         PushNotification.localNotification({
           channelId: 'notificacao',
@@ -141,7 +147,7 @@ export default function Profile() {
           message: remoteMessage.notification.body || '',
           playSound: true,
           importance: 'default',
-          largeIcon: '',
+          largeIconUrl: imageUrl, // Utilizando a imagem corretamente
           smallIcon: 'custon_smart_icon',
         });
       }
