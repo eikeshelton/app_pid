@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from '../../services/api';
 import messaging from '@react-native-firebase/messaging';
+import CustomButton from '../../components/CustomizeButton';
 import LiteButton from '../../components/LiteButton';
 import {
   Container,
@@ -29,13 +30,21 @@ import {
   GuildeImage,
   GuildeContainer,
   GuideButton,
+  GuideFlex,
+  ModalContainer,
+  ModalTitle,
+  ModalPicture,
+  ModalPictureContainer,
+  ModalText,
+  ModalTextContainer,
 } from './style';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import fotoPerfil from '../../assets/imagens/fotoperfil.png';
+import fotoGuia from '../../assets/imagens/hobbieguia.jpg';
 import {useAuth} from '../../hooks/auth';
 import {Loading} from '../../components/Loading';
 import PushNotification from 'react-native-push-notification';
-import {Image, Dimensions, FlatList} from 'react-native';
+import {Image, Dimensions, FlatList, Modal, ScrollView} from 'react-native';
 
 interface Guia {
   id_guias: number;
@@ -54,6 +63,8 @@ export default function Profile() {
   const [imageSizes, setImageSizes] = useState<{
     [key: number]: {width: number; height: number};
   }>({});
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   const screenWidth = Dimensions.get('window').width;
   const screenHeight = Dimensions.get('window').height;
@@ -164,24 +175,17 @@ export default function Profile() {
     navigation.navigate('Requests');
   };
 
-  const handleGuidePress = () => {
-    console.log('ok');
+  const handleGuidePress = (item: any) => {
+    setModalVisible(true);
+    console.log(item);
   };
 
   const renderItem = ({item}: {item: Guia}) => {
-    const size = imageSizes[item.id_guias] || {width: screenWidth, height: 200};
-
     return (
-      <GuideButton onPress={() => handleGuidePress()}>
+      <GuideButton onPress={() => handleGuidePress(item.id_guias)}>
+        {/* <Guildetitle>{item.titulo}</Guildetitle> */}
         <GuildeContainer>
-          <Guildetitle>{item.titulo}</Guildetitle>
-
-          <GuildeImage
-            source={{uri: item.foto_url}}
-            resizeMode="contain"
-            width={size.width}
-            height={size.height}
-          />
+          <GuildeImage source={{uri: item.foto_url}} />
         </GuildeContainer>
       </GuideButton>
     );
@@ -191,79 +195,107 @@ export default function Profile() {
     <Loading />
   ) : (
     <ScreenBackground>
-      <Container>
-        <Header>
-          <RequestsButton onPress={handleRequests}>
-            <RequestsIcon name="addusergroup" focado={focado} />
-            <Number focado={focado}>{1}</Number>
-          </RequestsButton>
-          <SettingContainer>
-            <SettingButton onPress={handleSettings}>
-              <SettingIcon name="menu" />
-            </SettingButton>
-          </SettingContainer>
-        </Header>
+      <ScrollView>
+        <Container>
+          <Header>
+            <RequestsButton onPress={handleRequests}>
+              <RequestsIcon name="addusergroup" focado={focado} />
+              <Number focado={focado}>{1}</Number>
+            </RequestsButton>
+            <SettingContainer>
+              <SettingButton onPress={handleSettings}>
+                <SettingIcon name="menu" />
+              </SettingButton>
+            </SettingContainer>
+          </Header>
 
-        <PictureContainer>
-          {user.foto_perfil ? (
-            <ProfilePicture
-              source={{uri: user.foto_perfil}}
-              resizeMode="cover"
+          <PictureContainer>
+            {user.foto_perfil ? (
+              <ProfilePicture
+                source={{uri: user.foto_perfil}}
+                resizeMode="cover"
+              />
+            ) : (
+              <ProfilePicture source={fotoPerfil} resizeMode="cover" />
+            )}
+            <ProfileName>{user.nome_usuario}</ProfileName>
+          </PictureContainer>
+
+          <CountContainer>
+            <ContainerPubFoll>
+              <ContainerPub>
+                <TextNumber>8</TextNumber>
+                <TextPubFoll>Publicações</TextPubFoll>
+              </ContainerPub>
+              <ContainerFollowers
+                onPress={() =>
+                  navigation.navigate('Followers_Followed', {
+                    type: 'seguidores',
+                    id: user.id,
+                  })
+                }>
+                <TextNumber>{user.seguidores}</TextNumber>
+                <TextPubFoll>Seguidores</TextPubFoll>
+              </ContainerFollowers>
+
+              <ContainerFollowed
+                onPress={() =>
+                  navigation.navigate('Followers_Followed', {
+                    type: 'seguidos',
+                    id: user.id,
+                  })
+                }>
+                <TextNumber>{user.seguidos}</TextNumber>
+                <TextPubFoll>Seguidos</TextPubFoll>
+              </ContainerFollowed>
+            </ContainerPubFoll>
+          </CountContainer>
+        </Container>
+        <ContainerNameBio>
+          <TextBio>{user.bio}</TextBio>
+        </ContainerNameBio>
+        <ButtonFollow>
+          <LiteButton
+            texto="Editar Perfil"
+            onPress={() => navigation.navigate('EditProfile')}
+          />
+          <LiteButton
+            texto="Abrir Chat"
+            onPress={() => navigation.navigate('ScreenChat')}
+          />
+        </ButtonFollow>
+        <GuideFlex>
+          <FlatList
+            nestedScrollEnabled={true}
+            scrollEnabled={false}
+            data={guias}
+            renderItem={renderItem}
+            keyExtractor={item => item.id_guias.toString()}
+            numColumns={2}
+          />
+        </GuideFlex>
+        <Modal visible={modalVisible} animationType="slide">
+          <ModalContainer>
+            <ModalTitle>Título da Guia</ModalTitle>
+            <ModalPictureContainer>
+              <ModalPicture source={fotoGuia} resizeMode="cover" />
+            </ModalPictureContainer>
+            <ModalTextContainer>
+              <ModalText>
+                Texto da Guia: Lorem ipsum dolor sit amet, consectetur
+                adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                consequat.
+              </ModalText>
+            </ModalTextContainer>
+            <CustomButton
+              texto="Cancelar"
+              onPress={() => setModalVisible(false)}
             />
-          ) : (
-            <ProfilePicture source={fotoPerfil} resizeMode="cover" />
-          )}
-          <ProfileName>{user.nome_usuario}</ProfileName>
-        </PictureContainer>
-
-        <CountContainer>
-          <ContainerPubFoll>
-            <ContainerPub>
-              <TextNumber>8</TextNumber>
-              <TextPubFoll>Publicações</TextPubFoll>
-            </ContainerPub>
-            <ContainerFollowers
-              onPress={() =>
-                navigation.navigate('Followers_Followed', {
-                  type: 'seguidores',
-                  id: user.id,
-                })
-              }>
-              <TextNumber>{user.seguidores}</TextNumber>
-              <TextPubFoll>Seguidores</TextPubFoll>
-            </ContainerFollowers>
-
-            <ContainerFollowed
-              onPress={() =>
-                navigation.navigate('Followers_Followed', {
-                  type: 'seguidos',
-                  id: user.id,
-                })
-              }>
-              <TextNumber>{user.seguidos}</TextNumber>
-              <TextPubFoll>Seguidos</TextPubFoll>
-            </ContainerFollowed>
-          </ContainerPubFoll>
-        </CountContainer>
-      </Container>
-      <ContainerNameBio>
-        <TextBio>{user.bio}</TextBio>
-      </ContainerNameBio>
-      <ButtonFollow>
-        <LiteButton
-          texto="Editar Perfil"
-          onPress={() => navigation.navigate('EditProfile')}
-        />
-        <LiteButton
-          texto="Abrir Chat"
-          onPress={() => navigation.navigate('ScreenChat')}
-        />
-      </ButtonFollow>
-      <FlatList
-        data={guias}
-        renderItem={renderItem}
-        keyExtractor={item => item.id_guias.toString()}
-      />
+          </ModalContainer>
+        </Modal>
+      </ScrollView>
     </ScreenBackground>
   );
 }

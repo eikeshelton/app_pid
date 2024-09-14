@@ -8,14 +8,17 @@ export const Container = styled(Modal)`
   margin: 0;
 `;
 export const ModalContent = styled.View`
-  background-color: white;
+  background-color: ${({theme}) => theme.colors.backgroundColor};
+  border-top-color: ${({theme}) => theme.colors.primary};
+  border-top-width: 2px;
   height: 60%;
-  padding: 0 24px 24px 24px;
+  padding: ${RFValue(20)}px;
 `;
 export const Title = styled.Text`
   color: ${({theme}) => theme.colors.primary};
   text-align: center;
   font-size: ${RFValue(20)}px;
+  padding: 0 0 ${RFValue(20)}px 0;
 `;
 export const PictureContainer = styled.TouchableOpacity`
   align-items: center;

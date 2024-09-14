@@ -1,9 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import axios from '../../services/api';
 import {useRoute} from '@react-navigation/native';
-import {Body, Container, Name, ProfilePicture} from './styles';
+import {
+  Body,
+  Container,
+  ProfilePicture,
+  Text,
+  Title,
+  UserContainer,
+} from './styles';
 import BackButton from '../../components/BackButton';
 import {Loading} from '../../components/Loading';
+import {ScrollView} from 'react-native';
 
 interface Params {
   type: string; // Supondo que type seja uma string
@@ -16,6 +24,7 @@ export function Followers_Followed() {
   const {type, id} = params;
   const [userData, setUserData] = useState<any[]>([]); // Estado para armazenar os dados dos usuários seguidos
   const [loading, setLoading] = useState(true);
+  const [title, setTitle] = useState('Usuários Seguidos');
   useEffect(() => {
     // Função para buscar usuários seguidos se type for 'seguidos'
     async function fetchFollowedUsers() {
@@ -26,6 +35,7 @@ export function Followers_Followed() {
             throw new Error('Não foi possível obter os usuários seguidos');
           }
           setUserData(response.data);
+          setTitle('Usuários Seguidos');
           setLoading(false); // Armazena os dados dos usuários seguidos no estado
         } catch (error) {
           console.error('Erro ao buscar usuários seguidos:', error);
@@ -38,6 +48,7 @@ export function Followers_Followed() {
             throw new Error('Não foi possível obter os usuários seguidore');
           }
           setUserData(response.data);
+          setTitle('Seguidores');
           setLoading(false); // Armazena os dados dos usuários seguidos no estado
         } catch (error) {
           console.error('Erro ao buscar usuários seguidores:', error);
@@ -58,14 +69,21 @@ export function Followers_Followed() {
   ) : (
     <Container>
       <BackButton />
-      {userData.map(user => (
-        <Body key={user.id_usuario}>
-          <ProfilePicture source={{uri: user.foto_perfil}} resizeMode="cover" />
-          <Name>ID: {user.id_usuario}</Name>
-          <Name>Nome: {user.nome_usuario}</Name>
-          <Name>Tipo: {user.tipo_usuario}</Name>
-        </Body>
-      ))}
+      <Title>{title}</Title>
+      <ScrollView>
+        <UserContainer>
+          {userData.map(user => (
+            <Body key={user.id_usuario}>
+              <ProfilePicture
+                source={{uri: user.foto_perfil}}
+                resizeMode="cover"
+              />
+              <Text>{user.nome_usuario}</Text>
+              <Text>{user.tipo_usuario}</Text>
+            </Body>
+          ))}
+        </UserContainer>
+      </ScrollView>
     </Container>
   );
 }
