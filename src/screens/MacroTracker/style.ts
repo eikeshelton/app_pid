@@ -89,10 +89,16 @@ export const AddFoodContainer = styled.View`
 `;
 
 export const FoodItem = styled.View`
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   margin-bottom: ${RFValue(10)}px;
-  padding: 0 ${RFValue(20)}px;
+  padding: 0 ${RFValue(0)}px 0 ${RFValue(20)}px;
+  border: solid 1px ${({theme}) => theme.colors.primary};
+`;
+export const FoodItemNameContainer = styled.View`
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 export const ModalContainer = styled.SafeAreaView`

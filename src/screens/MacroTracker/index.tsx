@@ -21,6 +21,7 @@ import {
   FoodName,
   ModalBody,
   ModalHeader,
+  FoodItemNameContainer,
 } from './style';
 import {InputComponent} from '../../components/Input';
 import CustomButton from '../../components/CustomizeButton';
@@ -48,49 +49,85 @@ interface FoodList {
 }
 const MacroTracker = () => {
   const [selectedDay, setSelectedDay] = useState('Hoje');
-  const [calories] = useState(0);
-  const [carbs] = useState(30);
-  const [protein] = useState(50);
-  const [fats] = useState(20);
+  const [calories, setCalories] = useState(0);
+  const [carbs, setCarbs] = useState(0);
+  const [protein, setProtein] = useState(0);
+  const [fats, setFats] = useState(0);
   const [mealData, setMealData] = useState<{[key: string]: FoodItem[]}>({});
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMeal, setSelectedMeal] = useState<string | null>(null);
   const [foodName, setFoodName] = useState('');
   const [foodNameList, setFoodNameList] = useState<FoodList[]>([]);
-  const [MyfoodList, setMyFoodNameList] = useState<FoodList[]>([]);
+  const [selectedFoodItem, setSelectedFoodItem] = useState<FoodList | null>(
+    null,
+  );
   const [foodGrams, setFoodGrams] = useState('');
   const width = Dimensions.get('window').width * 1;
   const height = Dimensions.get('window').height * 0.18;
+  const calculateTotals = () => {
+    const totalCarbs = Object.values(mealData)
+      .flat()
+      .reduce((acc, food) => acc + food.carbs, 0);
+    const totalProtein = Object.values(mealData)
+      .flat()
+      .reduce((acc, food) => acc + food.protein, 0);
+    const totalFats = Object.values(mealData)
+      .flat()
+      .reduce((acc, food) => acc + food.fats, 0);
+    const totalCalories = Object.values(mealData)
+      .flat()
+      .reduce((acc, food) => acc + food.calories, 0);
+
+    return {totalCarbs, totalProtein, totalFats, totalCalories};
+  };
+
+  const {totalCarbs, totalProtein, totalFats} = calculateTotals();
+  useEffect(() => {
+    const {totalCarbs, totalProtein, totalFats, totalCalories} =
+      calculateTotals();
+    setCarbs(totalCarbs);
+    setProtein(totalProtein);
+    setFats(totalFats);
+    setCalories(totalCalories);
+  }, [mealData]);
   const data = [
     {
       name: 'Carboidratos',
-      population: carbs,
+      population: totalCarbs,
       color: '#934dd2',
       legendFontColor: '#7F7F7F',
       legendFontSize: 15,
     },
     {
       name: 'Gorduras',
-      population: fats,
+      population: totalFats,
       color: '#FFFFFF',
       legendFontColor: '#7F7F7F',
       legendFontSize: 15,
     },
     {
       name: 'Proteínas',
-      population: protein,
+      population: totalProtein,
       color: '#303030',
       legendFontColor: '#7F7F7F',
       legendFontSize: 15,
     },
   ];
+
   const chartConfig = {
     backgroundGradientToOpacity: 0.5,
     color: (opacity = 2) => `rgba(26, 255, 146, ${opacity})`,
     strokeWidth: 2, // optional, default 3
   };
-
+  const handleRemoveFood = (meal: string, index: number) => {
+    const updatedMeal = [...mealData[meal]];
+    updatedMeal.splice(index, 1);
+    setMealData({
+      ...mealData,
+      [meal]: updatedMeal,
+    });
+  };
   const handleFoodList = React.useCallback(async () => {
     try {
       const response = await api.get(`/alimentos/${foodName}`);
@@ -107,42 +144,65 @@ const MacroTracker = () => {
       handleFoodList();
     } else {
       setFoodNameList([]);
+      setFoodGrams('');
     }
   }, [foodName, handleFoodList]);
   const addToFoodList = (item: FoodList) => {
-    const foodGramsNumber = foodGrams ? parseFloat(foodGrams) : 1;
-    const adjustedItem = {
-      ...item,
-      proteina_g: (item.proteina_g * foodGramsNumber) / 100,
-      carboidrato_g: (item.carboidrato_g * foodGramsNumber) / 100,
-      lipideos_g: (item.lipideos_g * foodGramsNumber) / 100,
-      quantidade_g: (item.quantidade_g * foodGramsNumber) / 100,
-    };
-    setMyFoodNameList(prevList => [...prevList, adjustedItem]);
+    setSelectedFoodItem(item);
+    setFoodName(item.descricao);
+    setFoodGrams(item.quantidade_g.toString());
   };
   const renderItem = ({item}: {item: FoodList}) => (
     <FoodListContainer onPress={() => addToFoodList(item)}>
       <FoodName>Nome: {item.descricao}</FoodName>
-      <FoodName>Proteína: {item.proteina_g} gramas</FoodName>
-      <FoodName>Carboidratos: {item.carboidrato_g} gramas</FoodName>
-      <FoodName>Gorduras: {item.lipideos_g} gramas</FoodName>
+      <FoodName>Proteína: {item.proteina_g.toFixed(2)} gramas</FoodName>
+      <FoodName>Carboidratos: {item.carboidrato_g.toFixed(2)} gramas</FoodName>
+      <FoodName>Gorduras: {item.lipideos_g.toFixed(2)} gramas</FoodName>
       <FoodName>
-        Quantidades de nutrientes para {item.quantidade_g} gramas
+        Quantidades de nutrientes para {item.quantidade_g.toFixed(2)} gramas
       </FoodName>
     </FoodListContainer>
   );
-  const renderItemMyList = ({item}: any) => (
-    <FoodListContainer>
-      <FoodName>Nome: {item.descricao}</FoodName>
-      <FoodName>Proteína: {item.proteina_g} gramas</FoodName>
-      <FoodName>Carboidratos: {item.carboidrato_g} gramas</FoodName>
-      <FoodName>Gorduras: {item.lipideos_g} gramas</FoodName>
-      <FoodName>
-        Quantidades de nutrientes para {item.quantidade_g} gramas
-      </FoodName>
-    </FoodListContainer>
-  );
+  const addToMeal = () => {
+    if (selectedMeal && foodGrams && selectedFoodItem) {
+      // Verifique se a quantidade em gramas é um número válido
+      const grams = parseFloat(foodGrams);
+      if (isNaN(grams) || grams <= 0) {
+        console.log('Quantidade inválida');
+        return;
+      }
 
+      // Calcule os valores nutricionais com base na quantidade informada
+      const newFood: FoodItem = {
+        name: selectedFoodItem.descricao,
+        calories:
+          selectedFoodItem.energia_kcal *
+          (grams / selectedFoodItem.quantidade_g),
+        grams: grams,
+        carbs:
+          selectedFoodItem.carboidrato_g *
+          (grams / selectedFoodItem.quantidade_g),
+        protein:
+          selectedFoodItem.proteina_g * (grams / selectedFoodItem.quantidade_g),
+        fats:
+          selectedFoodItem.lipideos_g * (grams / selectedFoodItem.quantidade_g),
+      };
+
+      // Adicione o alimento à refeição
+      setMealData(prevData => ({
+        ...prevData,
+        [selectedMeal]: [...(prevData[selectedMeal] || []), newFood],
+      }));
+
+      // Limpa os campos do modal e fecha o modal após adicionar
+      setFoodName('');
+      setFoodGrams('');
+      setSelectedFoodItem(null);
+      setModalVisible(false);
+    } else {
+      console.log('Selecione uma refeição e informe a quantidade');
+    }
+  };
   return (
     <Container>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -154,11 +214,11 @@ const MacroTracker = () => {
 
         <DailyDisplay>
           <DailyCalories>Calorias Diárias</DailyCalories>
-          <DailyCalories>{calories} kcal</DailyCalories>
+          <DailyCalories>{calories.toFixed(3)} kcal</DailyCalories>
           <DailyMacrosBox>
-            <DailyMacros>Carb: {carbs} g</DailyMacros>
-            <DailyMacros>Prot: {protein} g</DailyMacros>
-            <DailyMacros>Gord: {fats} g</DailyMacros>
+            <DailyMacros>Carb: {carbs.toFixed(2)} g</DailyMacros>
+            <DailyMacros>Prot: {protein.toFixed(2)} g</DailyMacros>
+            <DailyMacros>Gord: {fats.toFixed(2)} g</DailyMacros>
           </DailyMacrosBox>
           <DailyMacrosBoxGraphic>
             <PieChart
@@ -200,17 +260,23 @@ const MacroTracker = () => {
               data={mealData[meal]}
               renderItem={({item, index}) => (
                 <FoodItem>
-                  <MealText>
-                    {item.name} ({item.grams}g)
-                  </MealText>
-                  <MealText>{`${item.calories}kcal`}</MealText>
-                  <MealText>{`C: ${item.carbs}g P: ${item.protein}g G: ${item.fats}g`}</MealText>
-                  <Ionicons
-                    name="close"
-                    size={20}
-                    color="white"
-                    onPress={() => handleRemoveFood(meal, index)}
-                  />
+                  <FoodItemNameContainer>
+                    <MealText>
+                      {item.name} ({item.grams}g)
+                    </MealText>
+                    <Ionicons
+                      name="close"
+                      size={20}
+                      color="white"
+                      onPress={() => handleRemoveFood(meal, index)}
+                    />
+                  </FoodItemNameContainer>
+                  <MealText>{`${item.calories.toFixed(3)}kcal`}</MealText>
+                  <MealText>{`C: ${item.carbs.toFixed(
+                    2,
+                  )}g P: ${item.protein.toFixed(2)}g G: ${item.fats.toFixed(
+                    2,
+                  )}g`}</MealText>
                 </FoodItem>
               )}
               keyExtractor={(item, index) => index.toString()}
@@ -257,8 +323,8 @@ const MacroTracker = () => {
                     onChangeText={setFoodGrams}
                     isFocused={false}
                   />
-                  <CustomButton texto="Adicionar" />
-                  <FlatList data={MyfoodList} renderItem={renderItemMyList} />
+                  <CustomButton texto="Adicionar" onPress={addToMeal} />
+
                   <CustomButton
                     texto="Cancelar"
                     onPress={() => setModalVisible(false)}
