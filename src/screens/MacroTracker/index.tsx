@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, ScrollView, Modal, Dimensions} from 'react-native';
+import {FlatList, ScrollView, Modal, Dimensions, Text} from 'react-native';
 import {
   Container,
   Navbar,
@@ -27,13 +27,19 @@ import {InputComponent} from '../../components/Input';
 import CustomButton from '../../components/CustomizeButton';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {PieChart} from 'react-native-chart-kit';
+import {addDays, subDays, format} from 'date-fns';
 import api from '../../services/api';
-const meals = ['Café da Manhã', 'Almoço', 'Lanche da Tarde', 'Janta', 'Ceia'];
-interface FoodItem {
-  name: string;
+import {useAuth} from '../../hooks/auth';
+
+interface FoodItemInterface {
+  id_refeicao?: number;
+  alimento_usuario_id: number;
+  id_alimento: number;
   calories: number;
-  grams: number;
+  id: number;
   carbs: number;
+  name: string;
+  grams: number;
   protein: number;
   fats: number;
 }
@@ -47,16 +53,23 @@ interface FoodList {
   quantidade_g: number;
   lipideos_g: number;
 }
+interface Meals {
+  nome: string;
+  descricao?: string;
+  id: number;
+}
 const MacroTracker = () => {
-  const [selectedDay, setSelectedDay] = useState('Hoje');
+  const {user} = useAuth();
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [calories, setCalories] = useState(0);
   const [carbs, setCarbs] = useState(0);
   const [protein, setProtein] = useState(0);
   const [fats, setFats] = useState(0);
-  const [mealData, setMealData] = useState<{[key: string]: FoodItem[]}>({});
-
+  const [mealData, setMealData] = useState<FoodItemInterface[]>([]);
+  const [meals, setMeals] = useState<Meals[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMeal, setSelectedMeal] = useState<string | null>(null);
+  const [selectedMealId, setSelectedMealId] = useState(Number);
   const [foodName, setFoodName] = useState('');
   const [foodNameList, setFoodNameList] = useState<FoodList[]>([]);
   const [selectedFoodItem, setSelectedFoodItem] = useState<FoodList | null>(
@@ -65,50 +78,40 @@ const MacroTracker = () => {
   const [foodGrams, setFoodGrams] = useState('');
   const width = Dimensions.get('window').width * 1;
   const height = Dimensions.get('window').height * 0.18;
-  const calculateTotals = () => {
-    const totalCarbs = Object.values(mealData)
-      .flat()
-      .reduce((acc, food) => acc + food.carbs, 0);
-    const totalProtein = Object.values(mealData)
-      .flat()
-      .reduce((acc, food) => acc + food.protein, 0);
-    const totalFats = Object.values(mealData)
-      .flat()
-      .reduce((acc, food) => acc + food.fats, 0);
-    const totalCalories = Object.values(mealData)
-      .flat()
-      .reduce((acc, food) => acc + food.calories, 0);
 
-    return {totalCarbs, totalProtein, totalFats, totalCalories};
+  useEffect(() => {
+    fetchDataTotal(); // Atualiza os dados da refeição quando selectedDate mudar
+  }, [selectedDate]);
+
+  const goToPreviousDay = () => {
+    setSelectedDate(prevDate => subDays(prevDate, 1));
   };
 
-  const {totalCarbs, totalProtein, totalFats} = calculateTotals();
-  useEffect(() => {
-    const {totalCarbs, totalProtein, totalFats, totalCalories} =
-      calculateTotals();
-    setCarbs(totalCarbs);
-    setProtein(totalProtein);
-    setFats(totalFats);
-    setCalories(totalCalories);
-  }, [mealData]);
+  // Função para atualizar a data para o próximo dia
+  const goToNextDay = () => {
+    setSelectedDate(prevDate => addDays(prevDate, 1));
+  };
+
+  // Formata a data para exibição
+  const formattedDate = format(selectedDate, 'dd/MM/yyyy');
   const data = [
     {
       name: 'Carboidratos',
-      population: totalCarbs,
+      population: carbs,
       color: '#934dd2',
       legendFontColor: '#7F7F7F',
       legendFontSize: 15,
     },
     {
       name: 'Gorduras',
-      population: totalFats,
+      population: fats,
       color: '#FFFFFF',
       legendFontColor: '#7F7F7F',
       legendFontSize: 15,
     },
     {
       name: 'Proteínas',
-      population: totalProtein,
+      population: protein,
       color: '#303030',
       legendFontColor: '#7F7F7F',
       legendFontSize: 15,
@@ -120,13 +123,16 @@ const MacroTracker = () => {
     color: (opacity = 2) => `rgba(26, 255, 146, ${opacity})`,
     strokeWidth: 2, // optional, default 3
   };
-  const handleRemoveFood = (meal: string, index: number) => {
-    const updatedMeal = [...mealData[meal]];
+  const handleRemoveFood = (mealId: number, index: number) => {
+    const updatedMeal = mealData.filter(
+      foodItem => foodItem.id_refeicao === mealId,
+    );
     updatedMeal.splice(index, 1);
-    setMealData({
-      ...mealData,
-      [meal]: updatedMeal,
-    });
+
+    const newMealData = mealData
+      .filter(foodItem => foodItem.id_refeicao !== mealId)
+      .concat(updatedMeal);
+    setMealData(newMealData);
   };
   const handleFoodList = React.useCallback(async () => {
     try {
@@ -147,6 +153,54 @@ const MacroTracker = () => {
       setFoodGrams('');
     }
   }, [foodName, handleFoodList]);
+
+  const fetchData = async () => {
+    try {
+      const response = await api.get('/buscar/id/refeicao');
+      if (response.data) {
+        setMeals(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const fetchmealData = async () => {
+    try {
+      const formattedDateForApi = format(selectedDate, 'yyyy-MM-dd');
+      const response = await api.post('/buscar/info/alimento', {
+        id_usuario: user.id,
+        data: formattedDateForApi,
+      });
+      if (response.data) {
+        setMealData(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const fetchDataTotal = async () => {
+    try {
+      const formattedDateForApi = format(selectedDate, 'yyyy-MM-dd');
+      const response = await api.get(
+        `/refeicoes/${user.id}/${formattedDateForApi}`,
+      );
+      const data = response.data;
+      if (data) {
+        setCalories(data.total_energia_kcal);
+        setCarbs(data.total_carboidrato_g);
+        setProtein(data.total_proteina_g);
+        setFats(data.total_lipideos_g);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchData(); // Chame a função async
+    fetchmealData();
+    fetchDataTotal();
+  }, [calories, modalVisible]);
+
   const addToFoodList = (item: FoodList) => {
     setSelectedFoodItem(item);
     setFoodName(item.descricao);
@@ -163,36 +217,30 @@ const MacroTracker = () => {
       </FoodName>
     </FoodListContainer>
   );
+  const fetchIdRefeicao = async () => {
+    try {
+      const response = await api.post('/refeicoes/alimentos/', {
+        id_usuario: user.id,
+        refeicao_id: selectedMealId,
+        quantidade: parseInt(foodGrams, 10),
+        alimento_id: selectedFoodItem?.id,
+      });
+      if (response.data) {
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const addToMeal = () => {
+    fetchIdRefeicao();
     if (selectedMeal && foodGrams && selectedFoodItem) {
       // Verifique se a quantidade em gramas é um número válido
       const grams = parseFloat(foodGrams);
       if (isNaN(grams) || grams <= 0) {
-        console.log('Quantidade inválida');
         return;
       }
 
       // Calcule os valores nutricionais com base na quantidade informada
-      const newFood: FoodItem = {
-        name: selectedFoodItem.descricao,
-        calories:
-          selectedFoodItem.energia_kcal *
-          (grams / selectedFoodItem.quantidade_g),
-        grams: grams,
-        carbs:
-          selectedFoodItem.carboidrato_g *
-          (grams / selectedFoodItem.quantidade_g),
-        protein:
-          selectedFoodItem.proteina_g * (grams / selectedFoodItem.quantidade_g),
-        fats:
-          selectedFoodItem.lipideos_g * (grams / selectedFoodItem.quantidade_g),
-      };
-
-      // Adicione o alimento à refeição
-      setMealData(prevData => ({
-        ...prevData,
-        [selectedMeal]: [...(prevData[selectedMeal] || []), newFood],
-      }));
 
       // Limpa os campos do modal e fecha o modal após adicionar
       setFoodName('');
@@ -207,9 +255,9 @@ const MacroTracker = () => {
     <Container>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Navbar>
-          <Arrow onPress={() => setSelectedDay('Ontem')}>{'<'}</Arrow>
-          <Day>{selectedDay}</Day>
-          <Arrow onPress={() => setSelectedDay('Amanhã')}>{'>'}</Arrow>
+          <Arrow onPress={goToPreviousDay}>{'<'}</Arrow>
+          <Day>{formattedDate}</Day>
+          <Arrow onPress={goToNextDay}>{'>'}</Arrow>
         </Navbar>
 
         <DailyDisplay>
@@ -238,18 +286,25 @@ const MacroTracker = () => {
             />
           </DailyMacrosBoxGraphic>
         </DailyDisplay>
-
         {meals.map(meal => (
-          <MealContainer key={meal}>
+          <MealContainer key={meal.id}>
             <MealTitleContainer>
-              <MealTitle>{meal}</MealTitle>
               <MealTitle>
-                {' '}
-                {mealData[meal]?.reduce(
-                  (acc, food) => acc + food.calories,
-                  0,
-                ) || 0}{' '}
-                kcal
+                <Text>{meal.nome} </Text>
+              </MealTitle>
+              <MealTitle>
+                <Text>
+                  {(
+                    mealData
+                      .filter(foodItem => foodItem.id_refeicao === meal.id)
+                      .reduce(
+                        (acc: number, food: FoodItemInterface) =>
+                          acc + food.calories,
+                        0,
+                      ) || 0
+                  ).toFixed(3)}{' '}
+                  kcal
+                </Text>
               </MealTitle>
             </MealTitleContainer>
 
@@ -257,29 +312,38 @@ const MacroTracker = () => {
               showsVerticalScrollIndicator={false}
               scrollEnabled={false}
               nestedScrollEnabled={true}
-              data={mealData[meal]}
+              data={
+                mealData.filter(foodItem => foodItem.id_refeicao === meal.id) ||
+                []
+              }
               renderItem={({item, index}) => (
                 <FoodItem>
                   <FoodItemNameContainer>
                     <MealText>
-                      {item.name} ({item.grams}g)
+                      <Text>
+                        {item.name} ({item.grams}g)
+                      </Text>
                     </MealText>
                     <Ionicons
                       name="close"
                       size={20}
                       color="white"
-                      onPress={() => handleRemoveFood(meal, index)}
+                      onPress={() => handleRemoveFood(meal.id, index)}
                     />
                   </FoodItemNameContainer>
-                  <MealText>{`${item.calories.toFixed(3)}kcal`}</MealText>
-                  <MealText>{`C: ${item.carbs.toFixed(
-                    2,
-                  )}g P: ${item.protein.toFixed(2)}g G: ${item.fats.toFixed(
-                    2,
-                  )}g`}</MealText>
+                  <MealText>
+                    <Text>{`${item.calories.toFixed(3)}kcal`}</Text>
+                  </MealText>
+                  <MealText>
+                    <Text>{`C: ${item.carbs.toFixed(
+                      2,
+                    )}g P: ${item.protein.toFixed(2)}g G: ${item.fats.toFixed(
+                      2,
+                    )}g`}</Text>
+                  </MealText>
                 </FoodItem>
               )}
-              keyExtractor={(item, index) => index.toString()}
+              keyExtractor={item => item.alimento_usuario_id.toString()}
             />
 
             <AddFoodContainer>
@@ -288,7 +352,8 @@ const MacroTracker = () => {
                 size={40}
                 color="#934dd2"
                 onPress={() => {
-                  setSelectedMeal(meal);
+                  setSelectedMeal(meal.nome);
+                  setSelectedMealId(meal.id);
                   setModalVisible(true);
                 }}
               />
