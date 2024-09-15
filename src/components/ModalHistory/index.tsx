@@ -71,7 +71,7 @@ export function ModalHistory({showModal, onDismiss}: Props) {
       onBackButtonPress={onDismiss}
       onBackdropPress={onDismiss}>
       <ModalContent>
-        <Title>Pesquisados recentemente</Title>
+        <Title>Pesquisados Recentemente</Title>
         <FlatList
           data={registeredUsers}
           renderItem={renderItem}

@@ -8,6 +8,7 @@ import {
   RequestButtonText,
   RequestContainer,
   RequestContainerButton,
+  Title,
 } from './styles';
 import axios from '../../services/api';
 import {useAuth} from '../../hooks/auth';
@@ -16,6 +17,7 @@ import fotoPerfil from '../../assets/imagens/fotoperfil.png';
 import {FlatList} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Loading} from '../../components/Loading';
+import BackButton from '../../components/BackButton';
 export function Requests() {
   const {user} = useAuth();
   const [requests, Setrequests] = useState([]);
@@ -67,6 +69,7 @@ export function Requests() {
         ) : (
           <ProfilePicture source={fotoPerfil} resizeMode="contain" />
         )}
+        <Name>{item.nome_usuario}</Name>
         <Name>{item.login}</Name>
         <Name>{item.tipo_usuario}</Name>
       </PictureContainer>
@@ -87,6 +90,8 @@ export function Requests() {
     <Loading />
   ) : (
     <Container>
+      <BackButton />
+      <Title>Solicitações de Seguir</Title>
       <FlatList data={requests} renderItem={renderItem} />
     </Container>
   );

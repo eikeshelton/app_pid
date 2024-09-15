@@ -29,7 +29,7 @@ export const RequestsButton = styled.TouchableOpacity`
 `;
 
 export const RequestsIcon = styled(AntDesign)<iconsProps>`
-  color: ${({theme, focado}) => (focado ? theme.colors.primary : 'white')};
+  color: ${({theme}) => theme.colors.primary};
   font-size: ${RFValue(35)}px;
 `;
 export const Number = styled.Text<iconsProps>`
@@ -122,19 +122,74 @@ export const ChatIcon = styled(Entypo)`
   font-size: ${RFValue(40)}px;
 `;
 
-export const GuideButton = styled.TouchableOpacity``;
-export const GuildeContainer = styled.View``;
-export const GuildeImage = styled.ImageBackground<{
-  width: number;
-  height: number;
-}>`
-  width: ${({width}) => width}px;
-  height: ${({height}) => height}px;
-  justify-content: flex-end;
-  align-items: center;
+export const GuideFlex = styled.View`
+  padding: ${RFValue(6)}px ${RFValue(6)}px 0;
+`;
+export const AddFoodContainer = styled.View`
+  justify-content: center;
+  margin: 0 auto;
+  padding: 0 ${RFValue(20)}px;
+  margin-top: ${RFValue(10)}px;
+`;
+
+export const GuideButton = styled.TouchableOpacity`
+  margin: 0 ${RFValue(10)}px ${RFValue(16)}px;
+`;
+export const GuildeContainer = styled.View`
+  width: ${RFValue(120)}px;
+`;
+export const GuildeImage = styled.Image`
+  width: ${RFValue(120)}px;
+  height: ${RFValue(200)}px;
+  border-radius: ${RFValue(12)}px;
+`;
+export const GuildetitleContainer = styled.View`
+  width: ${RFValue(120)}px;
+  height: ${RFValue(30)}px;
 `;
 export const Guildetitle = styled.Text`
   color: white;
   font-family: ${({theme}) => theme.fonts.bold};
-  font-size: ${RFValue(30)}px;
+  font-size: ${RFValue(16)}px;
+`;
+
+export const ModalContainer = styled.View`
+  flex: 1;
+  padding: ${RFValue(16)}px;
+  background-color: ${({theme}) => theme.colors.backgroundColor};
+  color: ${({theme}) => theme.colors.colorWhite};
+`;
+
+export const ModalTitle = styled.Text`
+  text-align: center;
+  font-size: ${RFValue(26)}px;
+  color: ${({theme}) => theme.colors.colorWhite};
+  padding-bottom: ${RFValue(6)}px;
+  font-family: ${({theme}) => theme.fonts.bold};
+`;
+
+export const ModalPictureContainer = styled.View`
+  flex: 1;
+  margin: 0 auto;
+  padding-bottom: ${RFValue(6)}px;
+  height: ${RFValue(300)}px;
+  width: ${RFValue(300)}px;
+`;
+
+export const ModalPicture = styled.Image`
+  border-radius: 12px;
+  width: 100%;
+  height: 100%;
+`;
+
+export const ModalTextContainer = styled.View`
+  flex: 1;
+  padding-bottom: ${RFValue(6)}px;
+`;
+
+export const ModalText = styled.Text`
+  text-align: justify;
+  font-size: ${RFValue(14)}px;
+  color: ${({theme}) => theme.colors.colorWhite};
+  font-family: ${({theme}) => theme.fonts.regular};
 `;

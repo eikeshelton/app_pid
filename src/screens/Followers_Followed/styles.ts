@@ -1,5 +1,5 @@
-import {Dimensions} from 'react-native';
 import styled from 'styled-components/native';
+import {RFValue} from 'react-native-responsive-fontsize';
 
 export const Container = styled.View`
   flex: 1;
@@ -7,13 +7,29 @@ export const Container = styled.View`
 `;
 export const Body = styled.View``;
 
-export const Name = styled.Text`
-  color: ${({theme}) => theme.colors.primary};
+export const UserContainer = styled.View`
+  flex: 1;
+  flex-direction: column;
+  margin: 0 auto;
 `;
-const ProfilePictureHeight = Dimensions.get('window').height * 0.1;
-const ProfilePictureWidth = Dimensions.get('window').width * 0.2;
+
+export const Title = styled.Text`
+  text-align: center;
+  color: ${({theme}) => theme.colors.colorWhite};
+  font-family: ${({theme}) => theme.fonts.bold};
+  font-size: ${RFValue(22)}px;
+`;
+
+export const Text = styled.Text`
+  text-align: center;
+  color: ${({theme}) => theme.colors.colorWhite};
+  font-family: ${({theme}) => theme.fonts.regular};
+  font-size: ${RFValue(14)}px;
+  padding: ${RFValue(3)}px 0 0 0;
+`;
 export const ProfilePicture = styled.Image`
   border-radius: 100px;
-  height: ${ProfilePictureHeight}px;
-  width: ${ProfilePictureWidth}px;
+  height: ${RFValue(120)}px;
+  width: ${RFValue(120)}px;
+  margin: ${RFValue(16)}px 0 0 0;
 `;
