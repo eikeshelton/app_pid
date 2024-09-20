@@ -63,7 +63,6 @@ export function Chat() {
           );
 
           setMensagens(response.data);
-          console.log('mensagens:', response.data);
         } catch (error) {
           console.error('Erro ao recuperar mensagens:', error);
         }

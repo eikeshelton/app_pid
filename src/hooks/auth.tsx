@@ -21,6 +21,7 @@ interface User {
   id?: number;
   token?: string;
   sexo?: string;
+  publicacoes?: number;
 }
 interface UserCheck {
   email: any;
@@ -203,8 +204,8 @@ function AuthProvider({children}: AuthProviderProps) {
   }
   async function updateUser() {
     try {
-      const email = data.email;
-      const response = await api.get(`/usuarios/${email}`);
+      const id = data.id;
+      const response = await api.get(`/usuarios/${id}`);
       if (response.data) {
         setData(response.data);
       }
@@ -293,7 +294,6 @@ function AuthProvider({children}: AuthProviderProps) {
       });
 
       if (response.data) {
-        console.log('respondeu ');
       }
     } catch (err) {
       console.log(err);

@@ -104,7 +104,6 @@ const EditProfile = () => {
       return true; // iOS ou outras plataformas que não requerem permissão manual
     }
   };
-
   const handlePickImage = async (source: string) => {
     const options: OptionsCommon = {
       mediaType: 'photo',
@@ -176,6 +175,7 @@ const EditProfile = () => {
       Alert.alert('Erro', 'Não foi possível selecionar a imagem.');
     }
   };
+
   return (
     <Container>
       <Header>

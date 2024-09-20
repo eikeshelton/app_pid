@@ -42,7 +42,7 @@ node_modules/
 npm-debug.log
 yarn-error.log
 yarn.lock
-
+.env
 
 # fastlane
 #
@@ -68,7 +68,7 @@ yarn.lock
 
 # testing
 /coverage
-
+.env
 # vm python
 server/venv
 server/_pycache_

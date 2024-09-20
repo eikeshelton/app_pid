@@ -45,8 +45,10 @@ import fotoPerfil from '../../assets/imagens/fotoperfil.png';
 import {useAuth} from '../../hooks/auth';
 import {Loading} from '../../components/Loading';
 import PushNotification from 'react-native-push-notification';
-import {Image, Dimensions, FlatList, Modal, ScrollView} from 'react-native';
+import {FlatList, Modal, ScrollView} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import FotoGuia from '../../assets/imagens/hobbieguia.jpg';
+import {ModalGuildeCreate} from '../../components/ModalGuildeCreate';
 interface GuiaCapa {
   id_guias: number;
   titulo: string;
@@ -66,18 +68,19 @@ export default function Profile() {
   const {user, updateUser} = useAuth();
   const isFocused = useIsFocused();
   const [loading, setLoading] = useState(true);
+  const [showModelGuildeCreate, setShowModelGuildeCreate] = useState(false);
   const navigation = useNavigation();
   const [focado, setFocado] = useState(false);
   const [guias, setGuias] = useState<GuiaCapa[]>([]);
   const [guiaData, setGuiaData] = useState<Guia | null>(null);
-  const [imageSizes, setImageSizes] = useState<{
+  /*const [imageSizes, setImageSizes] = useState<{
     [key: number]: {width: number; height: number};
-  }>({});
+  }>({});*/
 
   const [modalVisible, setModalVisible] = useState(false);
 
-  const screenWidth = Dimensions.get('window').width;
-  const screenHeight = Dimensions.get('window').height;
+  /*const screenWidth = Dimensions.get('window').width;
+  const screenHeight = Dimensions.get('window').height;*/
 
   const requestUserPermission = async () => {
     try {
@@ -111,7 +114,7 @@ export default function Profile() {
     try {
       const response = await axios.get(`/buscar/capas/guias/${user.id}`);
       setGuias(response.data);
-      response.data.forEach((guia: GuiaCapa) => {
+      /*response.data.forEach((guia: GuiaCapa) => {
         Image.getSize(
           guia.foto_url,
           (width, height) => {
@@ -131,7 +134,7 @@ export default function Profile() {
           },
           error => console.error('Erro ao obter o tamanho da imagem:', error),
         );
-      });
+      });*/
     } catch (error) {
       console.error('Erro ao buscar guias:', error);
     }
@@ -139,7 +142,7 @@ export default function Profile() {
 
   const fetchProfileData = () => {
     updateUser({
-      email: user.email,
+      id: user.id,
     });
     setLoading(false);
   };
@@ -157,9 +160,6 @@ export default function Profile() {
       if (remoteMessage.notification) {
         // Verifique se o campo android e imageUrl existem
         const imageUrl = remoteMessage.notification.android?.imageUrl || '';
-
-        // Log para verificar o conteúdo da notificação, incluindo a imagem
-        console.log('Remote Message Notification:', remoteMessage.notification);
 
         setFocado(true);
         PushNotification.localNotification({
@@ -192,17 +192,17 @@ export default function Profile() {
   };
 
   const handleGuidePress = (item: any) => {
-    setModalVisible(true);
-    console.log(item);
-    getGuilde(item);
+    getGuilde(item); // Chama a requisição
   };
   const getGuilde = async (item: number) => {
     try {
       const response = await axios.get(`/buscar/guias/id/${item}`);
       setGuiaData(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error('Erro ao buscar guias:', error);
+    } finally {
+      // Finaliza o carregamento após a requisição (com sucesso ou erro)
+      setModalVisible(true);
     }
   };
 
@@ -258,7 +258,7 @@ export default function Profile() {
           <CountContainer>
             <ContainerPubFoll>
               <ContainerPub>
-                <TextNumber>8</TextNumber>
+                <TextNumber>{user.publicacoes}</TextNumber>
                 <TextPubFoll>Publicações</TextPubFoll>
               </ContainerPub>
               <ContainerFollowers
@@ -313,7 +313,7 @@ export default function Profile() {
                       size={100}
                       color="#934dd2"
                       onPress={() => {
-                        setModalVisible(true);
+                        setShowModelGuildeCreate(true);
                       }}
                     />
                   </AddFoodContainer>
@@ -329,18 +329,23 @@ export default function Profile() {
             numColumns={2}
           />
         </GuideFlex>
+
         <Modal visible={modalVisible} animationType="slide">
           <ModalContainer>
-            <ModalTitle>{guiaData?.titulo_guia}</ModalTitle>
-            <ModalPictureContainer>
-              <ModalPicture
-                source={{uri: guiaData.foto_guia}}
-                resizeMode="cover"
-              />
-            </ModalPictureContainer>
-            <ModalTextContainer>
-              <ModalText>{guiaData.texto_guia}</ModalText>
-            </ModalTextContainer>
+            <ScrollView>
+              <ModalTitle>{guiaData?.titulo_guia}</ModalTitle>
+              <ModalPictureContainer>
+                <ModalPicture
+                  source={
+                    guiaData?.foto_guia ? {uri: guiaData?.foto_guia} : FotoGuia
+                  }
+                  resizeMode="cover"
+                />
+              </ModalPictureContainer>
+              <ModalTextContainer>
+                <ModalText>{guiaData?.texto_guia}</ModalText>
+              </ModalTextContainer>
+            </ScrollView>
             <CustomButton
               texto="Cancelar"
               onPress={() => setModalVisible(false)}
@@ -348,6 +353,10 @@ export default function Profile() {
           </ModalContainer>
         </Modal>
       </ScrollView>
+      <ModalGuildeCreate
+        onDismiss={() => setShowModelGuildeCreate(false)}
+        showModal={showModelGuildeCreate}
+      />
     </ScreenBackground>
   );
 }

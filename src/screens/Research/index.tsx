@@ -144,14 +144,14 @@ export default function Research() {
             <FilterButton onPress={() => Buscar_usuario_por_tipo()}>
               <ClickableText>selecionar</ClickableText>
             </FilterButton>
+            <FlatList
+              data={usersfilter}
+              renderItem={renderItemFilter}
+              keyExtractor={item => item.id_usuario.toString()}
+              numColumns={2}
+            />
           </FilterContainer>
         )}
-        <FlatList
-          data={usersfilter}
-          renderItem={renderItemFilter}
-          keyExtractor={item => item.id_usuario.toString()}
-          numColumns={2}
-        />
       </Container>
       <ModalHistory
         onDismiss={() => setShowModal(false)}

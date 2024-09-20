@@ -219,11 +219,13 @@ const MacroTracker = () => {
   );
   const fetchIdRefeicao = async () => {
     try {
+      const formattedDateForApi = format(selectedDate, 'yyyy-MM-dd');
       const response = await api.post('/refeicoes/alimentos/', {
         id_usuario: user.id,
         refeicao_id: selectedMealId,
         quantidade: parseInt(foodGrams, 10),
         alimento_id: selectedFoodItem?.id,
+        data: formattedDateForApi,
       });
       if (response.data) {
       }
