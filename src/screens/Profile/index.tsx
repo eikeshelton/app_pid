@@ -81,7 +81,6 @@ export default function Profile() {
 
   /*const screenWidth = Dimensions.get('window').width;
   const screenHeight = Dimensions.get('window').height;*/
-
   const requestUserPermission = async () => {
     try {
       const authStatus = await messaging().requestPermission();
