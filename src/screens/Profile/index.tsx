@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import axios from '../../services/api';
+import api from '../../services/api';
 import messaging from '@react-native-firebase/messaging';
 import CustomButton from '../../components/CustomizeButton';
 import LiteButton from '../../components/LiteButton';
@@ -39,13 +39,16 @@ import {
   ModalTextContainer,
   GuildetitleContainer,
   AddFoodContainer,
+  DeleteIcon,
+  DeleteIconContainer,
+  DeleteButton,
 } from './style';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import fotoPerfil from '../../assets/imagens/fotoperfil.png';
 import {useAuth} from '../../hooks/auth';
 import {Loading} from '../../components/Loading';
 import PushNotification from 'react-native-push-notification';
-import {FlatList, Modal, ScrollView} from 'react-native';
+import {Alert, FlatList, Modal, ScrollView} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FotoGuia from '../../assets/imagens/hobbieguia.jpg';
 import {ModalGuildeCreate} from '../../components/ModalGuildeCreate';
@@ -68,7 +71,7 @@ export default function Profile() {
   const {user, updateUser} = useAuth();
   const isFocused = useIsFocused();
   const [loading, setLoading] = useState(true);
-  const [showModelGuildeCreate, setShowModelGuildeCreate] = useState(false);
+
   const navigation = useNavigation();
   const [focado, setFocado] = useState(false);
   const [guias, setGuias] = useState<GuiaCapa[]>([]);
@@ -96,7 +99,7 @@ export default function Profile() {
       const fcmToken = await messaging().getToken();
       if (fcmToken) {
         try {
-          await axios.post('/atualizar-fcm-token/', {
+          await api.post('/atualizar-fcm-token/', {
             fcm_token: fcmToken,
             id_usuario: user.id,
           });
@@ -111,7 +114,7 @@ export default function Profile() {
 
   const getCoverGuilde = async () => {
     try {
-      const response = await axios.get(`/buscar/capas/guias/${user.id}`);
+      const response = await api.get(`/buscar/capas/guias/${user.id}`);
       setGuias(response.data);
       /*response.data.forEach((guia: GuiaCapa) => {
         Image.getSize(
@@ -179,7 +182,7 @@ export default function Profile() {
     });
 
     return unsubscribe;
-  }, [isFocused]);
+  }, [isFocused, modalVisible]);
 
   const handleSettings = () => {
     navigation.navigate('SettingsScreen');
@@ -195,13 +198,47 @@ export default function Profile() {
   };
   const getGuilde = async (item: number) => {
     try {
-      const response = await axios.get(`/buscar/guias/id/${item}`);
+      const response = await api.get(`/buscar/guias/id/${item}`);
       setGuiaData(response.data);
     } catch (error) {
       console.error('Erro ao buscar guias:', error);
     } finally {
       // Finaliza o carregamento após a requisição (com sucesso ou erro)
       setModalVisible(true);
+    }
+  };
+
+  const deleteGuia = async () => {
+    try {
+      // Exibe o alerta de confirmação
+      Alert.alert(
+        'Confirmar Deleção',
+        'Você tem certeza que deseja apagar este guia?',
+        [
+          {
+            text: 'Cancelar',
+            onPress: () => console.log('Cancelado'),
+            style: 'cancel',
+          },
+          {
+            text: 'Sim',
+            onPress: async () => {
+              // Chamada à função de deleção no backend
+              try {
+                const response = await api.delete(`/guia/${guiaData?.id_guia}`);
+                console.log(response.data);
+                setModalVisible(false);
+                // Aqui você pode adicionar lógica adicional, como atualizar a lista de guias
+              } catch (error) {
+                console.error('Erro ao deletar guia:', error);
+                // Aqui você pode adicionar lógica para exibir um erro ao usuário
+              }
+            },
+          },
+        ],
+      );
+    } catch (error) {
+      console.error('Erro ao exibir alerta:', error);
     }
   };
 
@@ -312,7 +349,7 @@ export default function Profile() {
                       size={100}
                       color="#934dd2"
                       onPress={() => {
-                        setShowModelGuildeCreate(true);
+                        setModalVisible(true);
                       }}
                     />
                   </AddFoodContainer>
@@ -332,6 +369,11 @@ export default function Profile() {
         <Modal visible={modalVisible} animationType="slide">
           <ModalContainer>
             <ScrollView>
+              <DeleteIconContainer>
+                <DeleteButton onPress={deleteGuia}>
+                  <DeleteIcon name="delete" color="#934dd2" size={35} />
+                </DeleteButton>
+              </DeleteIconContainer>
               <ModalTitle>{guiaData?.titulo_guia}</ModalTitle>
               <ModalPictureContainer>
                 <ModalPicture
@@ -353,8 +395,8 @@ export default function Profile() {
         </Modal>
       </ScrollView>
       <ModalGuildeCreate
-        onDismiss={() => setShowModelGuildeCreate(false)}
-        showModal={showModelGuildeCreate}
+        onDismiss={() => setModalVisible(false)}
+        showModal={modalVisible}
       />
     </ScreenBackground>
   );

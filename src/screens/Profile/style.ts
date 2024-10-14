@@ -123,6 +123,7 @@ export const ChatIcon = styled(Entypo)`
 `;
 
 export const GuideFlex = styled.View`
+  align-items: center;
   padding: ${RFValue(6)}px ${RFValue(6)}px 0;
 `;
 export const AddFoodContainer = styled.View`
@@ -159,7 +160,11 @@ export const ModalContainer = styled.View`
   background-color: ${({theme}) => theme.colors.backgroundColor};
   color: ${({theme}) => theme.colors.colorWhite};
 `;
-
+export const DeleteIconContainer = styled.View`
+  align-items: flex-end;
+`;
+export const DeleteButton = styled.TouchableOpacity``;
+export const DeleteIcon = styled(AntDesign)``;
 export const ModalTitle = styled.Text`
   text-align: center;
   font-size: ${RFValue(26)}px;

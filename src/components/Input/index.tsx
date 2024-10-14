@@ -10,6 +10,7 @@ interface InputMaskProps extends TextInputMaskProps {
 export function InputComponent({
   isFocused,
   showModels,
+
   ...rest
 }: InputMaskProps) {
   const [focusedInputId, setFocusedInputId] = useState<number | null>(null);

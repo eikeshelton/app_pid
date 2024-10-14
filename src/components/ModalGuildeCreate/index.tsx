@@ -1,18 +1,25 @@
 import React, {useState} from 'react';
 import {
   Container,
+  ContainerBackButton,
   GuildeContainer,
   GuildeImage,
+  GuildeImageButton,
   Guildetitle,
   GuildetitleContainer,
+  IconBack,
   ModalContent,
   ModalPicture,
   ModalPictureContainer,
+  ModalText,
+  ModalTitle,
   Title,
+  TitleCamera,
 } from './styles';
 import AWS from 'aws-sdk';
 import RNFS from 'react-native-fs';
 import {Buffer} from 'buffer';
+import api from '../../services/api';
 import {AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY} from '@env';
 AWS.config.update({
   accessKeyId: AWS_ACCESS_KEY_ID,
@@ -28,6 +35,7 @@ import {
   OptionsCommon,
 } from 'react-native-image-picker';
 import {InputComponent} from '../Input';
+import {useAuth} from '../../hooks/auth';
 
 interface Props {
   showModal: boolean;
@@ -35,10 +43,13 @@ interface Props {
 }
 
 export function ModalGuildeCreate({showModal, onDismiss}: Props) {
+  const {user} = useAuth();
   const linkCameraFoto = 'https://apppid.s3.amazonaws.com/fotoCamera.png';
   const [fotoCapa, setFotoCapa] = useState(linkCameraFoto);
   const [fotoGuia, setFotoGuia] = useState(linkCameraFoto);
   const [tituloCapa, setTituloCapa] = useState('');
+  const [textoGuia, setTextoGuia] = useState('');
+  const [tituloGuia, setTituloGuia] = useState('');
   const tirarFoto = async (tipoFoto: string) => {
     Alert.alert('Escolha uma opção', 'De onde você quer selecionar a foto?', [
       {
@@ -130,56 +141,94 @@ export function ModalGuildeCreate({showModal, onDismiss}: Props) {
   };
 
   // Função separada para o upload da imagem
-  const uploadImageToS3 = async (uri: string) => {
+  const uploadImagesToS3 = async () => {
     try {
-      // Ler o arquivo como base64
-      const fileData = await RNFS.readFile(uri, 'base64');
-      const buffer = Buffer.from(fileData, 'base64');
+      // Função para ler e preparar o upload de uma imagem para o S3
+      const uploadImage = async (uri: string) => {
+        const fileData = await RNFS.readFile(uri, 'base64');
+        const buffer = Buffer.from(fileData, 'base64');
+        const fileName = uri.split('/').pop() || `${Date.now()}.jpg`;
 
-      // Criar um nome de arquivo único para o upload
-      const fileName = uri.split('/').pop() || `${Date.now()}.jpg`;
+        const s3 = new AWS.S3();
+        const params = {
+          Bucket: 'apppid',
+          Key: fileName,
+          Body: buffer,
+          ContentType: 'image/jpeg',
+        };
 
-      // Configurar o upload para o S3
-      const s3 = new AWS.S3();
-      const params = {
-        Bucket: 'apppid',
-        Key: fileName,
-        Body: buffer,
-        ContentType: 'image/jpeg', // ou o tipo de imagem correto
+        return new Promise((resolve, reject) => {
+          s3.upload(params, (err: any, data: any) => {
+            if (err) {
+              console.log('Erro ao fazer upload da imagem:', err);
+              reject(err);
+            } else {
+              console.log('Upload realizado com sucesso:', data.Location);
+              resolve(data.Location);
+            }
+          });
+        });
       };
 
-      // Enviar a imagem para o S3
-      s3.upload(params, (err: any, data: any) => {
-        if (err) {
-          console.log('Erro ao fazer upload da imagem:', err);
-          Alert.alert('Erro', 'Não foi possível fazer upload da imagem.');
-          return;
-        }
-        console.log('Upload realizado com sucesso:', data.Location);
+      // Executando os uploads em paralelo
+      const [fotoCapaUrl, fotoGuiaUrl] = (await Promise.all([
+        uploadImage(fotoCapa),
+        uploadImage(fotoGuia),
+      ])) as [string, string];
 
-        // Atualizar o estado com a URL do S3 após o upload
-        setFotoCapa(data.Location);
-      });
+      // Após ambos os uploads serem concluídos, registrar a guia
+      await RegisterGuide(fotoCapaUrl, fotoGuiaUrl);
+      Alert.alert('Sucesso', 'Guia registrada com sucesso!');
     } catch (error) {
-      console.log('Erro ao fazer upload da imagem:', error);
-      Alert.alert('Erro', 'Não foi possível fazer upload da imagem.');
+      console.error('Erro ao fazer upload das imagens:', error);
+      Alert.alert('Erro', 'Não foi possível fazer upload das imagens.');
+    }
+  };
+
+  // Ajustar a função RegisterGuide para receber as URLs das fotos
+  const RegisterGuide = async (fotoCapaUrl: string, fotoGuiaUrl: string) => {
+    try {
+      const response = await api.post('/cadastrar/guia/', {
+        titulo: tituloCapa,
+        foto_url: fotoCapaUrl,
+        id_usuario: user.id,
+        foto_guia: fotoGuiaUrl,
+        titulo_guia: tituloGuia,
+        texto_guia: textoGuia,
+      });
+      console.log('Guia cadastrada com sucesso:', response.data);
+      if (response.data) {
+        setFotoCapa(linkCameraFoto);
+        setFotoGuia(linkCameraFoto);
+        setTextoGuia('');
+        setTituloCapa('');
+        setTituloGuia('');
+        onDismiss();
+      }
+    } catch (error) {
+      console.error('Erro ao registrar a guia:', error);
+      Alert.alert('Erro', 'Não foi possível registrar a guia.');
     }
   };
 
   const handleItemPress = () => {
-    console.log('ok');
+    uploadImagesToS3();
   };
   const Cancel = () => {
     onDismiss();
     setFotoCapa(linkCameraFoto);
     setFotoGuia(linkCameraFoto);
   };
+
   return (
     <Container
       isVisible={showModal}
       onBackButtonPress={onDismiss}
       onBackdropPress={onDismiss}>
       <ModalContent>
+        <ContainerBackButton onPress={Cancel}>
+          <IconBack name="arrow-back" />
+        </ContainerBackButton>
         <Title>Adicionar nova guia</Title>
 
         <InputComponent
@@ -196,24 +245,35 @@ export function ModalGuildeCreate({showModal, onDismiss}: Props) {
               {tituloCapa}
             </Guildetitle>
           </GuildetitleContainer>
-          <GuildeImage
-            source={{uri: fotoCapa}}
-            resizeMode="cover"
-            resizeMethod="scale"
-          />
+          <TitleCamera>foto da foto capa</TitleCamera>
+          <GuildeImageButton onPress={() => tirarFoto('capa')}>
+            <GuildeImage source={{uri: fotoCapa}} resizeMode="cover" />
+          </GuildeImageButton>
         </GuildeContainer>
-        <CustomButton texto="Foto Capa" onPress={() => tirarFoto('capa')} />
 
-        <ModalPictureContainer>
-          <ModalPicture
-            source={{uri: fotoGuia}}
-            resizeMode="cover"
-            resizeMethod="scale"
-          />
+        <InputComponent
+          placeholder="Título do guia"
+          placeholderTextColor={'silver'}
+          value={tituloGuia}
+          onChangeText={setTituloGuia}
+          isFocused={false}
+        />
+        <ModalTitle>{tituloGuia}</ModalTitle>
+        <TitleCamera>adicionar foto guia</TitleCamera>
+        <ModalPictureContainer onPress={() => tirarFoto('guia')}>
+          <ModalPicture source={{uri: fotoGuia}} resizeMode="cover" />
         </ModalPictureContainer>
-        <CustomButton texto="Foto Guia" onPress={() => tirarFoto('guia')} />
+        <ModalText>{textoGuia}</ModalText>
+        <InputComponent
+          placeholder="Texto do guia"
+          placeholderTextColor={'silver'}
+          value={textoGuia}
+          onChangeText={setTextoGuia}
+          isFocused={false}
+          multiline={true}
+        />
+
         <CustomButton texto="Adicionar" onPress={handleItemPress} />
-        <CustomButton texto="Cancelar" onPress={Cancel} />
       </ModalContent>
     </Container>
   );
