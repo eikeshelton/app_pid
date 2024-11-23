@@ -13,6 +13,10 @@ import TrainingPartnerRegister from '../screens/TrainingPartnerRegister';
 import TrainingPartnerSearch from '../screens/TrainingPartnerSearch';
 import {Followers_Followed} from '../screens/Followers_Followed';
 import {Requests} from '../screens/Requests';
+import Events from '../screens/Events';
+import EventsRegister from '../screens/EventsRegister';
+import EventsSearch from '../screens/EventsSearch';
+import {EventParticipants} from '../screens/EventParticipants';
 
 const Stack = createStackNavigator();
 
@@ -82,6 +86,26 @@ export function AppRoutes() {
       <Stack.Screen
         name="Requests"
         component={Requests}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Events"
+        component={Events}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="EventsRegister"
+        component={EventsRegister}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="EventsSearch"
+        component={EventsSearch}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="EventParticipants"
+        component={EventParticipants}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

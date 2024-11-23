@@ -19,4 +19,8 @@ export type RootStackParamsList = {
   Chat: {selectedItem: any};
   Followers_Followed: {type: string; id: any};
   Requests: undefined;
+  Events: undefined;
+  EventsRegister: undefined;
+  EventsSearch: undefined;
+  EventParticipants: {eventoId: number};
 };

@@ -5,6 +5,9 @@ import {
   Background,
   ClickableText,
   Container,
+  ContainerButton,
+  EventButton,
+  EventIcon,
   FilterButton,
   FilterContainer,
   Name,
@@ -122,10 +125,15 @@ export default function Research() {
           keyExtractor={item => item.id_usuario.toString()}
           numColumns={2}
         />
-
-        <FilterButton onPress={() => setshowFiltros(!showFiltros)}>
-          <ClickableText>Filtros</ClickableText>
-        </FilterButton>
+        <ContainerButton>
+          <FilterButton onPress={() => setshowFiltros(!showFiltros)}>
+            <ClickableText>Filtros</ClickableText>
+          </FilterButton>
+          <EventButton onPress={() => navigation.navigate('Events')}>
+            <EventIcon name="emoji-events" size={30} />
+            <ClickableText>Eventos</ClickableText>
+          </EventButton>
+        </ContainerButton>
         {showFiltros && (
           <FilterContainer>
             <InputPicker

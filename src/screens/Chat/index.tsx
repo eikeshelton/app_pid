@@ -20,7 +20,7 @@ import CustomButton from '../../components/CustomizeButton';
 import {useAuth} from '../../hooks/auth';
 import {useFocusEffect, useRoute} from '@react-navigation/native';
 import {FlatList} from 'react-native';
-import axios from '../../services/api';
+import axios, {Ip} from '../../services/api';
 import {InputComponent} from '../../components/Input';
 interface Params {
   selectedItem: {
@@ -74,7 +74,7 @@ export function Chat() {
 
   useEffect(() => {
     const ws = new WebSocket(
-      `ws://192.168.15.170:8000/ws/${user.id}/${selectedItem.id_usuario}`,
+      `ws://${Ip}/ws/${user.id}/${selectedItem.id_usuario}`,
     );
     websocketRef.current = ws;
 

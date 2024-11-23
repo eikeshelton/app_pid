@@ -22,7 +22,10 @@ interface User {
   id_usuario: number;
   nome_usuario: string;
   foto_perfil: string | null;
-  tipo_usuario: string;
+  tipo_usuario: {
+    id: number;
+    tipo: number;
+  };
 }
 
 export function ModalHistory({showModal, onDismiss}: Props) {
@@ -60,7 +63,7 @@ export function ModalHistory({showModal, onDismiss}: Props) {
           resizeMode="cover"
         />
         <Name>{item.nome_usuario}</Name>
-        <Name>{item.tipo_usuario}</Name>
+        <Name>{item.tipo_usuario.tipo}</Name>
       </PictureContainer>
     );
   };

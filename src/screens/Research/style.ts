@@ -1,6 +1,7 @@
 import {Dimensions} from 'react-native';
 import {RFValue} from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 export const Background = styled.SafeAreaView`
   flex: 1;
   background-color: ${({theme}) => theme.colors.backgroundColor};
@@ -37,6 +38,10 @@ export const Name = styled.Text`
   color: ${({theme}) => theme.colors.colorWhite};
   text-align: center;
 `;
+export const ContainerButton = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+`;
 export const FilterButton = styled.TouchableOpacity`
   border-radius: ${RFValue(12)}px;
   background-color: ${({theme}) => theme.colors.backgroundColor};
@@ -45,6 +50,20 @@ export const FilterButton = styled.TouchableOpacity`
   padding: 0 ${RFValue(6)}px 0 ${RFValue(6)}px;
   border: solid 2px ${({theme}) => theme.colors.primary};
   margin-bottom: ${RFValue(10)}px;
+`;
+export const EventButton = styled.TouchableOpacity`
+  flex-direction: row;
+  border-radius: ${RFValue(12)}px;
+  background-color: ${({theme}) => theme.colors.backgroundColor};
+  width: 40%;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 ${RFValue(6)}px 0 ${RFValue(6)}px;
+  border: solid 2px ${({theme}) => theme.colors.primary};
+  margin-bottom: ${RFValue(10)}px;
+`;
+export const EventIcon = styled(MaterialIcons)`
+  color: ${({theme}) => theme.colors.colorWhite};
 `;
 export const FilterContainer = styled.View``;
 export const ClickableText = styled.Text`

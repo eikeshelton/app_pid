@@ -1,37 +1,40 @@
 import React, {useEffect, useState} from 'react';
-import api from '../../services/api';
 import {
   Container,
   Header,
+  NameText,
   PictureContainer,
   ProfilePicture,
-  NameText,
-  MessageText,
-  TextContainer,
   SuperContainer,
-} from './style';
+  TextContainer,
+} from './styles';
+import fotoPerfil from '../../assets/imagens/fotoperfil.png';
+import api from '../../services/api';
+import {Loading} from '../../components/Loading';
 import BackButton from '../../components/BackButton';
 import {InputComponent} from '../../components/Input';
 import {FlatList} from 'react-native';
-import fotoPerfil from '../../assets/imagens/fotoperfil.png';
-import {useAuth} from '../../hooks/auth';
-import {Loading} from '../../components/Loading';
-interface Conversas {
-  id_conversa: number;
-  nome_remetente: string;
-  nome_destinatario: string;
-  id_usuario: number;
-  foto_perfil: string | null;
-  ultima_mensagem: String;
+import {useRoute} from '@react-navigation/native';
+interface Params {
+  eventoId: number;
 }
-export function ScreenChat() {
+interface Conversas {
+  id: number;
+  nome_usuario: number;
+  foto_perfil: string;
+}
+export function EventParticipants() {
+  const route = useRoute();
+  const params = route.params as Params;
   const [loading, setLoading] = useState(true);
   const [conversas, setConversas] = useState<Conversas[]>([]);
   const [pesquisar, setPesquisar] = useState('');
-  const {user} = useAuth();
-  const getConversation = async () => {
+
+  const HandleParticipants = async () => {
     try {
-      const response = await api.get(`/conversas_usuario/${user.id}`);
+      const response = await api.get(
+        `/lista/participantes/evento/${params.eventoId}`,
+      );
       setConversas(response.data);
       setLoading(false);
     } catch (error) {
@@ -39,9 +42,9 @@ export function ScreenChat() {
     }
   };
   useEffect(() => {
-    getConversation();
+    HandleParticipants();
   }, []);
-  const renderItem = ({item}: any) => (
+  const renderItem = ({item}: {item: Conversas}) => (
     <SuperContainer>
       <PictureContainer>
         {item.foto_perfil ? (
@@ -51,8 +54,7 @@ export function ScreenChat() {
         )}
       </PictureContainer>
       <TextContainer>
-        <NameText>{item.nome_destinatario}</NameText>
-        <MessageText>{item.ultima_mensagem}</MessageText>
+        <NameText>{item.nome_usuario}</NameText>
       </TextContainer>
     </SuperContainer>
   );
@@ -73,7 +75,7 @@ export function ScreenChat() {
       <FlatList
         data={conversas}
         renderItem={renderItem}
-        keyExtractor={item => item.id_conversa.toString()}
+        keyExtractor={item => item.id.toString()}
       />
     </Container>
   );

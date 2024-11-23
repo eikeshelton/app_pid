@@ -50,7 +50,7 @@ import {Loading} from '../../components/Loading';
 import PushNotification from 'react-native-push-notification';
 import {Alert, FlatList, Modal, ScrollView} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import FotoGuia from '../../assets/imagens/hobbieguia.jpg';
+import FotoGuia from '../../assets/imagens/logo.png';
 import {ModalGuildeCreate} from '../../components/ModalGuildeCreate';
 interface GuiaCapa {
   id_guias: number;
@@ -81,7 +81,7 @@ export default function Profile() {
   }>({});*/
 
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [modalCreateVisible, setmodalCreateVisibleVisible] = useState(false);
   /*const screenWidth = Dimensions.get('window').width;
   const screenHeight = Dimensions.get('window').height;*/
   const requestUserPermission = async () => {
@@ -349,7 +349,7 @@ export default function Profile() {
                       size={100}
                       color="#934dd2"
                       onPress={() => {
-                        setModalVisible(true);
+                        setmodalCreateVisibleVisible(true);
                       }}
                     />
                   </AddFoodContainer>
@@ -395,8 +395,8 @@ export default function Profile() {
         </Modal>
       </ScrollView>
       <ModalGuildeCreate
-        onDismiss={() => setModalVisible(false)}
-        showModal={modalVisible}
+        onDismiss={() => setmodalCreateVisibleVisible(false)}
+        showModal={modalCreateVisible}
       />
     </ScreenBackground>
   );

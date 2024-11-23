@@ -1,7 +1,7 @@
 import axios from 'axios';
-
+export const Ip = '192.168.15.170:8000';
 const api = axios.create({
-  baseURL: 'http://192.168.15.170:8000', // substitua pela URL do seu servidor FastAPI
+  baseURL: `http://${Ip}`, // substitua pela URL do seu servidor FastAPI
 });
 
 export default api;

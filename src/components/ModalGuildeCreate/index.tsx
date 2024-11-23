@@ -11,7 +11,6 @@ import {
   ModalContent,
   ModalPicture,
   ModalPictureContainer,
-  ModalText,
   ModalTitle,
   Title,
   TitleCamera,
@@ -36,6 +35,7 @@ import {
 } from 'react-native-image-picker';
 import {InputComponent} from '../Input';
 import {useAuth} from '../../hooks/auth';
+import {AutoExpandingTextInput} from '../InputAdapted';
 
 interface Props {
   showModal: boolean;
@@ -263,8 +263,8 @@ export function ModalGuildeCreate({showModal, onDismiss}: Props) {
         <ModalPictureContainer onPress={() => tirarFoto('guia')}>
           <ModalPicture source={{uri: fotoGuia}} resizeMode="cover" />
         </ModalPictureContainer>
-        <ModalText>{textoGuia}</ModalText>
-        <InputComponent
+
+        <AutoExpandingTextInput
           placeholder="Texto do guia"
           placeholderTextColor={'silver'}
           value={textoGuia}

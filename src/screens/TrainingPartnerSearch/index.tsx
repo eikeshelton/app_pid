@@ -27,13 +27,13 @@ import {
   PictureContainer,
   ProfilePicture,
   Name,
-} from './style';
+} from './styles';
 import {InputComponent} from '../../components/Input';
 import BackButton from '../../components/BackButton';
 import InputPicker from '../../components/InputPicker';
 import {useAuth} from '../../hooks/auth';
 import {useNavigation} from '@react-navigation/native';
-
+import {GOOGLE_PLACE_API_KEY} from '@env';
 interface Estados {
   id: string;
   sigla: string;
@@ -240,7 +240,7 @@ export default function TrainingPartnerSearch() {
                 location: `${latitude},${longitude}`,
                 radius: 225347,
                 keyword: local,
-                key: 'AIzaSyBHCKxygf6ny6ek3q2LmQvFS75JYNISMwY',
+                key: GOOGLE_PLACE_API_KEY,
               },
             },
           );

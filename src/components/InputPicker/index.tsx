@@ -58,6 +58,7 @@ const InputPicker: React.FC<InputPickerProps> = ({
         dropDownContainerStyle={{
           ...dropDownPickerStyles.dropDownContainerStyle,
           borderColor: borderColor,
+          maxHeight: 148,
         }}
         textStyle={dropDownPickerStyles.textStyle}
         placeholderStyle={dropDownPickerStyles.placeholderStyle}

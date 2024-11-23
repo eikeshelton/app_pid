@@ -19,8 +19,12 @@ import {
 import {InputComponent} from '../../components/Input';
 import BackButton from '../../components/BackButton';
 import InputPicker from '../../components/InputPicker';
-import {useAuth} from '../../hooks/auth';
 import {GOOGLE_PLACE_API_KEY} from '@env';
+import {AutoExpandingTextInput} from '../../components/InputAdapted';
+import {format} from 'date-fns';
+import api from '../../services/api';
+import {useAuth} from '../../hooks/auth';
+import {useNavigation} from '@react-navigation/native';
 interface Place {
   name: string;
   vicinity: string;
@@ -47,62 +51,26 @@ interface Cidades {
     nome: string;
   };
 }
-export default function TrainingPartnerRegister() {
-  const {PartnerRegister, user} = useAuth();
-  const [modalidade, setModalidade] = useState('');
+export default function EventsRegister() {
+  const {user} = useAuth();
+  const navigation = useNavigation();
+  const [nome, setNome] = useState('');
   const [estados, setEstados] = useState<
     {label: string; value: string; id: string}[]
   >([]);
   const [estado, setEstado] = useState('');
-  const [estadoId, setEstadoId] = useState('');
+  const [dataNascimento, setDataNascimento] = useState('');
   const [cidades, setCidades] = useState<
     {label: string; value: string; id: string}[]
   >([]);
   const [cidadeId, setCidadeId] = useState('');
   const [local, setLocal] = useState<string | undefined>(undefined);
-  const [grupamentoMuscular, setGrupamentoMuscular] = useState<string | null>(
-    null,
-  );
-  const [dia, setDia] = useState<string | null>(null);
-  const [hora, setHora] = useState<string | null>(null);
-  const [duracao, setDuracao] = useState('');
   const [observacoes, setObservacoes] = useState<string | undefined>(undefined);
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
   const [places, setPlaces] = useState<Place[]>([]);
+  const [hora, setHora] = useState<string | null>(null);
   const [scrollEnabled, setScrollEnabled] = useState(true);
-
-  const modalidadeItems = [
-    {label: 'Calistenia', value: 'Calistenia'},
-    {label: 'Caminhada', value: 'Caminhada'},
-    {label: 'Ciclismo', value: 'Ciclismo'},
-    {label: 'Corrida', value: 'Corrida'},
-    {label: 'Musculação', value: 'Musculacao'},
-  ];
-
-  const grupamentoMuscularItems = [
-    {label: 'Membros Inferiores', value: 'Inferiores'},
-    {label: 'Membros Superiores', value: 'Superiores'},
-    {label: 'Abdome', value: 'Abdome'},
-    {label: 'Bíceps', value: 'Biceps'},
-    {label: 'Costas', value: 'Costas'},
-    {label: 'Coxa', value: 'Coxa'},
-    {label: 'Ombros', value: 'Ombros'},
-    {label: 'Panturrilha', value: 'Panturrilha'},
-    {label: 'Peito', value: 'Peito'},
-    {label: 'Tríceps', value: 'Triceps'},
-  ];
-
-  const diaItems = [
-    {label: 'Domingo', value: 'Domingo'},
-    {label: 'Segunda', value: 'Segunda'},
-    {label: 'Terça', value: 'Terça'},
-    {label: 'Quarta', value: 'Quarta'},
-    {label: 'Quinta', value: 'Quinta'},
-    {label: 'Sexta', value: 'Sexta'},
-    {label: 'Sábado', value: 'Sabado'},
-  ];
-
   const gerarHorarios = () => {
     let horarios = [];
     for (let hora = 0; hora < 24; hora++) {
@@ -118,20 +86,17 @@ export default function TrainingPartnerRegister() {
     return horarios;
   };
   const [horaItems] = useState(gerarHorarios());
-
-  const duracaoItems = [
-    {label: '30min', value: '00:30'},
-    {label: '1h', value: '01:00'},
-    {label: '1h 30min', value: '01:30'},
-    {label: '2h', value: '02:00'},
-    {label: '2h 30min', value: '02:30'},
-    {label: '3h', value: '03:00'},
-  ];
+  const CleanLocation = () => {
+    if (local?.length === 0) {
+      setPlaces([]);
+    }
+  };
 
   useEffect(() => {
     requestLocationPermission();
     fetchEstadosFromAPI();
-  }, []);
+    CleanLocation();
+  }, [local]);
   const requestLocationPermission = async () => {
     try {
       const status = await check(
@@ -221,7 +186,6 @@ export default function TrainingPartnerRegister() {
           );
           //console.log('latitude api', latitude, 'longitude api', longitude);
           setPlaces(response.data.results);
-          console.log('resultado', response.data.results);
         } catch (error) {
           console.error(error);
         }
@@ -259,7 +223,7 @@ export default function TrainingPartnerRegister() {
     const estadoSelecionada = estados.find(estado => estado.value === value);
     if (estadoSelecionada) {
       setEstado(estadoSelecionada.value); // Aqui definimos o valor selecionado
-      setEstadoId(estadoSelecionada.id); // Aqui definimos o ID selecionado
+
       //console.log('estado selecionado:', estadoSelecionada.label);
       //console.log('id estado:', estadoSelecionada.id);
     }
@@ -285,31 +249,47 @@ export default function TrainingPartnerRegister() {
       }
     }
   };
-  const handlePress = () => {
-    //console.log(estado);
-    //console.log('cidade:', cidade);
-    PartnerRegister({
-      modalidade: modalidade,
-      dia_da_semana: dia,
-      estado_codigo_ibge: parseInt(estadoId, 10),
-      municipio_codigo_ibge: parseInt(cidadeId, 10),
-      agrupamento_muscular: grupamentoMuscular,
-      observacoes: observacoes,
-      horario: hora,
-      id_usuario: user.id,
-      tempo_treino: duracao,
-      local: local,
-    });
-    console.log('Modalidade:', modalidade);
-    console.log('Dia da Semana:', dia);
-    console.log('Estado Código IBGE:', parseInt(estadoId, 10));
-    console.log('Município Código IBGE:', parseInt(cidadeId, 10));
-    console.log('Agrupamento Muscular:', grupamentoMuscular);
-    console.log('Observações:', observacoes);
-    console.log('Horário:', hora);
-    console.log('ID Usuário:', user.id);
-    console.log('Tempo de Treino:', duracao);
-    console.log('Local:', local);
+  const handlePress = async () => {
+    try {
+      // Limpa a data de nascimento
+      const cleanedText = dataNascimento.replace(/\D/g, '');
+      const dia = cleanedText.substring(0, 2);
+      const mes = cleanedText.substring(2, 4);
+      const ano = cleanedText.substring(4, 8);
+
+      const novaData = new Date(
+        parseInt(ano, 10),
+        parseInt(mes, 10) - 1,
+        parseInt(dia, 10),
+      );
+
+      const dataFormatada = format(novaData, 'yyyy-MM-dd');
+
+      // Aguarda a resposta da API
+      const response = await api.post('/evento/cadastrar/', {
+        organizador_id: user.id,
+        nome: nome,
+        descricao: observacoes,
+        data_inicio: dataFormatada,
+        hora_inicio: hora,
+        localizacao: local,
+        municipio_id: cidadeId,
+      });
+
+      // Loga a resposta da API
+      Alert.alert('Sucesso', response.data.message, [
+        {
+          text: 'OK',
+          onPress: () => navigation.navigate('Events'), // Navega para a tela de eventos
+        },
+      ]);
+    } catch (error) {
+      console.error('Erro ao cadastrar evento:', error);
+      Alert.alert(
+        'Erro',
+        'Não foi possível cadastrar o evento. Tente novamente mais tarde.',
+      );
+    }
   };
 
   return (
@@ -319,15 +299,44 @@ export default function TrainingPartnerRegister() {
       </Header>
 
       <PageTitleContainer>
-        <PageTitleText>Cadastrar Treino</PageTitleText>
+        <PageTitleText>Cadastrar Evento</PageTitleText>
       </PageTitleContainer>
 
       <ContainerInputRegister>
         <ScrollView scrollEnabled={scrollEnabled}>
-          <LabelText>Modalidade</LabelText>
+          <LabelText>Nome do Evento</LabelText>
+          <InputComponent
+            onChangeText={text => setNome(text)}
+            value={nome}
+            placeholderTextColor={'silver'}
+            placeholder="ex: corrida no parque da cidade"
+            isFocused={true}
+          />
+          <LabelText>Descrição do Evento</LabelText>
+          <AutoExpandingTextInput
+            textAlignVertical="top"
+            onChangeText={text => setObservacoes(text)}
+            value={observacoes}
+            placeholderTextColor={'silver'}
+            placeholder="ex: corrida beneficente para arrecadar dinheiro
+            para o hospital da criança "
+            isFocused={true}
+          />
+          <LabelText>Data do Evento</LabelText>
+          <InputComponent
+            onChangeText={(extracted: any) => {
+              return setDataNascimento(extracted);
+            }}
+            mask="[00]/[00]/[0000]"
+            placeholderTextColor={'silver'}
+            placeholder="(DD/MM/AAAA)"
+            keyboardType="numeric"
+            isFocused={true}
+          />
+          <LabelText>Horário do Evento</LabelText>
           <InputPicker
-            items={modalidadeItems}
-            onValueChange={(value: string) => setModalidade(value)}
+            items={horaItems}
+            onValueChange={(value: string) => setHora(value)}
             placeholder={{label: 'Obrigatório', value: null}}
             onOpen={() => toggleScroll(false)}
             onClose={() => toggleScroll(true)}
@@ -364,7 +373,11 @@ export default function TrainingPartnerRegister() {
             scrollEnabled={false}
             data={places}
             renderItem={({item}) => (
-              <SelectLocation onPress={() => setLocal(item.name)}>
+              <SelectLocation
+                onPress={() => {
+                  setLocal(item.name);
+                  setPlaces([]);
+                }}>
                 <SelectLocationTitle>{item.name}</SelectLocationTitle>
                 <SelectLocationSubTitle>{item.vicinity}</SelectLocationSubTitle>
               </SelectLocation>
@@ -372,50 +385,6 @@ export default function TrainingPartnerRegister() {
             keyExtractor={item => item.place_id}
           />
 
-          {modalidade === 'Musculacao' && (
-            <>
-              <LabelText>Grupamento Muscular</LabelText>
-              <InputPicker
-                items={grupamentoMuscularItems}
-                onValueChange={(value: string) => setGrupamentoMuscular(value)}
-                placeholder={{label: 'Opcional', value: null}}
-                onOpen={() => toggleScroll(false)}
-                onClose={() => toggleScroll(true)}
-              />
-            </>
-          )}
-          <LabelText>Dia da Semana</LabelText>
-          <InputPicker
-            items={diaItems}
-            onValueChange={(value: string) => setDia(value)}
-            placeholder={{label: 'Opcional', value: null}}
-            onOpen={() => toggleScroll(false)}
-            onClose={() => toggleScroll(true)}
-          />
-          <LabelText>Horário do Treino</LabelText>
-          <InputPicker
-            items={horaItems}
-            onValueChange={(value: string) => setHora(value)}
-            placeholder={{label: 'Opcional', value: null}}
-            onOpen={() => toggleScroll(false)}
-            onClose={() => toggleScroll(true)}
-          />
-          <LabelText>Duração do Treino</LabelText>
-          <InputPicker
-            items={duracaoItems}
-            onValueChange={(value: string) => setDuracao(value)}
-            placeholder={{label: 'Opcional', value: null}}
-            onOpen={() => toggleScroll(false)}
-            onClose={() => toggleScroll(true)}
-          />
-          <LabelText>Observações</LabelText>
-          <InputComponent
-            onChangeText={text => setObservacoes(text)}
-            value={observacoes}
-            placeholderTextColor={'silver'}
-            placeholder="Qualquer informação adicional"
-            isFocused={true}
-          />
           <ContainerButton>
             <CustonButton texto="Realizar cadastro" onPress={handlePress} />
           </ContainerButton>
