@@ -20,7 +20,16 @@ export const Arrow = styled.Text`
   font-size: ${RFValue(24)}px;
   color: ${({theme}) => theme.colors.colorWhite};
 `;
-
+export const ContainerInput = styled.View``;
+export const ButtonSubmit = styled.TouchableOpacity`
+  border: 1px solid ${({theme}) => theme.colors.primary};
+  padding: ${RFValue(5)}px;
+  border-radius: 10px;
+`;
+export const ButtonSubmitText = styled.Text`
+  color: ${({theme}) => theme.colors.colorWhite};
+  text-align: center;
+`;
 export const Day = styled.Text`
   font-size: ${RFValue(18)}px;
   font-family: ${({theme}) => theme.fonts.bold};

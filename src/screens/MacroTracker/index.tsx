@@ -22,6 +22,9 @@ import {
   ModalBody,
   ModalHeader,
   FoodItemNameContainer,
+  ButtonSubmit,
+  ButtonSubmitText,
+  ContainerInput,
 } from './style';
 import {InputComponent} from '../../components/Input';
 import CustomButton from '../../components/CustomizeButton';
@@ -72,6 +75,8 @@ const MacroTracker = () => {
   const [selectedMealId, setSelectedMealId] = useState(Number);
   const [foodName, setFoodName] = useState('');
   const [foodNameList, setFoodNameList] = useState<FoodList[]>([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [displayedText, setDisplayedText] = useState('');
   const [selectedFoodItem, setSelectedFoodItem] = useState<FoodList | null>(
     null,
   );
@@ -206,6 +211,28 @@ const MacroTracker = () => {
     setFoodName(item.descricao);
     setFoodGrams(item.quantidade_g.toString());
   };
+  const handleDateClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleInputChange = (text: string) => {
+    setDisplayedText(text);
+  };
+
+  const handleInputBlur = () => {
+    if (displayedText) {
+      const [day, month, year] = displayedText.split('/').map(Number);
+      if (day && month && year) {
+        const formattedDate = new Date(year, month - 1, day);
+        setSelectedDate(formattedDate); // Atualiza diretamente o selectedDate com a data correta
+        setDisplayedText(formattedDate.toLocaleDateString()); // Atualiza o texto exibido com a data formatada
+      } else {
+        console.warn('Formato de data inválido.');
+      }
+    }
+    setIsEditing(false);
+  };
+
   const renderItem = ({item}: {item: FoodList}) => (
     <FoodListContainer onPress={() => addToFoodList(item)}>
       <FoodName>Nome: {item.descricao}</FoodName>
@@ -258,7 +285,26 @@ const MacroTracker = () => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <Navbar>
           <Arrow onPress={goToPreviousDay}>{'<'}</Arrow>
-          <Day>{formattedDate}</Day>
+          {isEditing ? (
+            <ContainerInput>
+              <InputComponent
+                value={
+                  typeof selectedDate === 'string'
+                    ? selectedDate
+                    : selectedDate.toLocaleDateString()
+                }
+                onChangeText={handleInputChange}
+                mask="[00]/[00]/[0000]"
+                isFocused={isEditing}
+              />
+
+              <ButtonSubmit onPress={handleInputBlur}>
+                <ButtonSubmitText>confirmar</ButtonSubmitText>
+              </ButtonSubmit>
+            </ContainerInput>
+          ) : (
+            <Day onPress={handleDateClick}>{formattedDate}</Day>
+          )}
           <Arrow onPress={goToNextDay}>{'>'}</Arrow>
         </Navbar>
 

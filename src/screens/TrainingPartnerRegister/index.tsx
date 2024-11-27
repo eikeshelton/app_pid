@@ -170,11 +170,13 @@ export default function TrainingPartnerRegister() {
       );
 
       // Formatando os estados para o formato que o InputPicker espera
-      const estadosFormatted = response.data.map(estado => ({
-        label: `${estado.nome} - ${estado.sigla}`,
-        value: estado.sigla,
-        id: estado.id,
-      }));
+      const estadosFormatted = response.data
+        .map(estado => ({
+          label: `${estado.nome} - ${estado.sigla}`,
+          value: estado.sigla,
+          id: estado.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
 
       setEstados(estadosFormatted);
     } catch (error) {

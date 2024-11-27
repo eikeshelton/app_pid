@@ -6,7 +6,7 @@ import MacroTracker from '../screens/MacroTracker';
 import TrainingPartner from '../screens/TrainingPartner';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useTheme} from 'styled-components';
-import TrainingMontage from '../screens/TrainingMontage';
+import Workout from '../screens/Workout';
 
 export const {Navigator, Screen} = createBottomTabNavigator();
 
@@ -112,8 +112,8 @@ export default function AppTabNav() {
         }}
       />
       <Screen
-        name="TrainingMontage"
-        component={TrainingMontage}
+        name="Workout"
+        component={Workout}
         options={{
           tabBarLabel: 'Treino',
 

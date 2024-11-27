@@ -17,6 +17,8 @@ import Events from '../screens/Events';
 import EventsRegister from '../screens/EventsRegister';
 import EventsSearch from '../screens/EventsSearch';
 import {EventParticipants} from '../screens/EventParticipants';
+import {PlanWorkout} from '../screens/PlanWorkout';
+import {WorkoutRoutines} from '../screens/WorkoutRoutines';
 
 const Stack = createStackNavigator();
 
@@ -106,6 +108,17 @@ export function AppRoutes() {
       <Stack.Screen
         name="EventParticipants"
         component={EventParticipants}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name="PlanWorkout"
+        component={PlanWorkout}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="WorkoutRoutines"
+        component={WorkoutRoutines}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

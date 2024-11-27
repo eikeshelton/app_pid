@@ -162,6 +162,17 @@ export const ModalContainer = styled.View`
 `;
 export const DeleteIconContainer = styled.View`
   align-items: flex-end;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+export const ContainerBackButton = styled.TouchableOpacity`
+  padding-top: ${RFValue(10)}px;
+  height: ${RFValue(50)}px;
+`;
+export const IconBack = styled(Ionicons)`
+  color: ${({theme}) => theme.colors.colorWhite};
+  font-size: ${RFValue(30)}px;
+  justify-content: flex-start;
 `;
 export const DeleteButton = styled.TouchableOpacity``;
 export const DeleteIcon = styled(AntDesign)``;

@@ -42,6 +42,8 @@ import {
   DeleteIcon,
   DeleteIconContainer,
   DeleteButton,
+  ContainerBackButton,
+  IconBack,
 } from './style';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import fotoPerfil from '../../assets/imagens/fotoperfil.png';
@@ -370,6 +372,9 @@ export default function Profile() {
           <ModalContainer>
             <ScrollView>
               <DeleteIconContainer>
+                <ContainerBackButton onPress={() => setModalVisible(false)}>
+                  <IconBack name="arrow-back" />
+                </ContainerBackButton>
                 <DeleteButton onPress={deleteGuia}>
                   <DeleteIcon name="delete" color="#934dd2" size={35} />
                 </DeleteButton>
@@ -387,10 +392,6 @@ export default function Profile() {
                 <ModalText>{guiaData?.texto_guia}</ModalText>
               </ModalTextContainer>
             </ScrollView>
-            <CustomButton
-              texto="Cancelar"
-              onPress={() => setModalVisible(false)}
-            />
           </ModalContainer>
         </Modal>
       </ScrollView>

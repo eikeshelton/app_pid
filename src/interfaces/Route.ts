@@ -23,4 +23,7 @@ export type RootStackParamsList = {
   EventsRegister: undefined;
   EventsSearch: undefined;
   EventParticipants: {eventoId: number};
+  Workout: undefined;
+  PlanWorkout: undefined;
+  WorkoutRoutines: undefined;
 };

@@ -10,10 +10,18 @@ export const ContainerImagemRegister = styled.View`
   width: 100%;
   height: ${RFValue(180)}px;
 `;
-
+export const PageTitleText = styled.Text`
+  color: ${({theme}) => theme.colors.colorWhite};
+  text-align: center;
+  font-size: ${RFValue(24)}px;
+  font-family: ${({theme}) => theme.fonts.bold};
+  padding: ${RFValue(10)}px 0 0 0;
+`;
 export const ContainerInputRegister = styled.View`
   width: 100%;
+
   flex: 1;
+  justify-content: space-around;
   padding-left: ${RFValue(24)}px;
   padding-right: ${RFValue(24)}px;
 `;
