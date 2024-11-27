@@ -96,7 +96,6 @@ const MacroTracker = () => {
   const goToNextDay = () => {
     setSelectedDate(prevDate => addDays(prevDate, 1));
   };
-
   // Formata a data para exibição
   const formattedDate = format(selectedDate, 'dd/MM/yyyy');
   const data = [
