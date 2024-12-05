@@ -8,6 +8,7 @@ export const Container = styled.View`
 export const ContainerFlatList = styled.View`
   padding-left: ${RFValue(24)}px;
   padding-right: ${RFValue(24)}px;
+  flex: 1;
 `;
 export const PageTitleText = styled.Text`
   color: ${({theme}) => theme.colors.colorWhite};
@@ -39,4 +40,5 @@ export const LabelText = styled.Text`
 export const ContainerExerciseList = styled.View`
   border: solid 1px ${({theme}) => theme.colors.primary};
   border-radius: 10px;
+  padding: ${RFValue(5)}px ${RFValue(10)}px;
 `;

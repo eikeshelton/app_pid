@@ -19,7 +19,7 @@ import {useNavigation} from '@react-navigation/native';
 import {ModalHistory} from '../../components/ModalHistory';
 import {InputComponent} from '../../components/Input';
 import InputPicker from '../../components/InputPicker';
-import axios from '../../services/api';
+import api from '../../services/api';
 interface Usersfilter {
   id_usuario: number;
   login: string;
@@ -70,7 +70,7 @@ export default function Research() {
   };
   const Buscar_usuario_por_tipo = async () => {
     try {
-      const response = await axios.post('/usuarios/buscar/filtro', {
+      const response = await api.post('/usuarios/buscar/filtro', {
         tipo_usuario: tipoUsuario,
       });
 

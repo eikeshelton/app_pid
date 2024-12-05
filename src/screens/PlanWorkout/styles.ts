@@ -18,6 +18,16 @@ export const LabelText = styled.Text`
   color: ${({theme}) => theme.colors.colorWhite};
   margin: ${RFValue(10)}px 0 ${RFValue(6)}px 0;
 `;
+export const ContainerWorkouts = styled.TouchableOpacity`
+  border: 1px solid ${({theme}) => theme.colors.primary};
+  border-radius: 10px;
+  padding: ${RFValue(5)}px ${RFValue(10)}px;
+  margin-bottom: ${RFValue(10)}px;
+`;
+export const ContainerWorkout = styled.View``;
+export const WorkoutsName = styled.Text`
+  color: ${({theme}) => theme.colors.colorWhite};
+`;
 export const ContainerListHeaderComponent = styled.View``;
 export const PageTitleText = styled.Text`
   color: ${({theme}) => theme.colors.colorWhite};
