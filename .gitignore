@@ -72,3 +72,4 @@ yarn.lock
 # vm python
 server/venv
 server/_pycache_
+commits.txt
